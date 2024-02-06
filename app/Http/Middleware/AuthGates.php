@@ -20,13 +20,12 @@ class AuthGates
 
             foreach ($roles as $role) {
                 foreach ($role->permissions as $permissions) {
-                    $permissionsArray[$permissions->title][] = $role->id;
+                    $permissionsArray[$permissions->name][] = $role->id;
                 }
-
             }
 
-            foreach ($permissionsArray as $title => $roles) {
-                Gate::define($title, function (User $user) use ($roles) {
+            foreach ($permissionsArray as $name => $roles) {
+                Gate::define($name, function (User $user) use ($roles) {
                     return count(array_intersect($user->roles->pluck('id')->toArray(), $roles)) > 0;
                 });
             }

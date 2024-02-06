@@ -111,5 +111,6 @@ return [
     */
 
     'password_timeout' => 10800,
+    'api_token_name' => env('API_TOKEN_NAME', 'ShiftSpan'),
 
 ];
