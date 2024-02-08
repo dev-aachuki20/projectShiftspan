@@ -54,7 +54,7 @@ class LoginController extends Controller
                 DB::commit();
                 $responseData = [
                     'status'            => true,
-                    'message'           => 'You have logged in successfully!',
+                    'message'           => trans('messages.login_success'),
                     'userData'          => [
                         'id'           => $user->id,
                         'name'   => $user->name ?? '',
@@ -131,7 +131,7 @@ class LoginController extends Controller
             DB::commit();
             $responseData = [
                 'status'            => true,
-                'message'           => 'You have Registered Successfully!',
+                'message'           => trans('messages.register_success'),
             ];
             return response()->json($responseData, 200);
         } catch (\Exception $e) {
