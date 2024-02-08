@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('username')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable()->default(null);
+            $table->tinyInteger('is_approved')->default(0)->comment('1=> approved, 0=>rejected');
             $table->tinyInteger('is_active')->default(1)->comment('1=> active, 0=>deactive');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->rememberToken();

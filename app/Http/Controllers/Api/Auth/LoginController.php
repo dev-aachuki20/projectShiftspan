@@ -17,9 +17,8 @@ use Illuminate\Support\Facades\Hash;
 class LoginController extends Controller
 {
     public function login(Request $request){
-        //dd($request->all());
         $validator = Validator::make($request->all(), [
-            'email'    => ['required','email',new IsActive],
+            'email'    => ['required','email','exists:users',new IsActive],
             'password' => 'required|min:8',
         ]);
 
@@ -29,6 +28,15 @@ class LoginController extends Controller
                 'status'        => false,
                 'validation_errors' => $validator->errors(),
             ];
+            return response()->json($responseData, 400);
+        }
+
+        $user = User::where('email', $request->email)->first();
+        if (!$user->is_approved) {
+            $responseData = [
+                'status'        => false,
+                'error'         => trans('messages.not_approved'),
+                ];
             return response()->json($responseData, 400);
         }
 
@@ -84,7 +92,7 @@ class LoginController extends Controller
             'password'   => ['required', 'string', 'min:8','confirmed'],
             'password_confirmation' => ['required','min:8','same:password'],
             'is_criminal' => ['required','boolean'],
-            'sub_admin_id'=> ['required','exists:users,id'],
+            'sub_admin_id'=> ['nullable','numeric'],
             'user_dbs_certificate' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'user_cv' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'other_doc' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
@@ -104,7 +112,6 @@ class LoginController extends Controller
             'username'=>$request->email,
             'sub_admin_id'=>$request->sub_admin_id,
             'email_verified_at'=> now(),
-            'is_active'=>0,
             'password'=>Hash::make($request->password),
         ];
 

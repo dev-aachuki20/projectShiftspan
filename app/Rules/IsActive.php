@@ -27,8 +27,8 @@ class IsActive implements Rule
     public function passes($attribute, $value)
     {
         //Check account is active or not
-        if(User::where('username', $value)->exists()){
-            return User::where('username', $value)->where('is_active', 1)->exists();
+        if(User::where('email', $value)->exists()){
+            return User::where('email', $value)->where('is_active', 1)->exists();
         }
         return true;
     }
