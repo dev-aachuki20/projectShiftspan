@@ -21,7 +21,7 @@ Route::controller(LoginController::class)->group(function(){
     Route::post('create-account', 'registerUser');
     Route::post('forgot-password', 'forgotPassword');
     Route::post('password/verify-otp', 'verifyOtp');
-    Route::post('password/reset', 'resetPassword');
+    Route::post('password/reset-password', 'resetPassword');
 });
 
 Route::middleware(['auth:sanctum'])->group(function () {

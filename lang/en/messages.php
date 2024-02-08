@@ -25,7 +25,7 @@ return [
     'invalid_otp'=>'Invalid OTP',
     'invalid_pin'=>'Invalid PIN',
     'wrong_credentials'=>'These credentials do not match our records!',
-    'not_approved'=>'Your Account Request is Pending!',
+    'not_approved'=>'Your account is still not approved by administrator. Please, be patient and try again later.',
     'otp_sent_email'=>'We have successfully sent OTP on your Registered Email',
     'expire_otp'=> 'OTP has been Expired',
     'verified_otp'=> 'OTP successfully Verified.',
@@ -33,6 +33,7 @@ return [
     'success'=>'Success',
     'register_success'=>'Your Account created Successfully! Please wait for the Approval!',
     'login_success'=>'You have logged in successfully!',
+    'logout_success'=>'Logged out successfully!',
 ];
 
 ?>

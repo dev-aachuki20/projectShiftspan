@@ -23,6 +23,12 @@ return [
         'staff' => 3 ,
     ],
 
+    'default' => [
+        'logo' => 'images/logo.png',
+        'favicon' => 'images/favicon.png',
+        'no-image' => 'images/no-image.jpg'
+    ],
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment

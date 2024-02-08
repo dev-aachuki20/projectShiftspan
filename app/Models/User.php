@@ -74,17 +74,15 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
-    // public function sendPasswordResetOtpNotification($request, $user)
-    // {
-    //     $this->notify(new OtpSendNotification($user));
-    // }
+    public function sendPasswordResetOtpNotification($request, $user)
+    {
+        $this->notify(new OtpSendNotification($user));
+    }
 
     public function routeNotificationForMail()
     {
         return $this->email;
     }
-
-
 
     public function uploads()
     {
