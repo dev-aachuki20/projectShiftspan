@@ -15,8 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name')->unique();
             $table->string('address',255)->nullable();
-            $table->text('shop_descp')->nullable();
-            $table->text('parking_descp')->nullable();
+            $table->text('shop_description')->nullable();
+            $table->text('parking_description')->nullable();
+            $table->unsignedBigInteger('sub_admin_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
             $table->tinyInteger('is_active')->default(1)->comment('1=> active, 0=>deactive');
             $table->timestamps();

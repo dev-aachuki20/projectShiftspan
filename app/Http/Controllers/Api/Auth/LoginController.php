@@ -84,7 +84,7 @@ class LoginController extends Controller
             'password'   => ['required', 'string', 'min:8','confirmed'],
             'password_confirmation' => ['required','min:8','same:password'],
             'is_criminal' => ['required','boolean'],
-            'company_id'=> ['required','exists:companies,id'],
+            'sub_admin_id'=> ['required','exists:users,id'],
             'user_dbs_certificate' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'user_cv' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'other_doc' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
@@ -102,6 +102,7 @@ class LoginController extends Controller
             'name'=>$request->name,
             'email'=>$request->email,
             'username'=>$request->email,
+            'sub_admin_id'=>$request->sub_admin_id,
             'email_verified_at'=> now(),
             'is_active'=>0,
             'password'=>Hash::make($request->password),
@@ -116,7 +117,6 @@ class LoginController extends Controller
                 'is_criminal' => $request->is_criminal,
             ]);
             $user->roles()->sync($role_id);
-
             $request->hasFile('user_dbs_certificate') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/dbs-doc', "user_dbs_certificate", 'original') : null;
             $request->hasFile('user_cv') ? uploadImage($user, $request->file('user_cv'), 'user/cv-doc', "user_cv", 'original') : null;
             $request->hasFile('other_doc') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/other_doc', "user_dbs_certificate", 'original') : null;

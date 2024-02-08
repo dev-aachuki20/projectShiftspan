@@ -16,8 +16,9 @@ class Client extends Model
     protected $fillable = [
         'name',
         'address',
-        'shop_descp',
-        'parking_descp',
+        'shop_description',
+        'parking_description',
+        'sub_admin_id',
         'created_by',
         'created_at',
         'updated_at',

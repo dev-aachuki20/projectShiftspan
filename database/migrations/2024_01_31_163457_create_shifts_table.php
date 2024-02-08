@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id')->unique();
             $table->unsignedBigInteger('location_id')->unique();
             $table->unsignedBigInteger('occupation_id')->unique();
+            $table->unsignedBigInteger('sub_admin_id')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();
             $table->time('start_time')->nullable();

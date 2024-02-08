@@ -18,6 +18,7 @@ class Shift extends Model
         'user_id',
         'location_id',
         'occupation_id',
+        'sub_admin_id',
         'start_date',
         'end_date',
         'approval_date',
