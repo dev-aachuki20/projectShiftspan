@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('occupations', function (Blueprint $table) {
-            $table->increments('id');
+            $table->id();
             $table->string('name')->unique();
-            $table->integer('created_by')->nullable();
+            $table->unsignedBigInteger('created_by')->nullable();
             $table->tinyInteger('is_active')->default(1)->comment('1=> active, 0=>deactive');
             $table->timestamps();
             $table->softDeletes();

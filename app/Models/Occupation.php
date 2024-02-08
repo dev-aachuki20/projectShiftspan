@@ -25,7 +25,7 @@ class Occupation extends Model
     protected static function boot ()
     {
         parent::boot();
-        static::creating(function(Company $model) {
+        static::creating(function(Occupation $model) {
             $model->created_by = auth()->user()->id;
         });
     }

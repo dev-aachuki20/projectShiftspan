@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\Profile;
+use App\Models\User;
 use App\Rules\IsActive;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,4 +75,67 @@ class LoginController extends Controller
             return response()->json($responseData, 500);
         }
     }
+
+    public function registerUser(Request $request){
+        $role_id= config('app.roleid.staff');
+        $validator = Validator::make($request->all(), [
+            'name' => ['required','string'],
+            'email'    => ['required','email'],
+            'password'   => ['required', 'string', 'min:8','confirmed'],
+            'password_confirmation' => ['required','min:8','same:password'],
+            'is_criminal' => ['required','boolean'],
+            'company_id'=> ['required','exists:companies,id'],
+            'user_dbs_certificate' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
+            'user_cv' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
+            'other_doc' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
+        ]);
+
+        if($validator->fails()){
+            $responseData = [
+                'status'        => false,
+                'validation_errors' => $validator->errors(),
+            ];
+            return response()->json($responseData, 400);
+        }
+
+        $data= [
+            'name'=>$request->name,
+            'email'=>$request->email,
+            'username'=>$request->email,
+            'email_verified_at'=> now(),
+            'is_active'=>0,
+            'password'=>Hash::make($request->password),
+        ];
+
+        DB::beginTransaction();
+        try {
+            $user=User::create($data);
+            $user->update(['created_by' => $user->id]);
+            $profile= Profile::create([
+                'user_id' => $user->id,
+                'is_criminal' => $request->is_criminal,
+            ]);
+            $user->roles()->sync($role_id);
+
+            $request->hasFile('user_dbs_certificate') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/dbs-doc', "user_dbs_certificate", 'original') : null;
+            $request->hasFile('user_cv') ? uploadImage($user, $request->file('user_cv'), 'user/cv-doc', "user_cv", 'original') : null;
+            $request->hasFile('other_doc') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/other_doc', "user_dbs_certificate", 'original') : null;
+
+            DB::commit();
+            $responseData = [
+                'status'            => true,
+                'message'           => 'You have Registered Successfully!',
+            ];
+            return response()->json($responseData, 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // dd($e->getMessage().'->'.$e->getLine());
+            $responseData = [
+                'status'        => false,
+                'error'         => trans('messages.error_message'),
+            ];
+            return response()->json($responseData, 500);
+        }
+    }
+
 }

@@ -12,9 +12,9 @@ class Shift extends Model
     use HasFactory,SoftDeletes,HasApiTokens;
 
     protected $guard = 'web';
-    public $table = 'homes';
+    public $table = 'shifts';
     protected $fillable = [
-        'home_id',
+        'client_id',
         'user_id',
         'location_id',
         'occupation_id',
@@ -39,9 +39,9 @@ class Shift extends Model
         });
     }
 
-    public function home()
+    public function client()
     {
-        return $this->belongsTo(Home::class);
+        return $this->belongsTo(Client::class);
     }
 
     public function location()

@@ -26,7 +26,7 @@ class Location extends Model
     protected static function boot ()
     {
         parent::boot();
-        static::creating(function(Company $model) {
+        static::creating(function(Location $model) {
             $model->created_by = auth()->user()->id;
         });
     }

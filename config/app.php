@@ -16,7 +16,12 @@ return [
     |
     */
 
-    'name' => env('APP_NAME', 'Laravel'),
+    'name' => env('APP_NAME', 'ShiftSpan'),
+    'roleid' => [
+        'super_admin' => 1 ,
+        'admin' => 2 ,
+        'staff' => 3 ,
+    ],
 
     /*
     |--------------------------------------------------------------------------

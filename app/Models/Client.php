@@ -7,12 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
 
-class Home extends Model
+class Client extends Model
 {
     use HasFactory,SoftDeletes,HasApiTokens;
 
     protected $guard = 'web';
-    public $table = 'homes';
+    public $table = 'clients';
     protected $fillable = [
         'name',
         'address',
@@ -28,7 +28,7 @@ class Home extends Model
     protected static function boot ()
     {
         parent::boot();
-        static::creating(function(Company $model) {
+        static::creating(function(Client $model) {
             $model->created_by = auth()->user()->id;
         });
     }
@@ -43,15 +43,15 @@ class Home extends Model
         return $this->morphMany(Uploads::class, 'uploadsable');
     }
 
-    public function homeImage()
+    public function clientImage()
     {
-        return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'home');
+        return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'client');
     }
 
-    public function getHomeImageUrlAttribute()
+    public function getClientImageUrlAttribute()
     {
-        if ($this->homeImage) {
-            return $this->homeImage->file_url;
+        if ($this->clientImage) {
+            return $this->clientImage->file_url;
         }
         return "";
     }

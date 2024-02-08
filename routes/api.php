@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(LoginController::class)->group(function(){
     Route::post('login', 'login');
+    Route::post('create-account', 'registerUser');
     Route::post('forgot-password', 'forgotPassword');
     Route::post('password/verify-otp', 'verifyOtp');
     Route::post('password/reset', 'resetPassword');
@@ -26,6 +27,3 @@ Route::controller(LoginController::class)->group(function(){
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LogoutController::class, 'logout']);
 });
-
-
-

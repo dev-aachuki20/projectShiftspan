@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('clock_in_out', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->unique();    // staff_id
-            $table->unsignedInteger('shift_id')->unique();
+            $table->id();
+            $table->unsignedBigInteger('user_id')->unique();    // staff_id
+            $table->unsignedBigInteger('shift_id')->unique();
             $table->datetime('clockin_date')->nullable();
             $table->datetime('clockout_date')->nullable();
             $table->string('clockin_latitude')->nullable();

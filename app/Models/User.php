@@ -83,10 +83,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->email;
     }
 
-    public function company()
-    {
-        return $this->belongsTo(Company::class);
-    }
+
 
     public function uploads()
     {
@@ -187,6 +184,20 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         if ($this->trainingCheck) {
             return $this->trainingCheck->file_url;
+        }
+        return "";
+    }
+
+    // Other Docs
+    public function otherDoc()
+    {
+        return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_other_doc');
+    }
+
+    public function OtherDocUrlAttribute()
+    {
+        if ($this->otherDoc) {
+            return $this->otherDoc->file_url;
         }
         return "";
     }

@@ -12,9 +12,9 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('staff_shift', function (Blueprint $table) {
-            $table->increments('id');
-            $table->unsignedInteger('user_id')->unique();
-            $table->unsignedInteger('shift_id')->unique();
+            $table->id();
+            $table->unsignedBigInteger('user_id')->unique();
+            $table->unsignedBigInteger('shift_id')->unique();
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
