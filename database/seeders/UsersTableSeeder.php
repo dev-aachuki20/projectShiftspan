@@ -14,7 +14,7 @@ class UsersTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $users = [ 
+        $users = [
             [
                 'name'           => 'Super Admin',
                 'email'          => 'superadmin@admin.com',
@@ -23,18 +23,18 @@ class UsersTableSeeder extends Seeder
                 'remember_token' => null,
                 'email_verified_at' => date('Y-m-d H:i:s'),
                 'created_by'     => 1,
-            
+
             ],
-            [  
-                'name'           => 'Admin',
-                'email'          => 'admin@admin.com',
-                'username'       => 'admin',
+            [
+                'name'           => "Jenny's Kitchen",
+                'email'          => 'jennykitchen@gmail.com',
+                'username'       => 'jennykitchen@gmail.com',
                 'password'       => bcrypt('12345678'),
                 'remember_token' => null,
                 'email_verified_at' => date('Y-m-d H:i:s'),
-                'created_by'     => 1, 
+                'created_by'     => 1,
             ],
-            [   
+            [
                 'name'           => 'Rohan',
                 'email'          => 'rohan@gmail.com',
                 'username'       => 'rohan12345',

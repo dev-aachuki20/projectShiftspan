@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
+use App\Http\Controllers\Api\SubAdminController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,4 +27,6 @@ Route::controller(LoginController::class)->group(function(){
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LogoutController::class, 'logout']);
+
+    Route::get('/all-sub-admin', [SubAdminController::class, 'AllSubAdmins']);
 });
