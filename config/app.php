@@ -26,7 +26,8 @@ return [
     'default' => [
         'logo' => 'images/logo.png',
         'favicon' => 'images/favicon.png',
-        'no-image' => 'images/no-image.jpg'
+        'no-image' => 'images/no-image.jpg',
+        'staff-image' => 'images/staff-img.png'
     ],
 
     /*

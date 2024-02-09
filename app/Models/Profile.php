@@ -52,4 +52,9 @@ class Profile extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function occupation()
+    {
+        return $this->belongsTo(Occupation::class);
+    }
+
 }

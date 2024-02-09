@@ -19,7 +19,7 @@ class LoginController extends Controller
 {
     public function login(Request $request){
         $validator = Validator::make($request->all(), [
-            'email'    => ['required','email','exists:users',new IsActive],
+            'email'    => ['required','email','exists:users,email',new IsActive],
             'password' => 'required|min:8',
         ]);
 
@@ -53,15 +53,19 @@ class LoginController extends Controller
                 $user = auth()->user();
                 $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
                 DB::commit();
+
                 $responseData = [
                     'status'            => true,
                     'message'           => trans('messages.login_success'),
                     'userData'          => [
                         'id'           => $user->id,
-                        'name'   => $user->name ?? '',
-                        'username'    => $user->username ?? '',
-                        'email'    => $user->email ?? '',
-                        'profile_image'=> $user->profile_image_url ?? '',
+                        'name'   => $user->name ?? null,
+                        'phone'   => $user->phone ?? null,
+                        'email'    => $user->email ?? null,
+                        'address'   => $user->profile->address ?? null,
+                        'occupation_name'    => $user->profile->occupation->name ?? null,
+                        'company_name'    => $user->company->name ?? null,
+                        'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('app.default.staff-image')),
                     ],
                     'remember_me_token' => $user->remember_token,
                     'access_token'      => $accessToken
@@ -95,6 +99,7 @@ class LoginController extends Controller
             'password_confirmation' => ['required','min:8','same:password'],
             'is_criminal' => ['required','boolean'],
             'sub_admin_id'=> ['nullable','numeric'],
+            'occupation_id'=> ['nullable','numeric','exists:occupations,id'],
             'user_dbs_certificate' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'user_cv' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
             'other_doc' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
@@ -123,6 +128,7 @@ class LoginController extends Controller
             $user->update(['created_by' => $user->id]);
             $profile= Profile::create([
                 'user_id' => $user->id,
+                'occupation_id'=> $request->occupation_id,
                 'is_criminal' => $request->is_criminal,
             ]);
             $user->roles()->sync($role_id);
@@ -147,8 +153,9 @@ class LoginController extends Controller
         }
     }
 
-    public function forgotPassword(Request $request){
-        $validator = Validator::make($request->all(), ['email' => ['required','email','exists:users',new IsActive]]);
+    public function forgotPassword(Request $request)
+    {
+        $validator = Validator::make($request->all(), ['email' => ['required','email','exists:users,email',new IsActive]]);
 
         if($validator->fails()){
             $responseData = [
