@@ -20,11 +20,11 @@
 	<table role="presentation" style="width:100%;border-collapse:collapse;border:0;border-spacing:0;background:#ffffff;">
 		<tr>
 			<td align="center" style="padding:0;">
-				<table role="presentation" style="width: 100%; max-width:602px;border-collapse:collapse;border-spacing:0;text-align:left;">
+				<table role="presentation" style="width: 100%; max-width:602px;border:2px solid #189a18;border-collapse:collapse;border-spacing:0;text-align:left;">
 					<tr>
-						<td align="center" style="padding:20px 0;background:#189a18;color:#fff;">
-							{{-- <img src="{{ asset(config('app.default.logo')) }}" alt="" width="300" style="height:auto;display:block;" /> --}}
-                            <h3>{{trans('quickadmin.qa_company_name')}}</h3>
+						<td align="center" style="padding:20px 0;border:2px solid #189a18;color:#fff;">
+							<img src="{{ asset(config('app.default.logo')) }}" alt="" width="100" style="height:auto;display:block;" />
+                            {{-- <h3>{{trans('quickadmin.qa_company_name')}}</h3> --}}
 						</td>
 					</tr>
 					<tr>
