@@ -16,9 +16,9 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('sub_admin_id')->nullable();
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->string('phone')->nullable();
-            $table->string('username')->unique();
+            $table->string('username');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable()->default(null);
             $table->tinyInteger('is_approved')->default(0)->comment('1=> approved, 0=>rejected');

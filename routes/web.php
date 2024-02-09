@@ -20,19 +20,19 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Route::group(['middleware' => 'guest'], function () {
     Route::controller(LoginController::class)->group(function(){
-        Route::get('/', 'index')->name('login');
+        Route::get('/admin/login', 'index')->name('login');
         Route::post('/login','registerUser')->name('authenticate');
     });
 
-    Route::controller(ForgotPasswordController::class)->group(function(){
-        Route::get('/forgot-password', 'index')->name('forgot.password');
-        Route::post('/forgot-pass-mail','sendResetLinkEmail')->name('password_mail_link');
-    });
+    // Route::controller(ForgotPasswordController::class)->group(function(){
+    //     Route::get('/forgot-password', 'index')->name('forgot.password');
+    //     Route::post('/forgot-pass-mail','sendResetLinkEmail')->name('password_mail_link');
+    // });
 
-    Route::controller(ResetPasswordController::class)->group(function(){
-        Route::get('reset-password', 'showform')->name('resetPassword');
-        Route::post('/reset-password','resetpass')->name('reset-new-password');
-    });
+    // Route::controller(ResetPasswordController::class)->group(function(){
+    //     Route::get('reset-password', 'showform')->name('resetPassword');
+    //     Route::post('/reset-password','resetpass')->name('reset-new-password');
+    // });
 });
 
 Route::middleware(['auth','PreventBackHistory'])->group(function () {
