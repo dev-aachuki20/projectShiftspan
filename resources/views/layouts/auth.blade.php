@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <title>Login</title>
-  <meta name="description" content="">
- @include('partials.hscript')
-
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="author" content="shiftSpan">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{ config('app.name') }} | @yield('title')</title>
+    <!-- Favicon -->
+    <link rel="icon" href="{{asset(config('app.default.favicon'))}}">
+    <!-- Poppins Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
+    <!-- Main css -->
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
 </head>
-<body class="background-image-body">
+<body>
     <div class="loader"></div>
-    <div id="app">
-        @yield('main-content')
-    </div>
-    <!-- General JS Scripts -->
-  <script src="{{ asset('admintheme/assets/js/app.min.js') }}"></script>
-  <!-- JS Libraies -->
-  <!-- Page Specific JS File -->
-  <!-- Template JS File -->
-  <script src="{{ asset('admintheme/assets/js/scripts.js') }}"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+   
+    @yield('main-content')
+  
+    <!-- Jquery Library -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <!-- Bootstrap Js -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
+    @yield('customJS')
 
   </body>
-
-
-  @yield('customJS')
 </html>

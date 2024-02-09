@@ -20,8 +20,13 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Route::group(['middleware' => 'guest'], function () {
     Route::controller(LoginController::class)->group(function(){
+      
+        Route::get('/', function () {
+            return redirect()->route('login');
+        });
+
         Route::get('/admin/login', 'index')->name('login');
-        Route::post('/login','registerUser')->name('authenticate');
+        Route::post('/admin/login','login')->name('authenticate');
     });
 
     // Route::controller(ForgotPasswordController::class)->group(function(){

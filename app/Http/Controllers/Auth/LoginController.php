@@ -21,8 +21,13 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        dd('Working on');
+        $field = filter_var($request->input('username'), FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
+
+        $emailValidation = ['required'];
+
         $validated = $request->validate([
-            'email'    => ['required','email',new IsActive],
+            $field    => ['required','email',new IsActive],
             'password' => 'required|min:8',
         ],[
             'email.required' => 'The Email is required.',
