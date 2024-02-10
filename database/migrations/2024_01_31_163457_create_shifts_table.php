@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('client_id')->unique();
-            $table->unsignedBigInteger('user_id')->unique();
-            $table->unsignedBigInteger('location_id')->unique();
-            $table->unsignedBigInteger('occupation_id')->unique();
+            $table->unsignedBigInteger('client_id')->nullable();
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->unsignedBigInteger('location_id')->nullable();
+            $table->unsignedBigInteger('occupation_id')->nullable();
             $table->unsignedBigInteger('sub_admin_id')->nullable();
             $table->date('start_date')->nullable();
             $table->date('end_date')->nullable();

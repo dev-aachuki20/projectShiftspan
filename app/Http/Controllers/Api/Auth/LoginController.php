@@ -17,260 +17,175 @@ use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function login(Request $request){
-        $validator = Validator::make($request->all(), [
+    public function login(Request $request)
+    {
+        $credentialsOnly = $request->validate([
             'email'    => ['required','email','exists:users,email',new IsActive],
             'password' => 'required|min:8',
         ]);
 
-        if($validator->fails()){
-            //Error Response Send
-            $responseData = [
+        if(Auth::attempt($credentialsOnly)){
+            $user = auth()->user();
+            $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
+            return response()->json([
+                'status'            => true,
+                'message'           => trans('messages.login_success'),
+                'userData'          => [
+                    'id'           => $user->id,
+                    'name'   => $user->name ?? null,
+                    'phone'   => $user->phone ?? null,
+                    'email'    => $user->email ?? null,
+                    'address'   => $user->profile->address ?? null,
+                    'occupation_name'    => $user->profile->occupation->name ?? null,
+                    'company_name'    => $user->company->name ?? null,
+                    'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('app.default.staff-image')),
+                    'user_dbs_certificate'=> $user->dbs_certificate_url ? $user->dbs_certificate_url : "",
+                    'user_training_doc'=> $user->training_document_url ? $user->training_document_url : "",
+                    'user_cv'=> $user->cv_url ? $user->cv_url : "",
+                    'user_staff_budge'=> $user->staff_budge_url ? $user->staff_budge_url : "",
+                    'user_dbs_check'=> $user->dbs_check_url ? $user->dbs_check_url : "",
+                    'user_training_check'=> $user->training_check_url ? $user->training_check_url : "",
+                ],
+                'access_token'      => $accessToken
+            ], 200);
+        } else{
+            return response()->json([
                 'status'        => false,
-                'validation_errors' => $validator->errors(),
-            ];
-            return response()->json($responseData, 400);
-        }
-
-        $user = User::where('email', $request->email)->first();
-        if (!$user->is_approved) {
-            $responseData = [
-                'status'        => false,
-                'error'         => trans('messages.not_approved'),
-                ];
-            return response()->json($responseData, 400);
-        }
-
-        DB::beginTransaction();
-        try {
-            $remember_me = !is_null($request->remember) ? true : false;
-            $credentialsOnly = [
-                'email'    => $request->email,
-                'password' => $request->password,
-            ];
-
-            if(Auth::attempt($credentialsOnly, $remember_me)){
-                $user = auth()->user();
-                $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
-                DB::commit();
-
-                $responseData = [
-                    'status'            => true,
-                    'message'           => trans('messages.login_success'),
-                    'userData'          => [
-                        'id'           => $user->id,
-                        'name'   => $user->name ?? null,
-                        'phone'   => $user->phone ?? null,
-                        'email'    => $user->email ?? null,
-                        'address'   => $user->profile->address ?? null,
-                        'occupation_name'    => $user->profile->occupation->name ?? null,
-                        'company_name'    => $user->company->name ?? null,
-                        'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('app.default.staff-image')),
-                    ],
-                    'remember_me_token' => $user->remember_token,
-                    'access_token'      => $accessToken
-                ];
-                return response()->json($responseData, 200);
-            } else{
-                $responseData = [
-                    'status'        => false,
-                    'error'         => trans('messages.wrong_credentials'),
-                ];
-                return response()->json($responseData, 401);
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            //dd($e->getMessage().'->'.$e->getLine());
-            $responseData = [
-                'status'        => false,
-                'error'         => trans('messages.error_message'),
-            ];
-            return response()->json($responseData, 500);
+                'error'         => trans('messages.wrong_credentials'),
+            ], 401);
         }
     }
 
-    public function registerUser(Request $request){
-        $role_id= config('app.roleid.staff');
-        $validator = Validator::make($request->all(), [
+    public function registerUser(Request $request)
+    {
+        $request->validate([
             'name' => ['required','string'],
-            // 'email'    => ['required','email:dns','unique:users,email,NULL,id,deleted_at,NULL'],
             'email'    => ['required','email:dns','unique:users,email,NULL,id'],
             'password'   => ['required', 'string', 'min:8','confirmed'],
             'password_confirmation' => ['required','min:8','same:password'],
             'is_criminal' => ['required','boolean'],
             'sub_admin_id'=> ['nullable','numeric'],
             'occupation_id'=> ['nullable','numeric','exists:occupations,id'],
-            'user_dbs_certificate' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
-            'user_cv' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
-            'other_doc' => ['required','file','max:2048','mimes:jpeg,png,pdf,doc,docx'],
+            'user_dbs_certificate' => ['required','file','max:2048','mimes:pdf'],
+            'user_cv' => ['required','file','max:2048','mimes:pdf'],
+            'user_training_doc' => ['required','file','max:2048','mimes:pdf'],
+            'user_staff_budge' => ['required','file','max:2048','mimes:pdf'],
+            'user_dbs_check' => ['required','file','max:2048','mimes:pdf'],
+            'user_training_check' => ['nullable','file','max:2048','mimes:pdf'],
         ]);
-
-        if($validator->fails()){
-            $responseData = [
-                'status'        => false,
-                'validation_errors' => $validator->errors(),
-            ];
-            return response()->json($responseData, 400);
-        }
-
-        $data= [
-            'name'=>$request->name,
-            'email'=>$request->email,
-            'username'=>$request->email,
-            'sub_admin_id'=>$request->sub_admin_id,
-            'email_verified_at'=> now(),
-            'password'=>Hash::make($request->password),
-        ];
 
         DB::beginTransaction();
         try {
-            $user=User::create($data);
-            $user->update(['created_by' => $user->id]);
-            $profile= Profile::create([
-                'user_id' => $user->id,
-                'occupation_id'=> $request->occupation_id,
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'sub_admin_id' => $request->sub_admin_id,
+                'email_verified_at' => now(),
+                'password' => Hash::make($request->password),
+                'is_active' => 0
+            ]);
+            $user->profile()->create([
+                'occupation_id' => $request->occupation_id,
                 'is_criminal' => $request->is_criminal,
             ]);
-            $user->roles()->sync($role_id);
-            $request->hasFile('user_dbs_certificate') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/dbs-doc', "user_dbs_certificate", 'original') : null;
-            $request->hasFile('user_cv') ? uploadImage($user, $request->file('user_cv'), 'user/cv-doc', "user_cv", 'original') : null;
-            $request->hasFile('other_doc') ? uploadImage($user, $request->file('user_dbs_certificate'), 'user/other_doc', "user_dbs_certificate", 'original') : null;
+
+            $user->roles()->sync(config('app.roleid.staff'));
+            foreach ($request->allFiles() as $key => $file) {
+                if (in_array($key,config('constant.staff_file_fields'))) {
+                    uploadImage($user, $file, 'staff/doc', $key, 'original');
+                }
+            }
 
             DB::commit();
-            $responseData = [
+            return response()->json([
                 'status'            => true,
                 'message'           => trans('messages.register_success'),
-            ];
-            return response()->json($responseData, 200);
+            ], 200);
+
         } catch (\Exception $e) {
             DB::rollBack();
-             dd($e->getMessage().'->'.$e->getLine());
-            $responseData = [
+            // dd($e->getMessage());
+            return response()->json([
                 'status'        => false,
                 'error'         => trans('messages.error_message'),
-            ];
-            return response()->json($responseData, 500);
+            ], 500);
         }
     }
 
     public function forgotPassword(Request $request)
     {
-        $validator = Validator::make($request->all(), ['email' => ['required','email','exists:users,email',new IsActive]]);
-
-        if($validator->fails()){
-            $responseData = [
-                'status'        => false,
-                'validation_errors' => $validator->errors(),
-            ];
-            return response()->json($responseData, 401);
-        }
+        $validator = $request->validate(['email' => ['required','email','exists:users,email',new IsActive]]);
 
         DB::beginTransaction();
         try {
+            $user = User::where('email', $request->email)->firstOrFail();
             $token = rand(100000, 999999);
-            $email_id = $request->email;
-            $user = User::where('email', $email_id)->first();
-            if(!$user){
-                $responseData = [
-                    'status'        => false,
-                    'error'         => trans('messages.invalid_email'),
-                ];
-                return response()->json($responseData, 401);
-            }
 
-            DB::table('password_resets')->insert([
-                'email'         => $email_id,
-                'token'         => $token,
-                'created_at'    => Carbon::now()
+            $passwordReset = DB::table('password_resets')->insert([
+                'email'      => $request->email,
+                'token'      => $token,
+                'created_at' => now()
             ]);
 
-            $user->otp = $token;
-            $user->subject = "Reset Password OTP";
-            $user->expiretime = '2 Minutes';
-            $user->sendPasswordResetOtpNotification($request, $user);
+            $subject = "Reset Password OTP";
+            $expiretime = '2 Minutes';
+            $user->sendPasswordResetOtpNotification($user,$token, $subject , $expiretime);
             DB::commit();
-            //Success Response Send
-            $responseData = [
+            return response()->json([
                 'status'        => true,
                 'otp_time_allow' => config('auth.passwords.users.expire').' Minutes',
                 'otp' => $token,
                 'message'         => trans('messages.otp_sent_email'),
-            ];
-            return response()->json($responseData, 200);
+            ], 200);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            //dd($e->getMessage().'->'.$e->getLine());
-            //Return Error Response
-            $responseData = [
+            dd($e->getMessage());
+            return response()->json([
                 'status'        => false,
                 'error'         => trans('messages.error_message'),
-            ];
-            return response()->json($responseData, 401);
+            ], 500);
         }
     }
 
     public function verifyOtp(Request $request)
     {
-        $validation = Validator::make($request->all(), [
+        $validation =  $request->validate([
             'email' => 'required|email|exists:password_resets,email',
-            'otp'   => 'required|numeric|min:6'
+            'otp'   => 'required|numeric|min:8'
         ]);
-        if ($validation->fails()) {
-            $responseData = [
-                'status'        => false,
-                'validation_errors' => $validation->errors(),
-            ];
-            return response()->json($responseData, 401);
-        }
-        $email = $request->email;
-        $otpToken = $request->otp;
 
-        $passwordReset = DB::table('password_resets')->where('token', $otpToken)
-                ->where('email', $email)
-                ->orderBy('created_at','desc')
-                ->first();
+        $passwordReset = DB::table('password_resets')
+        ->where('token', $request->otp)
+        ->where('email', $request->email)
+        ->latest()
+        ->first();
 
-        if (!$passwordReset){
-            $responseData = [
-                'status'        => false,
-                'error'         => trans('messages.invalid_otp'),
-            ];
-            return response()->json($responseData, 401);
+        if (!$passwordReset) {
+            return response()->json(['status' => false, 'error' => trans('messages.invalid_otp')], 401);
         }
 
-        if (Carbon::parse($passwordReset->created_at)->addMinutes(config('auth.passwords.users.expire'))->isPast()) {
-            $responseData = [
-                'status'        => false,
-                'error'         => trans('messages.expire_otp'),
-            ];
-            return response()->json($responseData, 401);
+        if (Carbon::parse($passwordReset->created_at)
+            ->addMinutes(config('auth.passwords.users.expire'))->isPast()) {
+            return response()->json(['status' => false, 'error' => trans('messages.expire_otp')], 401);
         }
 
-        $responseData = [
-            'status'        => true,
-            'token'         => encrypt($otpToken),
-            'message'         => trans('messages.verified_otp'),
-        ];
-        return response()->json($responseData, 200);
+        return response()->json([
+            'status' => true,
+            'token' => encrypt($request->otp),
+            'message' => trans('messages.verified_otp'),
+        ], 200);
     }
 
     public function resetPassword(Request $request)
     {
-        $validation = Validator::make($request->all(), [
+        $validation = $request->validate([
             'token' => 'required',
-            'email'     => 'required|email|exists:password_resets,email',
+            'email'     => 'required|email|exists:users,email',
             'password'  => 'required|string|min:8',
             'confirmed_password' => 'required|string|min:8',
         ]);
 
-        if ($validation->fails()) {
-            $responseData = [
-                'status'        => false,
-                'validation_errors' => $validation->errors(),
-            ];
-            return response()->json($responseData, 401);
-        }
         $token = decrypt($request->token);
         $passwordReset = DB::table('password_resets')->where('token',$token)
                 ->where('email', $request->email)
@@ -279,30 +194,23 @@ class LoginController extends Controller
 
         if (!$passwordReset)
         {
-            $responseData = [
-                'status'        => false,
+            return response()->json([
+                'status' => false,
                 'validation_errors' => trans('messages.invalid_token_email'),
-            ];
-            return response()->json($responseData, 401);
+            ], 403);
         }
 
-        $user = User::where('email', $passwordReset->email)->first();
-        if (!$user){
-            $responseData = [
-                'status'        => false,
-                'validation_errors' => trans('messages.invalid_email'),
-            ];
-            return response()->json($responseData, 401);
+        if (!$user = User::where('email', $passwordReset->email)->first()) {
+            return response()->json(['status' => false, 'validation_errors' => trans('messages.invalid_email')], 401);
         }
 
-        $user->password = bcrypt($request->password);
-        $user->save();
+        $user->update(['password' => bcrypt($request->password)]);
         DB::table('password_resets')->where('email',$passwordReset->email)->delete();
-        $responseData = [
-            'status'        => true,
-            'message'         => trans('passwords.reset'),
-        ];
-        return response()->json($responseData, 200);
+
+        return response()->json([
+            'status' => true,
+            'message' => trans('passwords.reset'),
+        ], 200);
     }
 
 }

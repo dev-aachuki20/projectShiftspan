@@ -28,7 +28,6 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $fillable = [
         'name',
         'email',
-        'username',
         'phone',
         'password',
         'sub_admin_id',
@@ -37,12 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'updated_at',
         'deleted_at',
         'remember_token',
-        'is_approved',
         'is_active',
         'email_verified_at',
-        'otp',
-        'subject',
-        'expiretime',
     ];
 
     /**
@@ -78,9 +73,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(User::class,'sub_admin_id','id');
     }
 
-    public function sendPasswordResetOtpNotification($request, $user)
+    public function sendPasswordResetOtpNotification($user,$token, $subject , $expiretime)
     {
-        $this->notify(new OtpSendNotification($user));
+        $this->notify(new OtpSendNotification($user,$token, $subject , $expiretime));
     }
 
     public function routeNotificationForMail()
@@ -113,7 +108,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_training_doc');
     }
 
-    public function TrainingDocumentUrlAttribute()
+    public function getTrainingDocumentUrlAttribute()
     {
         if ($this->trainingDocument) {
             return $this->trainingDocument->file_url;
@@ -127,7 +122,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_dbs_certificate');
     }
 
-    public function DbsCertificateUrlAttribute()
+    public function getDbsCertificateUrlAttribute()
     {
         if ($this->dbsCertificate) {
             return $this->dbsCertificate->file_url;
@@ -141,7 +136,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_cv');
     }
 
-    public function CVUrlAttribute()
+    public function getCVUrlAttribute()
     {
         if ($this->cv) {
             return $this->cv->file_url;
@@ -155,7 +150,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_staff_budge');
     }
 
-    public function StaffBudgeUrlAttribute()
+    public function getStaffBudgeUrlAttribute()
     {
         if ($this->staffBudge) {
             return $this->staffBudge->file_url;
@@ -169,7 +164,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_dbs_check');
     }
 
-    public function DbsCheckUrlAttribute()
+    public function getDbsCheckUrlAttribute()
     {
         if ($this->dbsCheck) {
             return $this->dbsCheck->file_url;
@@ -183,24 +178,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_training_check');
     }
 
-    public function TrainingCheckUrlAttribute()
+    public function getTrainingCheckUrlAttribute()
     {
         if ($this->trainingCheck) {
             return $this->trainingCheck->file_url;
-        }
-        return "";
-    }
-
-    // Other Docs
-    public function otherDoc()
-    {
-        return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_other_doc');
-    }
-
-    public function OtherDocUrlAttribute()
-    {
-        if ($this->otherDoc) {
-            return $this->otherDoc->file_url;
         }
         return "";
     }

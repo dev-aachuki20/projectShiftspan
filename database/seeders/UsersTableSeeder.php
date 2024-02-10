@@ -18,7 +18,6 @@ class UsersTableSeeder extends Seeder
             [
                 'name'           => 'Super Admin',
                 'email'          => 'superadmin@admin.com',
-                'username'       => 'superadmin',
                 'password'       => bcrypt('12345678'),
                 'remember_token' => null,
                 'email_verified_at' => date('Y-m-d H:i:s'),
@@ -28,21 +27,11 @@ class UsersTableSeeder extends Seeder
             [
                 'name'           => "Jenny's Kitchen",
                 'email'          => 'jennykitchen@gmail.com',
-                'username'       => 'jennykitchen@gmail.com',
                 'password'       => bcrypt('12345678'),
                 'remember_token' => null,
                 'email_verified_at' => date('Y-m-d H:i:s'),
                 'created_by'     => 1,
             ],
-            [
-                'name'           => 'Rohan',
-                'email'          => 'rohan@gmail.com',
-                'username'       => 'rohan12345',
-                'password'       => bcrypt('12345678'),
-                'remember_token' => null,
-                'email_verified_at' => date('Y-m-d H:i:s'),
-                'created_by'     => 1,
-            ]
         ];
         foreach($users as $key=>$user){
             $createdUser =  User::create($user);

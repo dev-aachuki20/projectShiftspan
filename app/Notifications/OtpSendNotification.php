@@ -20,18 +20,20 @@ class OtpSendNotification extends Notification
  * @param  mixed  $notifiable
  * @return \Illuminate\Notifications\Messages\MailMessage
  */
-    public $user;
+    public $user,$token, $subject , $expiretime;
 
-    public function __construct($user)
+    public function __construct($user,$token, $subject , $expiretime)
     {
         $this->user = $user;
+        $this->token = $token;
+        $this->subject = $subject;
+        $this->expiretime = $expiretime;
     }
 
 
     public function build()
     {
-        return $this->view('emails.auth.forgot_password_otp',['user' => $this->user]);
-
+        return $this->view('emails.auth.forgot_password_otp',['user' => $this->user ,'token' => $this->token ,'expiretime' => $this->expiretime]);
     }
 
     public function via($notifiable): array
@@ -46,9 +48,8 @@ class OtpSendNotification extends Notification
     {
         //dd($notifiable->email);
         return (new MailMessage)
-            ->subject($this->user->subject)
-            ->view('emails.auth.forgot_password_otp', ['user' => $this->user]);
-
+            ->subject($this->subject)
+            ->view('emails.auth.forgot_password_otp', ['user' => $this->user ,'token' => $this->token ,'expiretime' => $this->expiretime]);
            // ->to($notifiable->email);
     }
 

@@ -35,7 +35,6 @@ return [
 		'fields' => [
 			'name' => 'Name',
 			'email' => 'Email',
-            'usernameid'=>'Username',
 			'password' => 'Password',
 			'role' => 'Role',
             'phone'=>'Phone Number',

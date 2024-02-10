@@ -10,9 +10,9 @@
             </p>
             <div class="mail-desc">
                 <p style="font-size:14px;">We received a request to reset your password. Please use the following OTP to proceed:</p>
-                <p>Your OTP: {{ $user->otp }}</p>
+                <p>Your OTP: {{ $token }}</p>
 
-                <p>This OTP will expire in {{ $user->expiretime}}. If you did not request a password reset, please ignore this email.</p>
+                <p>This OTP will expire in {{ $expiretime}}. If you did not request a password reset, please ignore this email.</p>
             </div>
         </td>
         <tr>

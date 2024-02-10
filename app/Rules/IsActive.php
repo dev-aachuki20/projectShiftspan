@@ -7,15 +7,6 @@ use App\Models\User;
 
 class IsActive implements Rule
 {
-    /**
-     * Create a new rule instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
 
     /**
      * Determine if the validation rule passes.
@@ -40,6 +31,6 @@ class IsActive implements Rule
      */
     public function message()
     {
-        return trans('messages.suspened');
+        return trans('messages.not_activate');
     }
 }
