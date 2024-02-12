@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 
 class OccupationController extends Controller
 {
-    public function AllOccupations(){
-        $roleid= config('app.roleid.admin');
-        $allOccupations = Occupation::select('id','name')->orderBy('name', 'asc')->get();
+    public function AllOccupations(Request $request){
 
+        $request->validate([
+            'company_id'=> ['required','numeric','exists:users,id'],
+        ]);
+        $allOccupations = Occupation::select('id','name')->where('sub_admin_id',$request->company_id)->orderBy('name', 'asc')->get();
         $responseData = [
             'status'    => true,
             'message'   => 'success',

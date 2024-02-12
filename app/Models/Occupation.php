@@ -15,6 +15,7 @@ class Occupation extends Model
     public $table = 'occupations';
     protected $fillable = [
         'name',
+        'sub_admin_id',
         'created_by',
         'created_at',
         'updated_at',
@@ -33,5 +34,10 @@ class Occupation extends Model
     public function shifts()
     {
         return $this->hasMany(Shift::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }
