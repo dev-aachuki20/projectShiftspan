@@ -60,7 +60,7 @@ class LoginController extends Controller
     public function registerUser(Request $request)
     {
         $request->validate([
-            ['required','string','max:150',new TitleValidationRule],
+            'name'    => ['required','string','max:150',new TitleValidationRule],
             'email'    => ['required','email:dns','unique:users,email,NULL,id'],
             'password'   => ['required', 'string', 'min:8','confirmed'],
             'password_confirmation' => ['required','min:8','same:password'],

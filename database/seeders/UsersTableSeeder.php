@@ -26,8 +26,8 @@ class UsersTableSeeder extends Seeder
             ],
             [
                 'sub_admin_id'     => 2,
-                'name'           => "Jenny's Kitchen",
-                'email'          => 'jennykitchen@gmail.com',
+                'name'           => "Klive's Kitchen",
+                'email'          => 'klivekitchen@gmail.com',
                 'password'       => bcrypt('12345678'),
                 'remember_token' => null,
                 'email_verified_at' => date('Y-m-d H:i:s'),
