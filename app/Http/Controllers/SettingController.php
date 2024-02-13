@@ -54,6 +54,11 @@ class SettingController extends Controller
 
                         $setting_value = null;
 
+                    }
+                    elseif($setting->type === 'file'){
+
+                        /// code pending     path 'settings/doc/'
+
                     } else {
                         // Handle other fields
                         $setting->value = $setting_value;

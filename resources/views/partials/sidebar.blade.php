@@ -6,7 +6,7 @@
             </span>
         </div>
         <ul>
-            <li><a href="dashboard.html" class="active" title="Dashboard">Dashboard</a></li>
+            <li><a href="dashboard.html" class="{{ Request::is('dashboard*') ? 'active' : '' }}" title="Dashboard">Dashboard</a></li>
             <li><a href="messages.html" title="Messages">Messages</a></li>
             <li><a href="client-admin.html" title="Client Admin">Client Admin</a></li>
             <li><a href="client-details.html" title="Client Details">Client Details</a></li>

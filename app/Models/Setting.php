@@ -50,7 +50,7 @@ class Setting extends Model
 
     public function image()
     {
-        return $this->morphOne(Uploads::class, 'uploadsable')->where('type','setting');
+        return $this->morphOne(Uploads::class, 'uploadsable')->where('type','setting-image');
     }
 
     public function getImageUrlAttribute()
@@ -61,15 +61,15 @@ class Setting extends Model
         return "";
     }
 
-    public function docFile()
+    public function doc()
     {
-        return $this->morphOne(Uploads::class, 'uploadsable')->where('type','setting');
+        return $this->morphOne(Uploads::class, 'uploadsable')->where('type','setting-file');
     }
 
-    public function getDocFileUrlAttribute()
+    public function getDocUrlAttribute()
     {
-        if($this->docFile){
-            return $this->docFile->file_url;
+        if($this->doc){
+            return $this->doc->file_url;
         }
         return "";
     }

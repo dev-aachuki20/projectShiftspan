@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\OccupationController;
+use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\SubAdminController;
 use Illuminate\Http\Request;
@@ -34,4 +35,5 @@ Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/all-occupations', [OccupationController::class, 'AllOccupations']);
 
     Route::post('user/profile/{user}', [StaffController::class, 'updateProfile']);
+    Route::get('/setting-doc', [SettingController::class, 'getPolicyDoc']);
 });

@@ -93,13 +93,13 @@ if (!function_exists('getSetting')) {
 	{
 		$result = null;
 		$setting = Setting::where('key',$key)->where('status',1)->first();
-		if($setting->type == 'image'){
-			$result = $setting->image_url;
-		}elseif($setting->type == 'file'){
-			$result = $setting->doc_file_url;
-		}else{
-			$result = $setting->value;
-		}
+		if ($setting->type == 'image') {
+            $result = $setting->image_url;
+        } elseif ($setting->type == 'file') {
+            $result = $setting->doc_url;
+        } else {
+            $result = $setting->value;
+        }
 		return $result;
 	}
 }

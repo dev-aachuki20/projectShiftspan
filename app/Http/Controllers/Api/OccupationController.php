@@ -8,18 +8,14 @@ use Illuminate\Http\Request;
 
 class OccupationController extends Controller
 {
-    public function AllOccupations(Request $request){
-
-        $request->validate([
-            'company_id'=> ['required','numeric','exists:users,id'],
-        ]);
+    public function AllOccupations(Request $request)
+    {
+        $request->validate(['company_id'=> ['required','numeric','exists:users,id']]);
         $allOccupations = Occupation::select('id','name')->where('sub_admin_id',$request->company_id)->orderBy('name', 'asc')->get();
-        $responseData = [
+        return response()->json([
             'status'    => true,
             'message'   => 'success',
             'data'  => $allOccupations,
-        ];
-
-        return response()->json($responseData, 200);
+        ], 200);
     }
 }

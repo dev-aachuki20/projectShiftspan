@@ -10,7 +10,7 @@
 	<div class="main-dashboard ">
         @include('partials.header')
 
-		<div class="content-area">
+		<div class="content-area  {{ Request::is('dashboard') ? 'dashboard-page' : '' }}">
 			@include('partials.sidebar')
 			@yield('main-content')
 		</div>

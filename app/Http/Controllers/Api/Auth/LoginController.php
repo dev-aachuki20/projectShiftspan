@@ -31,7 +31,7 @@ class LoginController extends Controller
             return response()->json([
                 'status'            => true,
                 'message'           => trans('messages.login_success'),
-                'userData'          => [
+                'data'          => [
                     'id'           => $user->id,
                     'name'   => $user->name ?? null,
                     'phone'   => $user->phone ?? null,
