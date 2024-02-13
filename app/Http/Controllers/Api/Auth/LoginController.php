@@ -38,6 +38,7 @@ class LoginController extends Controller
                     'email'    => $user->email ?? null,
                     'address'   => $user->profile->address ?? null,
                     'occupation_name'    => $user->profile->occupation->name ?? null,
+                    'company_id'    => $user->company->sub_admin_id ?? null,
                     'company_name'    => $user->company->name ?? null,
                     'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('app.default.staff-image')),
                     'user_dbs_certificate'=> $user->dbs_certificate_url ? $user->dbs_certificate_url : "",

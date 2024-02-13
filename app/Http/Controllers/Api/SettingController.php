@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
-    public function getPolicyDoc(){
-        //dd(getSetting('gdpr_policy'));
+    public function getPolicyDoc()
+    {
         return response()->json([
             'status'            => true,
             'message'           => trans('messages.success'),
