@@ -69,6 +69,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
+    public function getIsStaffAttribute()
+    {
+        return $this->roles()->where('id', config('app.roleid.staff'))->exists();
+    }
+
     public function occupations(){
         return $this->belongsToMany(Occupation::class);
     }

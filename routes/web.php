@@ -4,6 +4,9 @@ use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\LocationController;
+use App\Http\Controllers\OccupationController;
+use App\Http\Controllers\ShiftController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,7 +23,7 @@ use Illuminate\Support\Facades\Route;
 // Authentication Routes
 Route::group(['middleware' => 'guest'], function () {
     Route::controller(LoginController::class)->group(function(){
-      
+
         Route::get('/', function () {
             return redirect()->route('login');
         });
@@ -41,6 +44,13 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::middleware(['auth','PreventBackHistory'])->group(function () {
-    Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
-    Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+    Route::prefix('admin')->group(function (){
+        Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
+        Route::get('/logout',[LoginController::class,'logout'])->name('logout');
+        Route::resource('/location',LocationController::class);
+        Route::resource('/occupation',OccupationController::class);
+        Route::resource('/shift',ShiftController::class);
+    });
 });
+
+

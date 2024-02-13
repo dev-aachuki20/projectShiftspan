@@ -29,11 +29,11 @@
             </ul>
         </div>
         <div class="logo-area px-2 px-xl-4">
-            <a href="#"><img src="images/logo.png" alt="Shift Span App | logo" class=""></a>
+            <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Shift Span App | logo" class=""></a>
         </div>
         <div class="menu-right">
             <ul>
-                <li class="dropdown"><a href="javascript:void(0)" title="Klive's Kitchen" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span class="d-none d-lg-inline-block">Klive's Kitchen</span><span class="menu-icon"><img src="images/kitchen.svg" alt="Kitchen set" class="img-fluid"></span></a>
+                <li class="dropdown"><a href="javascript:void(0)" title="Klive's Kitchen" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span class="d-none d-lg-inline-block">Klive's Kitchen</span><span class="menu-icon"><img src="{{ asset('images/kitchen.svg') }}" alt="Kitchen set" class="img-fluid"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="profile.html" title="Profile">Profile</a></li>
                         <li><a href="change-password.html" title="Change Password">Change Password</a></li>
@@ -45,7 +45,7 @@
                 </li>
                 <li class="d-none d-lg-inline-block"><a href="#" title="Help">Help</a></li>
                 <li class="d-none d-lg-inline-block"><a href="contact-us.html" title="Contact Us">Contact Us</a></li>
-                <li class="d-none d-lg-inline-block"><a href="#" title="Log Out">Log Out</a></li>
+                <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
             </ul>
         </div>
     </div>

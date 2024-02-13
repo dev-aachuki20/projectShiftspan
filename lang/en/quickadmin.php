@@ -2,50 +2,23 @@
 
 return [
 
-    'alert-type' => [
-        'success'  => 'success',
-        'info'     => 'info',
-        'warning'  => 'warning',
-        'error'    => 'error',
-    ],
-
     'dashboard' => [
         'title' => 'Dashboard',
 	],
 
-	'staff-management' => [
-		'title' => 'Staff management',
-		'fields' => [
-            'title' => 'Title',
-            'add' 	=> 'Add New',
-            'list-title'=>'Staff List',
-            'list'=> [
-                'name'=>'Name',
-            ],
-            'add-user'=>[
-                'title'=> 'Add User',
-            ]
-		],
+    'location' => [
+        'title' => 'Location',
 	],
 
-    'users' => [
-		'title' => 'Staffs',
-        'profile'=>'My Profile',
-        'users'=>'Staff',
-		'fields' => [
-			'name' => 'Name',
-			'email' => 'Email',
-			'password' => 'Password',
-			'role' => 'Role',
-            'phone'=>'Phone Number',
-            'address'=>'City',
-            'created_at'=>'Created At',
-            'created_by'=>'Created By',
-			'remember-token' => 'Remember token',
-            'add' 	=> 'Add New',
-            'edit' => 'Edit Staff',
-		]
+    'occupation' => [
+        'title' => 'Occupation',
 	],
+
+    'shift' => [
+        'title' => 'Shifts',
+	],
+
+
 
     'profile'=>[
         'title'=> 'My Profile',
@@ -100,7 +73,7 @@ return [
 	'qa_user' => 'User',
 	'qa_name' => 'Name',
 	'qa_email' => 'Email',
-    'qa_username' => 'Username',
+    'qa_username' => 'Username/Email',
 	'qa_password' => 'Password',
 	'qa_remember_token' => 'Remember token',
 	'qa_permissions' => 'Permissions',

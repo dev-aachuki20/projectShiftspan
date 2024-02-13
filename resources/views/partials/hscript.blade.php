@@ -4,12 +4,12 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
 	<!-- Favicon -->
-    <link rel="icon" href="images/favicon.png">
+    <link rel="icon" href="{{ asset('images/favicon.png') }}">
 	<!-- Poppins Google Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<!-- Bootstrap css -->
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/bootstrap.min.css') }}">
 	<!-- Animation css -->
-	<link rel="stylesheet" type="text/css" href="css/animate.min.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/animate.min.css') }}">
 	<!-- Main css -->
-	<link rel="stylesheet" type="text/css" href="css/main.css">
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">

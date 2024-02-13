@@ -6,14 +6,14 @@
             </span>
         </div>
         <ul>
-            <li><a href="dashboard.html" class="{{ Request::is('dashboard*') ? 'active' : '' }}" title="Dashboard">Dashboard</a></li>
+            <li><a href="{{ route('dashboard')}}" class="{{ Request::is('dashboard*') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a></li>
             <li><a href="messages.html" title="Messages">Messages</a></li>
             <li><a href="client-admin.html" title="Client Admin">Client Admin</a></li>
             <li><a href="client-details.html" title="Client Details">Client Details</a></li>
-            <li><a href="shifts.html" title="Shifts">Shifts</a></li>
+            <li><a href="{{ route('shift.index')}}" class="{{ Request::is('location*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a></li>
             <li><a href="staff.html" title="Staff">Staff</a></li>
-            <li><a href="location.html" title="Location">Location</a></li>
-            <li><a href="occupation.html" title="Occupation">Occupation</a></li>
+            <li><a href="{{ route('location.index')}}" class="{{ Request::is('location*') ? 'active' : '' }}" title="@lang('quickadmin.location.title')">@lang('quickadmin.location.title')</a></li>
+            <li><a href="{{ route('occupation.index')}}" class="{{ Request::is('occupation*') ? 'active' : '' }}" title="@lang('quickadmin.occupation.title')">@lang('quickadmin.occupation.title')</a></li>
             <li><a href="settings.html" title="Settings">Settings</a></li>
         </ul>
     </aside>
