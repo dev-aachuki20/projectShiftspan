@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Profile;
 use App\Models\User;
 use App\Rules\IsActive;
+use App\Rules\TitleValidationRule;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -59,7 +60,7 @@ class LoginController extends Controller
     public function registerUser(Request $request)
     {
         $request->validate([
-            'name' => ['required','string'],
+            ['required','string','max:150',new TitleValidationRule],
             'email'    => ['required','email:dns','unique:users,email,NULL,id'],
             'password'   => ['required', 'string', 'min:8','confirmed'],
             'password_confirmation' => ['required','min:8','same:password'],
@@ -84,6 +85,7 @@ class LoginController extends Controller
                 'password' => Hash::make($request->password),
                 'is_active' => 0
             ]);
+
             $user->profile()->create([
                 'occupation_id' => $request->occupation_id,
                 'is_criminal' => $request->is_criminal,

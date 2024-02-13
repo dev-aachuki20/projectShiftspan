@@ -60,6 +60,20 @@ class Setting extends Model
         }
         return "";
     }
+
+    public function docFile()
+    {
+        return $this->morphOne(Uploads::class, 'uploadsable')->where('type','setting');
+    }
+
+    public function getDocFileUrlAttribute()
+    {
+        if($this->docFile){
+            return $this->docFile->file_url;
+        }
+        return "";
+    }
+
     public function createdBy()
     {
         return $this->belongsTo(User::class, 'created_by', 'id');

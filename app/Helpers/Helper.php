@@ -95,21 +95,13 @@ if (!function_exists('getSetting')) {
 		$setting = Setting::where('key',$key)->where('status',1)->first();
 		if($setting->type == 'image'){
 			$result = $setting->image_url;
-		}elseif($setting->type == 'video'){
-			$result = $setting->video_url;
+		}elseif($setting->type == 'file'){
+			$result = $setting->doc_file_url;
 		}else{
 			$result = $setting->value;
 		}
 		return $result;
 	}
-}
-
-if (!function_exists('generateInvoiceNumber')) {
-    function generateInvoiceNumber($orderId) {
-        $timeframe = now()->format('M-y'); // Get the current month abbreviation
-        $invoiceNumber = strtoupper($timeframe) . '-' . str_pad($orderId, 4, '0', STR_PAD_LEFT);
-        return $invoiceNumber;
-    }
 }
 
 

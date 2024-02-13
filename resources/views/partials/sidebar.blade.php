@@ -1,56 +1,20 @@
-<div class="main-sidebar sidebar-style-2">
-    <aside id="sidebar-wrapper">
-      <div class="sidebar-brand">
-        <a href="#">
-          {{-- <div class="circleimg"><img alt="image" src="{{asset('admintheme/assets/img/shopping-bag.png') }}" class="header-logo" /></div> --}}
-          <span>{{ getSetting('company_name') ?? ''}}</span>
-        </a>
-      </div>
-      <ul class="sidebar-menu">
-        <li class="menu-header">Main</li>
-        <li class="{{ Request::is('dashboard*') ? 'active' : '' }}">
-            <a href="{{ route('dashboard') }}" class="nav-link">
-                <x-side-bar-svg-icon icon="dashboard" />
-                <span>@lang('quickadmin.qa_dashboard')</span>
-            </a>
-        </li>
-
-        @can('role_access')
-        <li class="{{ Request::is('roles*') ? 'active' : '' }}">
-            <a href="{{route('roles.index')}}" class="nav-link">
-                <x-side-bar-svg-icon icon="user" />
-                <span>@lang('quickadmin.roles.title')</span></a>
-        </li>
-        @endcan
-
-        @can('staff_access')
-        <li class="{{ Request::is('staff*') ? 'active' : '' }}">
-            <a href="{{ route('staff.index') }}" class="nav-link">
-                <x-side-bar-svg-icon icon="staff" />
-                <span>@lang('quickadmin.user-management.title')</span>
-            </a>
-        </li>
-        @endcan
-
-
-        @can('setting_access')
-        <li class="{{ Request::is('settings*') ? 'active' : '' }}">
-            <a href="{{ route('settings') }}" class="nav-link">
-                <x-side-bar-svg-icon icon="setting" />
-                <span>@lang('quickadmin.settings.title')</span>
-            </a>
-        </li>
-        @endcan
-
-
-
-        <li class="{{ Request::is('logout*') ? 'active' : '' }}">
-            <a class="nav-link" href="{{ route('logout') }}">
-                <x-side-bar-svg-icon icon="logout" />
-                <span>@lang('quickadmin.qa_logout')</span>
-            </a>
-        </li>
-    </ul>
-
+<div class="sidebar-menu">
+    <aside>
+        <div class="d-lg-none text-end sidebar-close">
+            <span>
+                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="26" height="26" x="0" y="0" viewBox="0 0 26 26" style="enable-background:new 0 0 512 512" xml:space="preserve" class=""><g><g data-name="02 User"><path d="M1.27 26a1.27 1.27 0 0 1 -0.898 -2.167l23.461 -23.461a1.27 1.27 0 0 1 1.796 1.796l-23.461 23.461A1.266 1.266 0 0 1 1.27 26z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""/><path d="M24.73 26a1.266 1.266 0 0 1 -0.898 -0.372l-23.461 -23.461A1.27 1.27 0 0 1 2.167 0.372l23.461 23.461A1.27 1.27 0 0 1 24.73 26z" fill="#ffffff" opacity="1" data-original="#ffffff" class=""/></g></g></svg>
+            </span>
+        </div>
+        <ul>
+            <li><a href="dashboard.html" class="active" title="Dashboard">Dashboard</a></li>
+            <li><a href="messages.html" title="Messages">Messages</a></li>
+            <li><a href="client-admin.html" title="Client Admin">Client Admin</a></li>
+            <li><a href="client-details.html" title="Client Details">Client Details</a></li>
+            <li><a href="shifts.html" title="Shifts">Shifts</a></li>
+            <li><a href="staff.html" title="Staff">Staff</a></li>
+            <li><a href="location.html" title="Location">Location</a></li>
+            <li><a href="occupation.html" title="Occupation">Occupation</a></li>
+            <li><a href="settings.html" title="Settings">Settings</a></li>
+        </ul>
     </aside>
-  </div>
+</div>

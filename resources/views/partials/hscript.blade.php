@@ -1,23 +1,15 @@
-<meta charset="UTF-8">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-  <meta content="width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no" name="viewport">
-  <!-- General CSS Files -->
-  <link rel="stylesheet" href="{{ asset('admintheme/assets/css/app.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/prism/prism.css') }}">
-   <!-- Template CSS -->
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/bootstrap-social/bootstrap-social.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/datatables/datatables.min.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/datatables/DataTables-1.10.16/css/dataTables.bootstrap4.min.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/css/style.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/css/components.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/css/custom.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/izitoast/css/iziToast.min.css') }}">
-   <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/select2/dist/css/select2.min.css') }}">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+	<meta name="author" content="BlogTheme">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-   {{-- <link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/flag-icon-css/css/flag-icon.min.css') }}"> --}}
-   <!-- Custom style CSS -->
-
-   <link rel='shortcut icon' type='image/x-icon' href="{{ asset('admintheme/assets/img/favicon.ico') }}" />
-
-
-
+	<!-- Favicon -->
+    <link rel="icon" href="images/favicon.png">
+	<!-- Poppins Google Font -->
+	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+	<!-- Bootstrap css -->
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+	<!-- Animation css -->
+	<link rel="stylesheet" type="text/css" href="css/animate.min.css">
+	<!-- Main css -->
+	<link rel="stylesheet" type="text/css" href="css/main.css">

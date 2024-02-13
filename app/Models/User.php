@@ -92,6 +92,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->morphMany(Uploads::class, 'uploadsable');
     }
 
+    // profile image
+
     public function profileImage()
     {
         return $this->morphOne(Uploads::class, 'uploadsable')->where('type', 'user_profile');
