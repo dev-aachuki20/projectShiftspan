@@ -9,6 +9,7 @@ use Yajra\DataTables\Services\DataTable;
 use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Html\Editor\Editor;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
+use Illuminate\Support\Facades\Gate;
 use PhpParser\Node\Expr\FuncCall;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -35,10 +36,13 @@ class LocationDataTable extends DataTable
                 return ($record->createdBy) ? $record->createdBy->name : '';
             }) */
             ->addColumn('action', function($record){
-
-                $actionHtml = '<button class="dash-btn sky-bg small-btn editLocationBtn" data-href="'.route('locations.edit', $record->uuid).'">'.__('global.edit').'</button><br>
-				<button class="dash-btn red-bg small-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'">'.__('global.delete').'</button>';
-
+                $actionHtml = '';
+                if (Gate::check('location_edit')) {
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" data-href="'.route('locations.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
+                }
+                if (Gate::check('location_delete')) {
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'">'.__('global.delete').'</button>';
+                }
                 return $actionHtml;
             })
             ->setRowId('id')
@@ -58,21 +62,17 @@ class LocationDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
+        $orderByColumn = 1;
+        if (Gate::check('location_delete')) {
+            $orderByColumn = 2;
+        }
         return $this->builder()
                     ->setTableId('location-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(1)
-                    ->selectStyleSingle()
-                    ->buttons([
-                        // Button::make('excel'),
-                        // Button::make('csv'),
-                        // Button::make('pdf'),
-                        // Button::make('print'),
-                        // Button::make('reset'),
-                        // Button::make('reload')
-                    ]);
+                    ->orderBy($orderByColumn)
+                    ->selectStyleSingle();
     }
 
     /**
@@ -80,16 +80,15 @@ class LocationDataTable extends DataTable
      */
     public function getColumns(): array
     {
-        return [
-            Column::make('checkbox')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('position-relative'),
-            Column::make('name')->title('<span>'.trans('cruds.location.fields.name').'</span>'),
-            // Column::make('createdBy.name')->title(trans('cruds.location.fields.created_by')),
-            Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),
-        ];
+        $columns = [];
+        if (Gate::check('location_delete')) {
+            $columns[] = Column::make('checkbox')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('position-relative');
+        } 
+        $columns[] = Column::make('name')->title('<span>'.trans('cruds.location.fields.name').'</span>');
+        $columns[] = Column::make('created_at')->title(trans('cruds.location.fields.created_at'))->searchable(false)->visible(false);
+        $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+
+        return $columns;
     }
 
     /**
