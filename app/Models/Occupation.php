@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class Occupation extends Model
 {
@@ -14,19 +15,20 @@ class Occupation extends Model
     protected $guard = 'web';
     public $table = 'occupations';
     protected $fillable = [
+        'uuid',
         'name',
-        'sub_admin_id',
+        'status',
         'created_by',
         'created_at',
         'updated_at',
         'deleted_at',
-        'is_active',
     ];
 
     protected static function boot ()
     {
         parent::boot();
         static::creating(function(Occupation $model) {
+            $model->uuid = Str::uuid();
             $model->created_by = auth()->user()->id;
         });
     }
@@ -39,5 +41,10 @@ class Occupation extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
     }
 }

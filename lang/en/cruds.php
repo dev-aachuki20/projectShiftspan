@@ -56,5 +56,21 @@ return [
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
         ]
+    ],
+
+    'occupation' => [
+        'title' => 'Occupations',
+        'title_singular' => 'Occupation',
+        'fields' => [
+            'id'                => 'ID',
+            'name'              => 'Name',
+            'occupation_name'   => 'Occupation Name',
+            'status'            => 'Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
     ]
+
 ];

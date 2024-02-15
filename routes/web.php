@@ -52,6 +52,7 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('/location/mass-destroy', [LocationController::class, 'massDestroy'])->name('locations.massDestroy');
 
         Route::resource('/occupations',OccupationController::class);
+        Route::post('/multiple-occupations-delete', [OccupationController::class, 'deleteMultipleOccupation'])->name('getMultipleOccupationToDelete');
 
         Route::resource('/shifts',ShiftController::class);
     });

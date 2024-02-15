@@ -14,13 +14,11 @@ return new class extends Migration
         Schema::create('occupations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid');
-            $table->string('name')->unique();
-            $table->unsignedBigInteger('sub_admin_id')->nullable();
+            $table->string('name')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();
-            $table->tinyInteger('is_active')->default(1)->comment('1=> active, 0=>deactive');
+            $table->tinyInteger('status')->default(1)->comment('1=> active, 0=>deactive');
             $table->timestamps();
             $table->softDeletes();
-            $table->foreign('sub_admin_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
