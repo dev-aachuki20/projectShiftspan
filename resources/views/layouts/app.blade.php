@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>@yield('title')</title>
+	<title>{{ config('app.name') }} | @yield('title')</title>
     @include('partials.hscript')
     @yield('customCss')
 </head>
@@ -10,11 +10,12 @@
 	<div class="main-dashboard ">
         @include('partials.header')
 
-		<div class="content-area  {{ Request::is('dashboard') ? 'dashboard-page' : '' }}">
+		<div class="content-area  {{ request()->is('dashboard') ? 'dashboard-page' : '' }}">
 			@include('partials.sidebar')
 			@yield('main-content')
 		</div>
 	</div>
+	<div class="popup_render_div"></div>
     @include('partials.fscript')
 </body>
 

@@ -44,4 +44,17 @@ return [
         ],
     ],
 
+    'location' => [
+        'title' => 'Locations',
+        'title_singular' => 'Location',
+        'fields' => [
+            'id'                => 'ID',
+            'name'              => 'Name',
+            'status'            => 'Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ]
 ];

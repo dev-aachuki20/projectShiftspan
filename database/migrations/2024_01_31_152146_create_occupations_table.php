@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('occupations', function (Blueprint $table) {
             $table->id();
+            $table->uuid('uuid');
             $table->string('name')->unique();
             $table->unsignedBigInteger('sub_admin_id')->nullable();
             $table->unsignedBigInteger('created_by')->nullable();

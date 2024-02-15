@@ -13,3 +13,6 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/animate.min.css') }}">
 	<!-- Main css -->
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
+
+	<!-- datatable -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">

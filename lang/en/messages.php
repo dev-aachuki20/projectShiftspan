@@ -34,6 +34,7 @@ return [
     'register_success'=>'Your Account created Successfully! Please wait for the Approval!',
     'login_success'=>'You have logged in successfully!',
     'logout_success'=>'Logged out successfully!',
+    'warning_select_record'=> 'Please select at least one record',
 ];
 
 ?>

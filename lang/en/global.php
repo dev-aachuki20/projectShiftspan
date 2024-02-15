@@ -271,6 +271,6 @@ return [
     'inactive'                            => 'Inactive',
     'add_button_url'                      => 'Add Button and URL',
     'add_more'                            => 'Add More',
-
-
+    'new'                                 => 'New',
+    'onceClickedRecordDeleted'             => 'Once deleted, this record cannot be restored',
 ];

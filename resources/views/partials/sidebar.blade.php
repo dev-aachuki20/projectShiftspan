@@ -6,15 +6,41 @@
             </span>
         </div>
         <ul>
-            <li><a href="{{ route('dashboard')}}" class="{{ Request::is('dashboard*') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a></li>
-            <li><a href="messages.html" title="Messages">Messages</a></li>
-            <li><a href="client-admin.html" title="Client Admin">Client Admin</a></li>
-            <li><a href="client-details.html" title="Client Details">Client Details</a></li>
-            <li><a href="{{ route('shift.index')}}" class="{{ Request::is('location*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a></li>
-            <li><a href="staff.html" title="Staff">Staff</a></li>
-            <li><a href="{{ route('location.index')}}" class="{{ Request::is('location*') ? 'active' : '' }}" title="@lang('quickadmin.location.title')">@lang('quickadmin.location.title')</a></li>
-            <li><a href="{{ route('occupation.index')}}" class="{{ Request::is('occupation*') ? 'active' : '' }}" title="@lang('quickadmin.occupation.title')">@lang('quickadmin.occupation.title')</a></li>
-            <li><a href="settings.html" title="Settings">Settings</a></li>
+            <li>
+                <a href="{{ route('dashboard')}}" class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0);" title="Messages">Messages</a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0);" title="Client Admin">Client Admin</a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0);" title="Client Details">Client Details</a>
+            </li>
+
+            <li>
+                <a href="{{ route('shifts.index')}}" class="{{ request()->is('admin/shifts') || request()->is('admin/shifts/*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0);" title="Staff">Staff</a>
+            </li>
+
+            <li>
+                <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title')</a>
+            </li>
+
+            <li>
+                <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('quickadmin.occupation.title')">@lang('quickadmin.occupation.title')</a>
+            </li>
+
+            <li>
+                <a href="javascript:void(0);" title="Settings">Settings</a>
+            </li>
         </ul>
     </aside>
 </div>

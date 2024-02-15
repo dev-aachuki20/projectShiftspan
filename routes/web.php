@@ -3,10 +3,10 @@
 use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\LocationController;
-use App\Http\Controllers\OccupationController;
-use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\OccupationController;
+use App\Http\Controllers\Backend\ShiftController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -47,9 +47,13 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
     Route::prefix('admin')->group(function (){
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
-        Route::resource('/location',LocationController::class);
-        Route::resource('/occupation',OccupationController::class);
-        Route::resource('/shift',ShiftController::class);
+
+        Route::resource('/locations',LocationController::class);
+        Route::post('/location/mass-destroy', [LocationController::class, 'massDestroy'])->name('locations.massDestroy');
+
+        Route::resource('/occupations',OccupationController::class);
+
+        Route::resource('/shifts',ShiftController::class);
     });
 });
 

@@ -48,99 +48,6 @@ $(document).ready(function($){
         $('.selected-options').text(selected.length > 0 ? selected.join(', ') : 'Select...');
     }
 
-	// Client Admin Table
-    $('#client-admin-table').DataTable();
-	// Shift page Table
-    var myTable = $('#shift-table').DataTable();
-    $('th .custom-checkbox input').on('click', function() {
-        var isChecked = $(this).prop('checked');
-        $('input[type="checkbox"]', myTable.rows().nodes()).prop('checked', isChecked);
-    });
-    $('#shift-table tbody').on('change', 'input[type="checkbox"]', function() {
-        if (!this.checked) {
-            var el = $('th .custom-checkbox input').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
-    $('#shift-table').on('change', 'tbody input[type="checkbox"]', function() {
-        var allChecked = $('input[type="checkbox"]', myTable.rows().nodes()).length === $('input[type="checkbox"]:checked', myTable.rows().nodes()).length;
-        $('th .custom-checkbox input').prop('checked', allChecked);
-    });
-	// Staff page Table
-    var myTableStaff = $('#staff-table').DataTable();
-    $('th .custom-checkbox input').on('click', function() {
-        var isChecked = $(this).prop('checked');
-        $('input[type="checkbox"]', myTableStaff.rows().nodes()).prop('checked', isChecked);
-    });
-    $('#staff-table tbody').on('change', 'input[type="checkbox"]', function() {
-        if (!this.checked) {
-            var el = $('th .custom-checkbox input').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
-    $('#staff-table').on('change', 'tbody input[type="checkbox"]', function() {
-        var allChecked = $('input[type="checkbox"]', myTableStaff.rows().nodes()).length === $('input[type="checkbox"]:checked', myTableStaff.rows().nodes()).length;
-        $('th .custom-checkbox input').prop('checked', allChecked);
-    });
-    // Client Detail page Table
-    var myTableCdetail = $('#client-detail-table').DataTable();
-    $('th .custom-checkbox input').on('click', function() {
-        var isChecked = $(this).prop('checked');
-        $('input[type="checkbox"]', myTableCdetail.rows().nodes()).prop('checked', isChecked);
-    });
-    $('#client-detail-table tbody').on('change', 'input[type="checkbox"]', function() {
-        if (!this.checked) {
-            var el = $('th .custom-checkbox input').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
-    $('#client-detail-table').on('change', 'tbody input[type="checkbox"]', function() {
-        var allChecked = $('input[type="checkbox"]', myTableCdetail.rows().nodes()).length === $('input[type="checkbox"]:checked', myTableCdetail.rows().nodes()).length;
-        $('th .custom-checkbox input').prop('checked', allChecked);
-    });
-    // Location page Table
-    var myTableLocation = $('#location-table').DataTable();
-    $('th .custom-checkbox input').on('click', function() {
-        var isChecked = $(this).prop('checked');
-        $('input[type="checkbox"]', myTableLocation.rows().nodes()).prop('checked', isChecked);
-    });
-    $('#location-table tbody').on('change', 'input[type="checkbox"]', function() {
-        if (!this.checked) {
-            var el = $('th .custom-checkbox input').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
-    $('#location-table').on('change', 'tbody input[type="checkbox"]', function() {
-        var allChecked = $('input[type="checkbox"]', myTableLocation.rows().nodes()).length === $('input[type="checkbox"]:checked', myTableLocation.rows().nodes()).length;
-        $('th .custom-checkbox input').prop('checked', allChecked);
-    });
-    // occupation page Table
-    var myTableOccupation = $('#occupation-table').DataTable();
-    $('th .custom-checkbox input').on('click', function() {
-        var isChecked = $(this).prop('checked');
-        $('input[type="checkbox"]', myTableOccupation.rows().nodes()).prop('checked', isChecked);
-    });
-    $('#occupation-table tbody').on('change', 'input[type="checkbox"]', function() {
-        if (!this.checked) {
-            var el = $('th .custom-checkbox input').get(0);
-            if (el && el.checked && ('indeterminate' in el)) {
-                el.indeterminate = true;
-            }
-        }
-    });
-    $('#occupation-table').on('change', 'tbody input[type="checkbox"]', function() {
-        var allChecked = $('input[type="checkbox"]', myTableOccupation.rows().nodes()).length === $('input[type="checkbox"]:checked', myTableOccupation.rows().nodes()).length;
-        $('th .custom-checkbox input').prop('checked', allChecked);
-    });
-
     // Multiple Input type file select for add staff modal
     $('.fileInput').on('change', function(e) {
         var files = e.target.files;
@@ -171,3 +78,52 @@ $(document).on('change', ".fileInputBoth",function(e){
 });
 
 
+function fireSuccessSwal(title,message){
+	Swal.fire({
+        title: title, 
+        text: message, 
+        type: "success",
+        icon: "success",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#04a9f5"
+    });
+}
+
+function fireWarningSwal(title,message){
+  Swal.fire({
+        title: title, 
+        text: message, 
+        type: "warning",
+        icon: "warning",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#04a9f5"
+    });
+}
+
+function fireErrorSwal(title,message){
+	Swal.fire({
+        title: title, 
+        text: message, 
+        type: "error",
+        icon: "error",
+        confirmButtonText: "Okay",
+        confirmButtonColor: "#04a9f5"
+    });
+}
+
+$(document).on('change', '#dt_cb_all', function(e){
+    var t = $(this);
+    if(t.prop('checked') === true){
+        $('.dt_cb').prop('checked', true);
+    } else {
+        $('.dt_cb').prop('checked', false);
+    }
+});
+
+$(document).on('change', '.dt_cb', function(e){    
+    if ($('.dt_cb:checked').length == $('.dt_cb').length) {
+        $('#dt_cb_all').prop('checked', true);
+    } else {
+        $('#dt_cb_all').prop('checked', false);
+    }
+});

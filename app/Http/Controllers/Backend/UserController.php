@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Backend;
 
+use App\Http\Controllers\Controller;
 use App\DataTables\UserDataTable;
 use App\DataTables\UserTypeDataTable;
 use App\Exports\UserExport;

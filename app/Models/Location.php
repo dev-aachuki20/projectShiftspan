@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
-
+use Illuminate\Support\Str;
 
 class Location extends Model
 {
@@ -15,7 +15,9 @@ class Location extends Model
     protected $guard = 'web';
     public $table = 'locations';
     protected $fillable = [
+        'uuid',
         'name',
+        'status',
         'created_by',
         'created_at',
         'updated_at',
@@ -27,6 +29,7 @@ class Location extends Model
     {
         parent::boot();
         static::creating(function(Location $model) {
+            $model->uuid = Str::uuid();
             $model->created_by = auth()->user()->id;
         });
     }
@@ -34,5 +37,10 @@ class Location extends Model
     public function shifts()
     {
         return $this->hasMany(Shift::class);
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
     }
 }

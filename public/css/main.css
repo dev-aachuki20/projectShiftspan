@@ -1797,3 +1797,30 @@ textarea:focus{
 }
 
 
+/* Developer css */
+.common-table{
+    margin-top: 20px !important;
+    border-spacing: 0px 12px !important; 
+    border-collapse: separate !important;
+}
+.short-table th:not(:first-child,.short-hidden) span::after{
+   transform-origin: center; 
+}
+.common-table.dataTable thead .sorting{
+    background-image: none !important;
+}
+.common-table.dataTable thead .sorting.sorting_asc span::after{
+    transform: rotate(-180deg) translateY(7px);
+}
+.common-table.dataTable thead th,
+.common-table.dataTable.no-footer{
+    border: none;
+}
+.form-label .validation-error-block{
+    color: #f00;
+    font-size: 12px;
+    margin-top: 6px;
+    display: block;
+    margin-left: 8px;
+    line-height: 14px;
+}
