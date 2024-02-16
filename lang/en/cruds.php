@@ -29,9 +29,19 @@ return [
             'updated_at'               => 'Updated',
             'deleted_at'               => 'Deleted',
             'rating'                   => 'Rating',
-
         ],
+        // admin profile
+        'admin_profile'     => [
+            'title'          => 'Profile',
+            'fields'         => [
+                'admin_name'               => 'Admin Name',
+                'mobile'                   => 'Mobile',
+                'image'                    => 'Image',
+            ],
+        ],   
     ],
+    
+
     'permission'     => [
         'title'          => 'Permissions',
         'title_singular' => 'Permission',

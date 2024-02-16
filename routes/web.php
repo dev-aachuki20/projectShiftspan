@@ -7,6 +7,7 @@ use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\OccupationController;
 use App\Http\Controllers\Backend\ShiftController;
+use App\Http\Controllers\Backend\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -45,6 +46,9 @@ Route::group(['middleware' => 'guest'], function () {
 
 Route::middleware(['auth','PreventBackHistory'])->group(function () {
     Route::prefix('admin')->group(function (){
+        Route::get('profile', [UserController::class, 'showProfile'])->name('show.profile');
+        Route::post('profile', [UserController::class, 'updateProfile'])->name('update.profile');
+
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 

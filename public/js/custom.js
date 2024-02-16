@@ -65,19 +65,6 @@ $(document).ready(function($){
     });
 });
 
-// Image show in profile page
-$(document).on('change', ".fileInputBoth",function(e){
-	var files = e.target.files;
-	for (var i = 0; i < files.length; i++) {
-		var reader2 = new FileReader();
-		reader2.onload = function(e) {
-			$('.img-prePro img').attr('src', e.target.result);
-		};
-		reader2.readAsDataURL(files[i]);
-	}
-});
-
-
 function fireSuccessSwal(title,message){
 	Swal.fire({
         title: title, 
@@ -111,6 +98,27 @@ function fireErrorSwal(title,message){
     });
 }
 
+
+function toasterAlert(status, message) {
+    // success, error, warning, info
+    const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        // showCancelButton :true,
+        didOpen: (toast) => {
+            toast.onmouseenter = Swal.stopTimer;
+            toast.onmouseleave = Swal.resumeTimer;
+        }
+    });
+    Toast.fire({
+        icon: status,
+        title: message
+    });
+}
+
 $(document).on('change', '#dt_cb_all', function(e){
     var t = $(this);
     if(t.prop('checked') === true){
@@ -127,3 +135,5 @@ $(document).on('change', '.dt_cb', function(e){
         $('#dt_cb_all').prop('checked', false);
     }
 });
+
+

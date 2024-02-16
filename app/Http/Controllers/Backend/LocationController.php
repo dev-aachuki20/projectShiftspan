@@ -21,7 +21,6 @@ class LocationController extends Controller
     public function index(LocationDataTable $dataTable)
     {
         abort_if(Gate::denies('location_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-
         return $dataTable->render('admin.location.index');
     }
 
@@ -32,9 +31,15 @@ class LocationController extends Controller
     {
         abort_if(Gate::denies('location_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
-            $viewHTML = view('admin.location.create')->render();
-            return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            try{
+                $viewHTML = view('admin.location.create')->render();
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            } 
+            catch (\Exception $e) {     
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -61,6 +66,7 @@ class LocationController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -76,11 +82,17 @@ class LocationController extends Controller
      */
     public function edit(Request $request, $id)
     {
-        if($request->ajax()) {            
-            $location = Location::where('uuid', $id)->first();
-            $viewHTML = view('admin.location.edit', compact('location'))->render();
-            return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+        if($request->ajax()) {        
+            try{    
+                $location = Location::where('uuid', $id)->first();
+                $viewHTML = view('admin.location.edit', compact('location'))->render();
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            } 
+            catch (\Exception $e) {     
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -107,6 +119,7 @@ class LocationController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -132,6 +145,7 @@ class LocationController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     public function massDestroy(Request $request)
@@ -161,5 +175,6 @@ class LocationController extends Controller
                 }
             }
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 }

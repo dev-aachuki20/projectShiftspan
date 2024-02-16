@@ -19,33 +19,64 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\Rule;
 use Maatwebsite\Excel\Facades\Excel;
 
 class UserController extends Controller
 {
 
     public function showprofile(){
-        abort_if(Gate::denies('profile_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $addresses = Address::all();
         $user = auth()->user();
-        return view('admin.profile.show', compact('addresses','user'));
+        return view('admin.profile', compact('user'));
     }
 
     public function updateprofile(Request $request){
+        
         $user = auth()->user();
-        $validatedData = $request->validate([
-            'name' => ['required','string','unique:users,name,'.$user->id, new TitleValidationRule],
-            // 'email' => ['required','email','unique:users,email,' . $user->id],
-            'phone' => ['nullable','digits:10','numeric'],
-            'address_id' => ['required','numeric'],
+        $request->validate([
+            'name'  => ['required'],
+            'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
+            'phone' => [
+                'required',
+                'integer',
+                'regex:/^[0-9]{7,15}$/',
+                'not_in:-',
+                'unique:users,phone,'. $user->id.',id,deleted_at,NULL',
+            ],
+        ],[
+            'phone.required'=>'The phone number field is required',
+            'phone.regex' =>'The phone number length must be 7 to 15 digits.',
+            'phone.unique' =>'The phone number already exists.',
+            'profile_image.image' =>'Please upload image.',
+            'profile_image.mimes' =>'Please upload image with extentions: jpeg,png,jpg.',
+            'profile_image.max' =>'The image size must equal or less than 2MB',
         ]);
+        if($request->ajax()){
+            DB::beginTransaction();
+            try {            
+                $user->update($request->all());
 
-        $user->update($validatedData);
-        return response()->json(['success' => true,
-        'message' => trans('messages.crud.update_record'),
-        'title'=> trans('quickadmin.profile.profile'),
-        'alert-type'=> trans('quickadmin.alert-type.success')
-        ], 200);
+                if($request->has('profile_image')){
+                    $uploadId = null;
+                    $actionType = 'save';
+                    if($profileImageRecord = $user->profileImage){
+                        $uploadId = $profileImageRecord->id;
+                        $actionType = 'update';
+                    }
+                    uploadImage($user, $request->profile_image, 'user/profile-images',"user_profile", 'original', $actionType, $uploadId);
+                }
+                DB::commit();
+                $data = [
+                    'success' => true,
+                    'message' => trans('messages.crud.update_record'),
+                ];
+                return response()->json($data, 200);
+            } catch (\Exception $e) {
+                DB::rollBack();                
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     public function updateprofileImage(Request $request){

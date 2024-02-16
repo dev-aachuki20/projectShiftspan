@@ -45,6 +45,12 @@
                         $('.popup_render_div').html(response.htmlView);
                         $('#addLocationModal').modal('show');
                     }
+                },
+                error: function (response) {
+                    $(".submitBtn").attr('disabled', false);
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } 
                 }
             })
         });
@@ -66,14 +72,14 @@
                 data: formData,
                 success: function (response) {                
                     if(response.success) {
+                        $('#location-table').DataTable().ajax.reload(null, false);
                         $('#addLocationModal').modal('hide');
                         fireSuccessSwal('Success',response.message);
-                        $('#location-table').DataTable().ajax.reload(null, false);
                     }
                 },
                 error: function (response) {
-                    if(response.error_type == 'something_error'){
-                        fireErrorSwal('Error',response.message);
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
@@ -110,6 +116,12 @@
                         $('.popup_render_div').html(response.htmlView);
                         $('#editLocationModal').modal('show');
                     }
+                },
+                error: function (response) {
+                    $(".submitBtn").attr('disabled', false);
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } 
                 }
             });
         });
@@ -132,25 +144,21 @@
                 data: formData,
                 success: function (response) {
                     if(response.success) {
-                        $('#editLocationModal').modal('hide');
-                        fireSuccessSwal('Success',response.message);
                         $('#location-table').DataTable().ajax.reload(null, false);
+                        $('#editLocationModal').modal('hide');
+                        toasterAlert('success',response.message);
                     }
                 },
                 error: function (response) {
                     $(".submitBtn").attr('disabled', false);
-                    if(response.error_type == 'something_error'){
-                        fireErrorSwal('Error',response.message);
+                    if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
-                            if(key == 'resume' || key == 'gender'){
-                                $('#'+key).html(errorLabelTitle);
-                            }
-                            else{
-                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            }                    
+                            
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
                         });
                     }
                 },
@@ -182,15 +190,15 @@
                         data: { _token: "{{ csrf_token() }}" },
                         success: function (response) {
                             if(response.success) {
-                                fireSuccessSwal('Success',response.message);
                                 $('#location-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
                             }
                             else {
-                                fireErrorSwal('Error',response.message);
+                                toasterAlert('error',response.error);
                             }
                         },
                         error: function(res){
-                            fireErrorSwal('Error',res.message);
+                            toasterAlert('error',res.responseJSON.error);
                         }
                     });
                 }
@@ -230,15 +238,15 @@
                         dataType: 'json',
                         success: function (response) {
                             if(response.success) {
-                                fireSuccessSwal('Success',response.message);
                                 $('#location-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
                             }
                             else {
-                                fireErrorSwal('Error',response.message);
+                                toasterAlert('error',response.error);
                             }
                         },
                         error: function(res){
-                            fireErrorSwal('Error',res.message);
+                            toasterAlert('error',res.responseJSON.error);
                         }
                     })
                 }
