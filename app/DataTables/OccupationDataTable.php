@@ -68,6 +68,30 @@ class OccupationDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy($orderByColumn)
+                    ->parameters([
+                        'responsive' => true,
+                        "scrollCollapse" => true,
+                        'autoWidth' => true,
+                        'language' => [
+                            "sZeroRecords" => __('cruds.data_not_found'),
+                            "sProcessing" => __('cruds.processing'),
+                            "sLengthMenu" => __('cruds.show') . " _MENU_ " . __('cruds.entries'),
+                            "sInfo" => config('app.locale') == 'en' ?
+                                __('cruds.showing') . " _START_ " . __('cruds.to') . " _END_ " . __('cruds.of') . " _TOTAL_ " . __('cruds.entries') :
+                                __('cruds.showing') . "_TOTAL_" . __('cruds.to') . __('cruds.of') . "_START_-_END_" . __('cruds.entries'),
+                            "sInfoEmpty" => __('cruds.showing') . " 0 " . __('cruds.to') . " 0 " . __('cruds.of') . " 0 " . __('cruds.entries'),
+                            "search" => __('cruds.search'),
+                            "paginate" => [
+                                "first" => __('cruds.first'),
+                                "last" => __('cruds.last'),
+                                "next" => __('cruds.next'),
+                                "previous" => __('cruds.previous'),
+                            ],
+                            "autoFill" => [
+                                "cancel" => __('message.cancel'),
+                            ],
+                        ],
+                    ])
                     ->selectStyleSingle()
                     ->buttons([
                         Button::make('excel'),

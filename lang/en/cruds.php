@@ -71,6 +71,19 @@ return [
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
         ]
-    ]
+        ],
+
+    'show' => 'Show',
+    'entries' => 'entries',
+    'showing' => 'Showing',
+    'to' => 'To',
+    'of'    => 'Of',
+    'search' => 'Search',
+    'previous' => 'Previous',
+    'next' => 'Next',
+    'first' => 'First',
+    'last'  => 'Last',
+    'data_not_found' => 'Data not found',
+    'processing'   => 'Processing...',
 
 ];
