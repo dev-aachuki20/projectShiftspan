@@ -22,7 +22,7 @@ class OccupationController extends Controller
         try {
             return $dataTable->render('admin.occupation.index');
         } catch (\Exception $e) {
-            \Log::error($e->getMessage());
+            return abort(500);
         }
     }
 
@@ -39,7 +39,7 @@ class OccupationController extends Controller
             }
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         } catch (\Exception $e) {
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }
@@ -62,7 +62,7 @@ class OccupationController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }
@@ -72,11 +72,7 @@ class OccupationController extends Controller
      */
     public function show(string $id)
     {
-        try {
-            
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-        }
+        //
     }
 
     /**
@@ -92,7 +88,7 @@ class OccupationController extends Controller
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));   
             }
         }catch (\Exception $e) {
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }
@@ -116,7 +112,7 @@ class OccupationController extends Controller
             }
         } catch (\Exception $e) {
             DB::rollBack();
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }   
     }
@@ -137,7 +133,7 @@ class OccupationController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         } catch (\Exception $e) {
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }
@@ -154,7 +150,7 @@ class OccupationController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         } catch (\Exception $e) {
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }

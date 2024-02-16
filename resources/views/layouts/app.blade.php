@@ -12,7 +12,9 @@
 
 		<div class="content-area  {{ request()->is('dashboard') ? 'dashboard-page' : '' }}">
 			@include('partials.sidebar')
-			@yield('main-content')
+			<div class="right-content">
+				@yield('main-content')
+			</div>
 		</div>
 	</div>
 	<div class="popup_render_div"></div>

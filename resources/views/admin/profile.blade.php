@@ -6,49 +6,47 @@
 
 @section('main-content')
 
-<div class="right-content">
-    <div class="animate__animated animate__fadeInUp">
-        <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
-            <h2 class="mb-md-0">@lang('global.update') @lang('cruds.user.admin_profile.title')</h2>
-        </div>
-        <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
-            <form class="msg-form" id="profile-form" enctype="multipart/form-data">
-                @csrf
-                <div class="form-label">
-                    <label>@lang('cruds.user.admin_profile.fields.admin_name'):</label>
-                    <input type="text" name="name" value="{{$user->name}}">
-                </div>
-                <div class="form-label">
-                    <label>@lang('cruds.user.fields.email'):</label>
-                    <input type="email" disabled value="{{$user->email}}"/>
-                </div>
-                <div class="form-label">
-                    <label>@lang('cruds.user.admin_profile.fields.mobile'):</label>
-                    <input type="text" name="phone" value="{{$user->phone ?? ''}}">
-                </div>
-                <div class="form-label">
-                    <label>@lang('cruds.user.admin_profile.fields.image'):</label>
-                    <div class="right-sidebox">
-                        <div class="img-prevarea img-prePro">
-                            
-                            @if($user->profile_image_url)
-                                <img src="{{$user->profile_image_url}}" alt="profile image">
-                            @else
-                                <img src="" alt="profile image" class="d-none" id="profile_image">
-                                <x-svg-icons icon="default-user" />
-                            @endif
-                        </div>
-                        <div class="chose-btn-area position-relative">
-                            <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('cruds.user.admin_profile.fields.image')</a>
-                            <input type="file" id="image-input" name="profile_image" class="fileInputBoth" accept="image/*">
-                        </div>
+<div class="animate__animated animate__fadeInUp">
+    <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
+        <h2 class="mb-md-0">@lang('global.update') @lang('cruds.user.admin_profile.title')</h2>
+    </div>
+    <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
+        <form class="msg-form" id="profile-form" enctype="multipart/form-data">
+            @csrf
+            <div class="form-label">
+                <label>@lang('cruds.user.admin_profile.fields.admin_name'):</label>
+                <input type="text" name="name" value="{{$user->name}}">
+            </div>
+            <div class="form-label">
+                <label>@lang('cruds.user.fields.email'):</label>
+                <input type="email" disabled value="{{$user->email}}"/>
+            </div>
+            <div class="form-label">
+                <label>@lang('cruds.user.admin_profile.fields.mobile'):</label>
+                <input type="text" name="phone" value="{{$user->phone ?? ''}}">
+            </div>
+            <div class="form-label">
+                <label>@lang('cruds.user.admin_profile.fields.image'):</label>
+                <div class="right-sidebox">
+                    <div class="img-prevarea img-prePro">
+                        
+                        @if($user->profile_image_url)
+                            <img src="{{$user->profile_image_url}}" alt="profile image">
+                        @else
+                            <img src="" alt="profile image" class="d-none" id="profile_image">
+                            <x-svg-icons icon="default-user" />
+                        @endif
+                    </div>
+                    <div class="chose-btn-area position-relative">
+                        <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('cruds.user.admin_profile.fields.image')</a>
+                        <input type="file" id="image-input" name="profile_image" class="fileInputBoth" accept="image/*">
                     </div>
                 </div>
-                <div class="form-label justify-content-center">
-                    <button type="submit" class="cbtn submitBtn">@lang('global.update') @lang('cruds.user.admin_profile.title')</button>
-                </div>
-            </form>
-        </div>
+            </div>
+            <div class="form-label justify-content-center">
+                <button type="submit" class="cbtn submitBtn">@lang('global.update') @lang('cruds.user.admin_profile.title')</button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -72,6 +70,7 @@
             data: formData,
             success: function (response) {
                 if(response.success) {
+                    updateHeaderProfile(response.profile_image, response.auth_name);
                     toasterAlert('success',response.message);
                 }
             },

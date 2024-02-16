@@ -33,18 +33,21 @@
         </div>
         <div class="menu-right">
             <ul>
-                <li class="dropdown"><a href="javascript:void(0)" title="Klive's Kitchen" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"><span class="d-none d-lg-inline-block">{{auth()->user()->name}}</span><span class="menu-icon"><img src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset('images/kitchen.svg') }}" alt="Kitchen set" class="img-fluid"></span></a>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" title="Klive's Kitchen" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                        <span class="d-none d-lg-inline-block" id="header_auth_name">{{auth()->user()->name}}</span>
+                        <span class="menu-icon"><img id="header_profile_image" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset('images/kitchen.svg') }}" alt="Kitchen set" class="img-fluid"></span></a>
                     <ul class="dropdown-menu">
-                        <li><a href="{{route('show.profile')}}" title="Profile">@lang('cruds.user.admin_profile.title')</a></li>
-                        <li><a href="change-password.html" title="Change Password">Change Password</a></li>
+                        <li><a href="{{route('show.profile')}}" title="@lang('cruds.user.admin_profile.title')">@lang('cruds.user.admin_profile.title')</a></li>
+                        <li><a href="{{route('show.change.password')}}" title="@lang('global.change_password')">@lang('global.change_password')</a></li>
                         <li class="d-lg-none"><a title="Company ID">Company ID:<span>SS12457</span></a></li>
-                        <li class="d-lg-none"><a href="#" title="Help">Help</a></li>
-                        <li class="d-lg-none"><a href="contact-us.html" title="Contact Us">Contact Us</a></li>
-                        <li class="d-lg-none"><a href="#" title="Log Out">Log Out</a></li>
+                        <li class="d-lg-none"><a href="javascript:void(0)" title="Help">Help</a></li>
+                        <li class="d-lg-none"><a href="javascript:void(0)" title="Contact Us">Contact Us</a></li>
+                        <li class="d-lg-none"><a href="javascript:void(0)" title="Log Out">Log Out</a></li>
                     </ul>
                 </li>
-                <li class="d-none d-lg-inline-block"><a href="#" title="Help">Help</a></li>
-                <li class="d-none d-lg-inline-block"><a href="contact-us.html" title="Contact Us">Contact Us</a></li>
+                <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="Help">Help</a></li>
+                <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="Contact Us">Contact Us</a></li>
                 <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
             </ul>
         </div>

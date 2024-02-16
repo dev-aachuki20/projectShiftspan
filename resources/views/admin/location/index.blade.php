@@ -5,7 +5,6 @@
 
 @section('main-content')
 
-<div class="right-content">
     <div class="animate__animated animate__fadeInUp">
         <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
             <h2 class="mb-md-0">@lang('cruds.location.title_singular')</h2>
@@ -22,7 +21,6 @@
             </div>
         </div>
     </div>
-</div>
 
 @endsection
 @section('customJS')
@@ -47,7 +45,6 @@
                     }
                 },
                 error: function (response) {
-                    $(".submitBtn").attr('disabled', false);
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
                     } 
@@ -83,7 +80,7 @@
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
-                            errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                             if(key == 'resume' || key == 'gender'){
                                 $('#'+key).html(errorLabelTitle);
                             }
@@ -118,7 +115,6 @@
                     }
                 },
                 error: function (response) {
-                    $(".submitBtn").attr('disabled', false);
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
                     } 

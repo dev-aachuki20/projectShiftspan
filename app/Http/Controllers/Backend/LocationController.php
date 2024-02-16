@@ -21,7 +21,11 @@ class LocationController extends Controller
     public function index(LocationDataTable $dataTable)
     {
         abort_if(Gate::denies('location_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        return $dataTable->render('admin.location.index');
+        try{
+            return $dataTable->render('admin.location.index');
+        }catch (\Exception $e) {     
+            return abort(500);
+        }
     }
 
     /**

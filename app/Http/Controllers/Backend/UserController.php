@@ -30,8 +30,7 @@ class UserController extends Controller
         return view('admin.profile', compact('user'));
     }
 
-    public function updateprofile(Request $request){
-        
+    public function updateprofile(Request $request){        
         $user = auth()->user();
         $request->validate([
             'name'  => ['required'],
@@ -66,8 +65,12 @@ class UserController extends Controller
                     uploadImage($user, $request->profile_image, 'user/profile-images',"user_profile", 'original', $actionType, $uploadId);
                 }
                 DB::commit();
+
+                $user = User::where('id', $user->id)->first();
                 $data = [
                     'success' => true,
+                    'profile_image' => $user->profile_image_url,
+                    'auth_name' => $user->name,
                     'message' => trans('messages.crud.update_record'),
                 ];
                 return response()->json($data, 200);
@@ -99,23 +102,34 @@ class UserController extends Controller
         ], 200);
     }
 
-    public function showchangepassform(){
-        return view('admin.profile.change-password');
+    public function showChangePassword(){
+        return view('admin.change-password');
     }
 
-    public function updatePassword(Request $request){
-        $userId = auth()->user()->id;
-        $validated = $request->validate([
-            'currentpassword'  => ['required', 'string','min:4',new MatchOldPassword],
-            'password'   => ['required', 'string', 'min:4','confirmed', 'different:currentpassword'],
-            'password_confirmation' => ['required','min:4','same:password'],
+    public function updateChangePassword(Request $request){
+        $user = auth()->user();
+        $request->validate([
+            'currentpassword'  => ['required', 'string','min:8',new MatchOldPassword],
+            'password'   => ['required', 'string', 'min:8', 'different:currentpassword'],
+            'password_confirmation' => ['required','min:8','same:password'],
 
         ], getCommonValidationRuleMsgs());
-        User::find($userId)->update(['password'=> Hash::make($request->password)]);
-        return redirect()->back()->with(['success' => true,
-        'message' => trans('passwords.reset'),
-        'title'=> trans('quickadmin.profile.fields.password'),
-        'alert-type'=> trans('quickadmin.alert-type.success')]);
+        if($request->ajax()){
+            DB::beginTransaction();
+            try {
+                $user->update(['password'=> Hash::make($request->password)]);
+                DB::commit();
+                $data = [
+                    'success' => true,
+                    'message' => trans('passwords.reset'),
+                ];
+                return response()->json($data, 200);
+            } catch (\Exception $e) {
+                DB::rollBack();                
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     public function destroy($id)

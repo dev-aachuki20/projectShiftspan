@@ -49,6 +49,9 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::get('profile', [UserController::class, 'showProfile'])->name('show.profile');
         Route::post('profile', [UserController::class, 'updateProfile'])->name('update.profile');
 
+        Route::get('change-password', [UserController::class, 'showChangePassword'])->name('show.change.password');
+        Route::post('change-password', [UserController::class, 'updateChangePassword'])->name('update.change.password');
+
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 
