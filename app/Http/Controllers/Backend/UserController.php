@@ -48,7 +48,7 @@ class UserController extends Controller
             'phone.unique' =>'The phone number already exists.',
             'profile_image.image' =>'Please upload image.',
             'profile_image.mimes' =>'Please upload image with extentions: jpeg,png,jpg.',
-            'profile_image.max' =>'The image size must equal or less than 2MB',
+            'profile_image.max' =>'The image size must equal or less than '.config('constant.profile_max_size_in_mb'),
         ]);
         if($request->ajax()){
             DB::beginTransaction();

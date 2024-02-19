@@ -58,7 +58,6 @@ return [
         'title' => 'Locations',
         'title_singular' => 'Location',
         'fields' => [
-            'id'                => 'ID',
             'name'              => 'Name',
             'status'            => 'Status',
             'created_by'        => 'Created By',
@@ -81,19 +80,31 @@ return [
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
         ]
-        ],
+    ],
 
-    'show' => 'Show',
-    'entries' => 'entries',
-    'showing' => 'Showing',
-    'to' => 'To',
-    'of'    => 'Of',
-    'search' => 'Search',
-    'previous' => 'Previous',
-    'next' => 'Next',
-    'first' => 'First',
-    'last'  => 'Last',
-    'data_not_found' => 'Data not found',
-    'processing'   => 'Processing...',
-
+    'setting' => [
+        'title' => 'Settings',
+        'title_singular' => 'Setting',
+        'fields' => [
+            'site_title'    => 'Title Name',
+            'site_logo'     => 'Logo Image',
+            'icon_image'    => 'Icon Image',
+            'change_logo'   => 'Change Logo',
+            'help_pdf'      => 'Help PDF',
+        ]
+    ],
+    'datatable' => [
+        'show' => 'Show',
+        'entries' => 'entries',
+        'showing' => 'Showing',
+        'to' => 'To',
+        'of'    => 'Of',
+        'search' => 'Search',
+        'previous' => 'Previous',
+        'next' => 'Next',
+        'first' => 'First',
+        'last'  => 'Last',
+        'data_not_found' => 'Data not found',
+        'processing'   => 'Processing...',
+    ]
 ];

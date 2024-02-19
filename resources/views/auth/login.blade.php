@@ -5,7 +5,7 @@
   <div class="splash-screen position-relative d-flex align-items-center justify-content-center">
 
     <div class="spalsh-carea text-center">
-      <a href="{{ route('login') }}"><img src="{{ asset(config('app.default.logo')) }}" alt="Shift Span | logo" class="img-fluid"></a>
+      <a href="{{ route('login') }}"><img src="{{ asset(config('constant.default.logo')) }}" alt="Shift Span | logo" class="img-fluid logo"></a>
       <div class="login-form">
         <form method="POST" action="{{route("authenticate")}}">
           @csrf

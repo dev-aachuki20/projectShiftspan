@@ -58,7 +58,7 @@ class StaffController extends Controller
                     'address'   => $detailUser->profile->address ?? null,
                     'occupation_name'    => $detailUser->profile->occupation->name ?? null,
                     'company_name'    => $detailUser->company->name ?? null,
-                    'profile_image'=> $detailUser->profile_image_url ? $detailUser->profile_image_url : asset(config('app.default.staff-image')),
+                    'profile_image'=> $detailUser->profile_image_url ? $detailUser->profile_image_url : asset(config('constant.default.staff-image')),
                 ]
             ], 200);
 

@@ -69,9 +69,19 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Role::class);
     }
 
+    public function getIsSuperAdminAttribute()
+    {
+        return $this->roles()->where('id', config('constant.roles.super_admin'))->exists();
+    }
+
+    public function getIsAdminAttribute()
+    {
+        return $this->roles()->where('id', config('constant.roles.admin'))->exists();
+    }
+
     public function getIsStaffAttribute()
     {
-        return $this->roles()->where('id', config('app.roleid.staff'))->exists();
+        return $this->roles()->where('id', config('constant.roles.staff'))->exists();
     }
 
     public function occupations(){

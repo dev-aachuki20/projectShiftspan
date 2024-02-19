@@ -1,49 +1,18 @@
 @extends('layouts.app')
-@section('title')@lang('quickadmin.settings.manage_settings')@endsection
+@section('title')@lang('cruds.setting.title_singular')@endsection
 @section('customCss')
-<meta name="csrf-token" content="{{ csrf_token() }}" >
-<link rel="stylesheet" href="{{ asset('admintheme/assets/bundles/summernote/summernote-bs4.css') }}">
+
 @endsection
 
 @section('main-content')
-
-<section class="section roles" style="z-index: unset">
-    <div class="section-body">
-          <div class="row">
-            <div class="col-12 col-sm-12 col-lg-12">
-                <div class="card">
-                  <div class="card-header">
-                    <h4>@lang('quickadmin.settings.manage_settings')</h4>
-                  </div>
-                  <div class="card-body">
-                    @if($allSettingType)
-                    <!-- Step form tab menu -->
-                    <ul class="nav nav-pills" id="myTab3" role="tablist">
-                    @foreach ($allSettingType as $key=>$groupType)
-                        @php
-                            $groupName = str_replace('_',' ',$groupType)
-                        @endphp
-                        <li class="nav-item">
-                            <a class="nav-link {{ $tab == $groupType  ? 'active' : '' }}" id="{{$groupType}}" data-toggle="tab" href="{{ route('settings', ['tab' => $groupType]) }}" role="tab"
-                            aria-controls="{{$groupType}}" aria-selected="{{ $tab == $groupType  ? true : false }}">{{ ucwords($groupName) }}</a>
-                        </li>
-                    @endforeach
-                    </ul>
-                    @endif
-
-                    <div class="tab-content" id="myTabContent2">
-                        @foreach ($allSettingType as $groupType)
-                        <div class="tab-pane fade {{ $tab == $groupType ? 'show active' : '' }}" id="{{ $groupType }}" role="tabpanel" aria-labelledby="{{ $groupType }}-tab">
-                            @include('admin.setting.form')
-                        </div>
-                        @endforeach
-                    </div>
-                  </div>
-                </div>
-              </div>
-          </div>
+    <div class="animate__animated animate__fadeInUp">
+        <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
+            <h2 class="mb-md-0">@lang('global.update') @lang('cruds.setting.title_singular')</h2>
+        </div>
+        <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
+            @include('admin.setting.form')
+        </div>
     </div>
-  </section>
 @endsection
 
 
@@ -61,11 +30,7 @@ $(document).ready(function(){
         $(".is-invalid").removeClass('is-invalid');
         var formData = new FormData(this);
         var formAction = $(this).attr('action');
-        $('.summernote').each(function() {
-            var textareaName = $(this).attr('name');
-            var summernoteContent = $(this).summernote('code');
-            formData.append(textareaName, summernoteContent);
-        });
+        
 
         $.ajax({
             type: "POST",
@@ -73,9 +38,7 @@ $(document).ready(function(){
             data: formData,
             processData: false,
             contentType: false,
-            headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-            },
+            dataType: 'json',
             success: function (response) {
                     var alertType = response['alert-type'];
                     var message = response['message'];

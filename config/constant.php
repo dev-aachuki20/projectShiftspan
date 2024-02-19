@@ -2,8 +2,8 @@
 
 return [
     'default' => [
-        'logo' => 'default/logo.svg',
-        'favicon' => 'default/favicon.svg',
+        'logo' => 'default/logo.png',
+        'favicon' => 'default/favicon.png',
         'admin_favicon' => 'default/favicon.svg',
         'short_logo' => 'default/favicon.svg',
         'admin_logo' => 'default/favicon.svg',
@@ -11,8 +11,17 @@ return [
         'profile_image' => 'default/default-user.svg',
         'email_logo' => 'default/elogo.png',
         'no_image' => 'default/no-image.jpg',
+        'staff-image' => 'images/staff-img.png'
     ],
     'profile_max_size' => 2048,
+    'profile_max_size_in_mb' => '2MB',
+
+    'roles' =>[
+        'super_admin' => 1,
+        'admin' => 2,
+        'staff' => 3,
+    ],
+
 
     'staff_file_fields' => [
         'user_dbs_certificate',

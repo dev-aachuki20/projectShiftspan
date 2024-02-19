@@ -30,17 +30,21 @@
                 <a href="javascript:void(0);" title="Staff">Staff</a>
             </li>
 
-            <li>
-                <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title')</a>
-            </li>
-
-            <li>
-                <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('quickadmin.occupation.title')">@lang('quickadmin.occupation.title')</a>
-            </li>
-
-            <li>
-                <a href="javascript:void(0);" title="Settings">Settings</a>
-            </li>
+            @can('location_access')
+                <li>
+                    <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title')</a>
+                </li>
+            @endcan
+            @can('occupation_access')
+                <li>
+                    <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('cruds.occupation.title')">@lang('cruds.occupation.title')</a>
+                </li>
+            @endcan
+            @if(auth()->user()->is_super_admin)
+                <li>
+                    <a href="{{route('show.setting')}}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
+                </li>
+            @endif
         </ul>
     </aside>
 </div>

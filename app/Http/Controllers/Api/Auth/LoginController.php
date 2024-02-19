@@ -40,7 +40,7 @@ class LoginController extends Controller
                     'occupation_name'    => $user->profile->occupation->name ?? null,
                     'company_id'    => $user->company->sub_admin_id ?? null,
                     'company_name'    => $user->company->name ?? null,
-                    'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('app.default.staff-image')),
+                    'profile_image'=> $user->profile_image_url ? $user->profile_image_url : asset(config('constant.default.staff-image')),
                     'user_dbs_certificate'=> $user->dbs_certificate_url ? $user->dbs_certificate_url : "",
                     'user_training_doc'=> $user->training_document_url ? $user->training_document_url : "",
                     'user_cv'=> $user->cv_url ? $user->cv_url : "",
@@ -92,7 +92,7 @@ class LoginController extends Controller
                 'is_criminal' => $request->is_criminal,
             ]);
 
-            $user->roles()->sync(config('app.roleid.staff'));
+            $user->roles()->sync(config('constant.roles.staff'));
             foreach ($request->allFiles() as $key => $file) {
                 if (in_array($key,config('constant.staff_file_fields'))) {
                     uploadImage($user, $file, 'staff/doc', $key, 'original');

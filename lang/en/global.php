@@ -273,5 +273,6 @@ return [
     'add_more'                            => 'Add More',
     'new'                                 => 'New',
     'onceClickedRecordDeleted'            => 'Once deleted, this record cannot be restored',
-    'choose'                              => 'Choose'
+    'choose'                              => 'Choose',
+    'pdf'                              => 'PDF',
 ];

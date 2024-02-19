@@ -17,18 +17,6 @@ return [
     */
 
     'name' => env('APP_NAME', 'ShiftSpan'),
-    'roleid' => [
-        'super_admin' => 1 ,
-        'admin' => 2 ,
-        'staff' => 3 ,
-    ],
-
-    'default' => [
-        'logo' => 'images/logo.png',
-        'favicon' => 'images/favicon.png',
-        'no-image' => 'images/no-image.jpg',
-        'staff-image' => 'images/staff-img.png'
-    ],
 
     /*
     |--------------------------------------------------------------------------

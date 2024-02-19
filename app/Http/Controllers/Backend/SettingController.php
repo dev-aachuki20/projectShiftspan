@@ -12,27 +12,17 @@ use Illuminate\Support\Facades\Gate;
 
 class SettingController extends Controller
 {
-
-    public function index($tab = 'web')
+    public function index()
     {
         abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $settings = Setting::where('status',1)->get();
-        $settings = $settings->where('group', $tab);
-        $allSettingType = Setting::groupBy('group')->pluck('group');
-        return view('admin.setting.index',compact('settings','allSettingType','tab'));
-    }
-
-    public function loadTabContent($groupType)
-    {
-        // Fetch the settings for the specific groupType
-        $settings = Setting::where('group', $groupType)->where('status', 1)->get();
-
-        return view('admin.setting.index', compact('settings'));
+        $settings = Setting::whereStatus(1)->whereGroup('web')->get();
+        return view('admin.setting.index',compact('settings'));
     }
 
     public function update(UpdateRequest $request, Setting $setting)
     {
         $data=$request->all();
+        dd($data);
         try {
             DB::beginTransaction();
             foreach ($data as $key => $value) {
@@ -69,9 +59,11 @@ class SettingController extends Controller
             }
 
             DB::commit();
-            return response()->json(['success' => true,
-            'message' => trans('messages.crud.update_record'),
-            'alert-type'=> trans('quickadmin.alert-type.success')], 200);
+            return response()->json([
+                'success' => true,
+                'message' => trans('messages.crud.update_record'),
+                'alert-type'=> trans('quickadmin.alert-type.success')
+            ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
             dd($e->getMessage());

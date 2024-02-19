@@ -99,26 +99,6 @@ function fireErrorSwal(title,message){
 }
 
 
-function toasterAlert(status, message) {
-    // success, error, warning, info
-    const Toast = Swal.mixin({
-        toast: true,
-        position: "top-end",
-        showConfirmButton: false,
-        timer: 3000,
-        timerProgressBar: true,
-        // showCancelButton :true,
-        didOpen: (toast) => {
-            toast.onmouseenter = Swal.stopTimer;
-            toast.onmouseleave = Swal.resumeTimer;
-        }
-    });
-    Toast.fire({
-        icon: status,
-        title: message
-    });
-}
-
 $(document).on('change', '#dt_cb_all', function(e){
     var t = $(this);
     if(t.prop('checked') === true){

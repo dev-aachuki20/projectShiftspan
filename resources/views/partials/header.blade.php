@@ -34,9 +34,10 @@
         <div class="menu-right">
             <ul>
                 <li class="dropdown">
-                    <a href="javascript:void(0)" title="Klive's Kitchen" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="javascript:void(0)" title="{{auth()->user()->name}}" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-none d-lg-inline-block" id="header_auth_name">{{auth()->user()->name}}</span>
-                        <span class="menu-icon"><img id="header_profile_image" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset('images/kitchen.svg') }}" alt="Kitchen set" class="img-fluid"></span></a>
+                        <span class="menu-icon"><img id="header_profile_image" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset('images/kitchen.svg') }}" alt="{{auth()->user()->name}}" class="img-fluid"></span>
+                    </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route('show.profile')}}" title="@lang('cruds.user.admin_profile.title')">@lang('cruds.user.admin_profile.title')</a></li>
                         <li><a href="{{route('show.change.password')}}" title="@lang('global.change_password')">@lang('global.change_password')</a></li>
