@@ -22,18 +22,20 @@ use Illuminate\Support\Facades\Route;
 
 Route::controller(LoginController::class)->group(function(){
     Route::post('login', 'login');
-    Route::post('create-account', 'registerUser');
+    Route::post('register', 'registerUser');
     Route::post('forgot-password', 'forgotPassword');
     Route::post('password/verify-otp', 'verifyOtp');
     Route::post('password/reset-password', 'resetPassword');
 });
 
+
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('/logout', [LogoutController::class, 'logout']);
-
-    Route::get('/all-sub-admin', [SubAdminController::class, 'AllSubAdmins']);
-    Route::get('/all-occupations', [OccupationController::class, 'AllOccupations']);
 
     Route::post('user/profile/{user}', [StaffController::class, 'updateProfile']);
     Route::get('/setting-doc', [SettingController::class, 'getPolicyDoc']);
 });
+
+Route::get('/all-sub-admin', [SubAdminController::class, 'AllSubAdmins']);
+
+Route::get('/occupations', [OccupationController::class, 'AllOccupations']);

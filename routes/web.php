@@ -9,6 +9,9 @@ use App\Http\Controllers\Backend\OccupationController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\ShiftController;
 use App\Http\Controllers\Backend\UserController;
+use App\Http\Controllers\Backend\SubAdminController;
+use App\Http\Controllers\Backend\SubAdminDetailController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -52,6 +55,8 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
 
         Route::get('change-password', [UserController::class, 'showChangePassword'])->name('show.change.password');
         Route::post('change-password', [UserController::class, 'updateChangePassword'])->name('update.change.password');
+
+        Route::resource('/client-admins',SubAdminController::class);
 
         Route::get('settings', [SettingController::class, 'index'])->name('show.setting');
         Route::post('update-settings', [SettingController::class, 'update'])->name('update.setting');

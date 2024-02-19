@@ -17,7 +17,7 @@ class RolesTableSeeder extends Seeder
             ],
             [
                 'id'         => 2,
-                'name'      => 'Admin',
+                'name'      => 'Sub Admin',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ],

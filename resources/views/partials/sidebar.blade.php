@@ -7,20 +7,24 @@
         </div>
         <ul>
             <li>
-                <a href="{{ route('dashboard')}}" class="{{ request()->is('admin/dashboard*') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a>
+                <a href="{{ route('dashboard')}}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a>
             </li>
 
             <li>
                 <a href="javascript:void(0);" title="Messages">Messages</a>
             </li>
 
+            @can('sub_admin_access')
             <li>
-                <a href="javascript:void(0);" title="Client Admin">Client Admin</a>
+                <a href="{{ route('client-admins.index') }}" class="{{ request()->is('admin/client-admins*') ? 'active' : '' }}" title="{{ trans('cruds.client_admin.title') }}">@lang('cruds.client_admin.title')</a>
             </li>
+            @endcan
 
+            @can('sub_admin_detail_access')
             <li>
                 <a href="javascript:void(0);" title="Client Details">Client Details</a>
             </li>
+            @endcan
 
             <li>
                 <a href="{{ route('shifts.index')}}" class="{{ request()->is('admin/shifts') || request()->is('admin/shifts/*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a>

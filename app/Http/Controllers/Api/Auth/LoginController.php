@@ -21,7 +21,7 @@ class LoginController extends Controller
     public function login(Request $request)
     {
         $credentialsOnly = $request->validate([
-            'email'    => ['required','email','exists:users,email',new IsActive],
+            'email'    => ['required','email:dns','exists:users,email',new IsActive],
             'password' => 'required|min:8',
         ]);
 
@@ -143,7 +143,7 @@ class LoginController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e->getMessage());
+            // dd($e->getMessage());
             return response()->json([
                 'status'        => false,
                 'error'         => trans('messages.error_message'),

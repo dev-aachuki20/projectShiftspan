@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 
 class User extends Authenticatable implements MustVerifyEmail
@@ -26,6 +27,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public $table = 'users';
 
     protected $fillable = [
+        'uuid',
+        'company_id',
         'name',
         'email',
         'phone',
@@ -59,6 +62,14 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    protected static function boot ()
+    {
+        parent::boot();
+        static::creating(function(User $model) {
+            $model->uuid = Str::uuid();
+        });
+    }
 
     public function profile()
     {

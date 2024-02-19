@@ -106,5 +106,20 @@ return [
         'last'  => 'Last',
         'data_not_found' => 'Data not found',
         'processing'   => 'Processing...',
-    ]
+    ],
+
+    'client_admin' => [
+        'title' => 'Client Admins',
+        'title_singular' => 'Client Admin',
+        'fields' => [
+            'id'                => 'ID',
+            'name'              => 'Client Name',
+            'email'             => 'Email',
+            'status'            => 'Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ],
 ];
