@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')@lang('quickadmin.dashboard.title')@endsection
+@section('title', trans('cruds.user.admin_profile.title'))
 @section('customCss')
 
 @endsection
@@ -30,12 +30,13 @@
                 <div class="right-sidebox">
                     <div class="img-prevarea img-prePro">
                         
-                        @if($user->profile_image_url)
+                        {{-- @if($user->profile_image_url)
                             <img src="{{$user->profile_image_url}}" alt="profile image">
                         @else
-                            <img src="" alt="profile image" class="d-none" id="profile_image">
+                            <img src="" alt="profile image" class="d-none">
                             <x-svg-icons icon="default-user" />
-                        @endif
+                        @endif --}}
+                        <img src="{{ $user->profile_image_url ? $user->profile_image_url : asset(config('constant.default.user_icon')) }}" >
                     </div>
                     <div class="chose-btn-area position-relative">
                         <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('cruds.user.admin_profile.fields.image')</a>
@@ -70,8 +71,8 @@
             data: formData,
             success: function (response) {
                 if(response.success) {
+                    toasterAlert('success',response.message);                    
                     updateHeaderProfile(response.profile_image, response.auth_name);
-                    toasterAlert('success',response.message);
                 }
             },
             error: function (response) {
@@ -81,13 +82,13 @@
                 } else {                    
                     var errorLabelTitle = '';
                     $.each(response.responseJSON.errors, function (key, item) {
-                        errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
+                        errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                         
                         $(errorLabelTitle).insertAfter("input[name='"+key+"']");
 
-                        if(key == 'profile_image'){
+                        /* if(key == 'profile_image'){
                             $(errorLabelTitle).insertAfter("#"+key);
-                        }
+                        } */
                     });
                 }
             },

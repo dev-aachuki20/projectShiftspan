@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')@lang('quickadmin.occupation.title')@endsection
+@section('title', trans('quickadmin.occupation.title'))
 @section('customCss')
 @endsection
 
@@ -81,12 +81,8 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                            if(key == 'resume' || key == 'gender'){
-                                $('#'+key).html(errorLabelTitle);
-                            }
-                            else{
-                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            }                    
+                            
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
                         });
                     }
                 },
@@ -147,18 +143,14 @@
                 },
                 error: function (response) {
                     $(".submitBtn").attr('disabled', false);
-                    if(response.responseJSON.error_type.error_type == 'something_error'){
+                    if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error_type.error);
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                            if(key == 'resume' || key == 'gender'){
-                                $('#'+key).html(errorLabelTitle);
-                            }
-                            else{
-                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            }                    
+                            console.log("input[name='"+key+"']");
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
                         });
                     }
                 },

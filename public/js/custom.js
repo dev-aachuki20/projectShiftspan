@@ -117,6 +117,9 @@ $(document).on('change', '.dt_cb', function(e){
 });
 
 function updateHeaderProfile(profile_image, user_name){
-    $('#header_profile_image').attr('src', profile_image);
+    if(profile_image != ''){
+        $('#header_profile_image').removeClass('default-image');
+        $('#header_profile_image').attr('src', profile_image);
+    }
     $('#header_auth_name').text(user_name);
 }

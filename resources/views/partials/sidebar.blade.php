@@ -7,7 +7,7 @@
         </div>
         <ul>
             <li>
-                <a href="{{ route('dashboard')}}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}" title="Dashboard">@lang('quickadmin.dashboard.title')</a>
+                <a href="{{ route('dashboard')}}" class="{{ request()->is('admin/dashboard') ? 'active' : '' }}" title="@lang('global.dashboard')">@lang('global.dashboard')</a>
             </li>
 
             <li>
@@ -46,7 +46,7 @@
             @endcan
             @if(auth()->user()->is_super_admin)
                 <li>
-                    <a href="{{route('show.setting')}}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
+                    <a href="{{route('show.setting')}}" class="{{ request()->is('admin/settings') ? 'active' : '' }}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
                 </li>
             @endif
         </ul>

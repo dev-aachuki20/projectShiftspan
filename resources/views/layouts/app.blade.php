@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>{{ config('app.name') }} | @yield('title')</title>
+	<title>{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | @yield('title')</title>
     @include('partials.hscript')
     @yield('customCss')
 </head>

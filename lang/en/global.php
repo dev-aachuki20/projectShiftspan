@@ -274,5 +274,6 @@ return [
     'new'                                 => 'New',
     'onceClickedRecordDeleted'            => 'Once deleted, this record cannot be restored',
     'choose'                              => 'Choose',
-    'pdf'                              => 'PDF',
+    'pdf'                               => 'PDF',
+    'help'                              => 'Help'
 ];

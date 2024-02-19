@@ -29,28 +29,45 @@
             </ul>
         </div>
         <div class="logo-area px-2 px-xl-4">
-            <a href="#"><img src="{{ asset('images/logo.png') }}" alt="Shift Span App | logo" class=""></a>
+            <a href="route('dashboard')"><img src="{{ getSetting('site_logo') ? getSetting('site_logo') : asset(config('constant.default.logo')) }}" alt="{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | logo" class=""></a>
         </div>
         <div class="menu-right">
             <ul>
                 <li class="dropdown">
                     <a href="javascript:void(0)" title="{{auth()->user()->name}}" class="active dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                         <span class="d-none d-lg-inline-block" id="header_auth_name">{{auth()->user()->name}}</span>
-                        <span class="menu-icon"><img id="header_profile_image" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset('images/kitchen.svg') }}" alt="{{auth()->user()->name}}" class="img-fluid"></span>
+                        <span class="menu-icon"><img id="header_profile_image" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset(config('constant.default.user_icon')) }}" alt="{{auth()->user()->name}}" class="img-fluid {{ auth()->user()->profile_image_url ? '' : 'default-image' }}"></span>
                     </a>
                     <ul class="dropdown-menu">
                         <li><a href="{{route('show.profile')}}" title="@lang('cruds.user.admin_profile.title')">@lang('cruds.user.admin_profile.title')</a></li>
                         <li><a href="{{route('show.change.password')}}" title="@lang('global.change_password')">@lang('global.change_password')</a></li>
                         <li class="d-lg-none"><a title="Company ID">Company ID:<span>SS12457</span></a></li>
                         <li class="d-lg-none"><a href="javascript:void(0)" title="Help">Help</a></li>
-                        <li class="d-lg-none"><a href="javascript:void(0)" title="Contact Us">Contact Us</a></li>
+                        <li class="d-lg-none"><a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a></li>
                         <li class="d-lg-none"><a href="javascript:void(0)" title="Log Out">Log Out</a></li>
                     </ul>
                 </li>
-                <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="Help">Help</a></li>
-                <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="Contact Us">Contact Us</a></li>
+                <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="@lang('global.help')" data-bs-toggle="modal" data-bs-target="#HelpPdf">@lang('global.help')</a></li>
+                <li class="d-none d-lg-inline-block">
+                    <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
+                </li>
                 <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
             </ul>
         </div>
     </div>
 </header>
+
+<!-- Help Modal -->
+<div class="modal fade common-modal modal-size-l" id="HelpPdf" tabindex="-1" aria-labelledby="HelpPdfLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered mw-820">
+        <div class="modal-content">
+            <div class="modal-header justify-content-center green-bg">
+                <h5 class="modal-title text-center" id="HelpPdfLabel">@lang('global.help')</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <embed src="{{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}" width="100%" height="500px"/>
+            </div>
+        </div>
+    </div>
+</div>

@@ -38,10 +38,15 @@ class LocationDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('location_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" data-href="'.route('locations.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
+                    
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" title="'.__('global.edit').'" data-href="'.route('locations.edit', $record->uuid).'">
+                        '.(getSvgIcon('edit')).'
+                    </button>';
                 }
                 if (Gate::check('location_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'">'.__('global.delete').'</button>';
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" title="'.__('global.delete').'" data-href="'.route('locations.destroy', $record->uuid).'">
+                    '.(getSvgIcon('delete')).'
+                    </button>';
                 }
                 return $actionHtml;
             })

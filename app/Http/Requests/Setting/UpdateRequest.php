@@ -25,11 +25,10 @@ class UpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'site_title' => 'required',
             'site_logo' => 'image|mimes:jpeg,png,jpg,PNG,JPG|max:2048',
-            'favicon' => 'image|mimes:jpeg,png,jpg,PNG,JPG|max:2048',
-            'phone_num' => 'nullable|numeric',
-            'thaila_price' => 'nullable|numeric',
-            'invoice_pdf_top_title' => 'nullable|string|max:120',
+            // 'favicon' => 'image|mimes:jpeg,png,jpg,PNG,JPG|max:2048',
+            'help_pdf' => 'mimes:pdf'
         ];
     }
 

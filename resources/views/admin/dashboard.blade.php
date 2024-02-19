@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')@lang('quickadmin.dashboard.title')@endsection
+@section('title', trans('global.dashboard'))
 @section('customCss')
 @endsection
 

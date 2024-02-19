@@ -5,10 +5,6 @@ return [
         'title'          => 'User Management',
         'title_singular' => 'User Management',
     ],
-    'setting' => [
-        'title'          => 'Settings',
-        'title_singular' => 'Setting',
-    ],
     'user'           => [
         'title'          => 'Users',
         'title_singular' => 'User',
@@ -90,8 +86,16 @@ return [
             'site_logo'     => 'Logo Image',
             'icon_image'    => 'Icon Image',
             'change_logo'   => 'Change Logo',
-            'help_pdf'      => 'Help PDF',
-        ]
+            'help_pdf'      => 'Upload Help PDF',
+        ],
+        'contact_details' => [
+            'title' => 'Contact Us',
+            'fields' => [
+                'contact_email' => 'Contact Email',
+                'contact_phone' => 'Contact Mobile',
+                'contact_details' => 'Contact Details',
+            ]
+        ],
     ],
     'datatable' => [
         'show' => 'Show',

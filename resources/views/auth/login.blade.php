@@ -1,11 +1,13 @@
 @extends('layouts.auth')
-@section('title','Login')
+@section('title', trans('global.login'))
 @section('main-content')
 
   <div class="splash-screen position-relative d-flex align-items-center justify-content-center">
 
     <div class="spalsh-carea text-center">
-      <a href="{{ route('login') }}"><img src="{{ asset(config('constant.default.logo')) }}" alt="Shift Span | logo" class="img-fluid logo"></a>
+      <a href="{{ route('login') }}">
+        <img src="{{ getSetting('site_logo') ? getSetting('site_logo') : asset(config('constant.default.logo')) }}" alt="{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | logo" class="img-fluid logo">
+      </a>
       <div class="login-form">
         <form method="POST" action="{{route("authenticate")}}">
           @csrf
@@ -25,8 +27,13 @@
             @enderror
           </div>
 
-          <div class="form-label position-relative">
+          <div class="form-label position-relative password-area">
             <input type="password" name="password" placeholder="@lang('quickadmin.qa_password')" id="password" autocomplete="off">
+            
+            <span class="toggle-password close-eye">
+              <x-svg-icons icon="close-eye" />
+              <x-svg-icons icon="open-eye" />
+            </span>
             <span class="input-icon"><img src="{{ asset('images/padlock-icon.svg') }}" alt="padlock icon"></span>
             @error('password')
             <span class="invalid-feedback d-block">
@@ -49,5 +56,18 @@
 @endsection
 
 @section('customJS')
+<script>
 
+  // Password field hide/show functiolity
+  $(document).on('click', '.toggle-password', function () {        
+        var passwordInput = $(this).prev('input');        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).removeClass('close-eye').addClass('open-eye');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).removeClass('open-eye').addClass('close-eye');
+        }
+    });
+</script>
 @endsection

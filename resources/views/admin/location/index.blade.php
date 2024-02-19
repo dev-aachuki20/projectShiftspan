@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')@lang('cruds.location.title_singular')@endsection
+@section('title', trans('cruds.location.title_singular'))
 @section('customCss')
 @endsection
 
@@ -71,7 +71,7 @@
                     if(response.success) {
                         $('#location-table').DataTable().ajax.reload(null, false);
                         $('#addLocationModal').modal('hide');
-                        fireSuccessSwal('Success',response.message);
+                        toasterAlert('success',response.message);
                     }
                 },
                 error: function (response) {
@@ -148,7 +148,7 @@
                 error: function (response) {
                     $(".submitBtn").attr('disabled', false);
                     if(response.responseJSON.error_type == 'something_error'){
-                    toasterAlert('error',response.responseJSON.error);
+                        toasterAlert('error',response.responseJSON.error);
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {

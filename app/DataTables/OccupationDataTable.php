@@ -33,10 +33,14 @@ class OccupationDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('occupation_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editOccupationBtn" title="'.__('global.edit').'" data-href="'.route('occupations.edit', $record->uuid).'">
+                        '.(getSvgIcon('edit')).'
+                    </button>';
                 }
                 if (Gate::check('occupation_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteOccupationBtn" data-href="'.route('occupations.destroy', $record->uuid).'">'.__('global.delete').'</button>';
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteOccupationBtn" title="'.__('global.delete').'" data-href="'.route('occupations.destroy', $record->uuid).'">
+                    '.(getSvgIcon('delete')).'
+                    </button>';
                 }
                 return $actionHtml;
             })

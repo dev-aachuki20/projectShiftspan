@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title')@lang('quickadmin.dashboard.title')@endsection
+@section('title', trans('global.change_password'))
 @section('customCss')
 
 @endsection
@@ -12,17 +12,31 @@
         <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
             <form class="msg-form" id="change-password-form">
                 @csrf
-                <div class="form-label">
+                <div class="form-label password-area">
                     <label>Old Password:</label>
                     <input type="password" name="currentpassword" value="">
+                    <span class="toggle-password close-eye">
+                        <x-svg-icons icon="close-eye" />
+                        <x-svg-icons icon="open-eye" />
+                    </span>
                 </div>
-                <div class="form-label">
+                <div class="form-label password-area">
                     <label>New Password:</label>
                     <input type="password" name="password" value="">
+
+                    <span class="toggle-password close-eye">
+                        <x-svg-icons icon="close-eye" />
+                        <x-svg-icons icon="open-eye" />
+                    </span>
                 </div>
-                <div class="form-label">
+                <div class="form-label password-area">
                     <label>Confirm Password:</label>
                     <input type="password" name="password_confirmation" value="">
+
+                    <span class="toggle-password close-eye">
+                        <x-svg-icons icon="close-eye" />
+                        <x-svg-icons icon="open-eye" />
+                    </span>
                 </div>
                 <div class="form-label justify-content-center">
                     <input type="submit" value="@lang('global.change_password')" class="cbtn submitBtn">
@@ -76,6 +90,17 @@
                 $(".submitBtn").attr('disabled', false);
             }
         });
+    });
+     // Password field hide/show functiolity
+    $('.toggle-password').click(function () {        
+        var passwordInput = $(this).prev('input');        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).removeClass('close-eye').addClass('open-eye');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).removeClass('open-eye').addClass('close-eye');
+        }
     });
 </script>
 @endsection

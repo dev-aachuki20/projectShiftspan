@@ -1,26 +1,37 @@
 @extends('layouts.app')
-@section('title', trans('cruds.setting.title_singular'))
+@section('title', trans('cruds.setting.contact_details.title'))
 @section('customCss')
 
 @endsection
 
 @section('main-content')
-    <div class="animate__animated animate__fadeInUp">
-        <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
-            <h2 class="mb-md-0">@lang('global.update') @lang('cruds.setting.title_singular')</h2>
-        </div>
-        <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
-            @include('admin.setting.form')
-        </div>
+
+<div class="animate__animated animate__fadeInUp">
+    <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
+        <h2 class="mb-md-0">@lang('cruds.setting.contact_details.title')</h2>
     </div>
+    <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
+        <form class="msg-form" id="profile-form" enctype="multipart/form-data">
+            @csrf
+            @foreach($settings as $key => $setting)
+                @if($setting->type == 'text')
+                    <div class="form-label">
+                        <label>{{$setting->display_name}}:</label>
+                        <input type="text" value="{{$setting->value}}" name="{{$setting->key}}" />
+                    </div>
+                @endif
+            @endforeach
+            <div class="form-label justify-content-center">
+                <button type="submit" class="cbtn submitBtn">@lang('cruds.setting.contact_details.fields.contact_details')</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @endsection
-
-
 @section('customJS')
 <script>
-$(document).ready(function(){
-
-    $(document).on('submit', '#settingform', function(e){
+    $(document).on('submit', '#profile-form', function(e){
         e.preventDefault();
         $(".submitBtn").attr('disabled', true);
 
@@ -30,7 +41,7 @@ $(document).ready(function(){
 
         $.ajax({
             type: 'post',
-            url: "{{ route('update.setting') }}",
+            url: "{{ route('update.contact-detail') }}",
             dataType: 'json',
             contentType: false,
             processData: false,
@@ -38,23 +49,17 @@ $(document).ready(function(){
             success: function (response) {
                 if(response.success) {
                     toasterAlert('success',response.message);
-                    window.location.reload();
                 }
             },
             error: function (response) {
-                console.log(response);
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
                 } else {                    
                     var errorLabelTitle = '';
                     $.each(response.responseJSON.errors, function (key, item) {
                         errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                        
-                        $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-
-                        /* if(key == 'profile_image'){
-                            $(errorLabelTitle).insertAfter("#"+key);
-                        } */
+                        console.log("input[name='"+key+"']");
+                        $("input[name='"+key+"']").after(errorLabelTitle);
                     });
                 }
             },
@@ -71,10 +76,11 @@ $(document).ready(function(){
             var reader2 = new FileReader();
             reader2.onload = function(e) {
                 $('.img-prePro img').attr('src', e.target.result);
+                $('.img-prePro img').removeClass('d-none');
+                $('x-svg-icons').addClass('d-none');
             };
             reader2.readAsDataURL(files[i]);
         }
     });
-});
 </script>
 @endsection

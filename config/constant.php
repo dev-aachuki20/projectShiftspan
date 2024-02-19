@@ -4,14 +4,10 @@ return [
     'default' => [
         'logo' => 'default/logo.png',
         'favicon' => 'default/favicon.png',
-        'admin_favicon' => 'default/favicon.svg',
-        'short_logo' => 'default/favicon.svg',
-        'admin_logo' => 'default/favicon.svg',
-        'transparent_logo' => 'assets/logo/logo-transparent.png',
-        'profile_image' => 'default/default-user.svg',
-        'email_logo' => 'default/elogo.png',
         'no_image' => 'default/no-image.jpg',
-        'staff-image' => 'images/staff-img.png'
+        'staff-image' => 'default/staff-img.png',
+        'help_pdf' => 'default/help_pdf.pdf',
+        'user_icon' => 'default/user-icon.svg',
     ],
     'profile_max_size' => 2048,
     'profile_max_size_in_mb' => '2MB',

@@ -12,6 +12,7 @@ use App\Models\Address;
 use App\Models\Role;
 use App\Models\User;
 use App\Rules\MatchOldPassword;
+use App\Rules\NoMultipleSpacesRule;
 use App\Rules\TitleValidationRule;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -33,10 +34,10 @@ class UserController extends Controller
     public function updateprofile(Request $request){        
         $user = auth()->user();
         $request->validate([
-            'name'  => ['required'],
+            'name'  => ['required', new NoMultipleSpacesRule],
             'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
             'phone' => [
-                'required',
+                'nullable',
                 'integer',
                 'regex:/^[0-9]{7,15}$/',
                 'not_in:-',
@@ -110,8 +111,8 @@ class UserController extends Controller
         $user = auth()->user();
         $request->validate([
             'currentpassword'  => ['required', 'string','min:8',new MatchOldPassword],
-            'password'   => ['required', 'string', 'min:8', 'different:currentpassword'],
-            'password_confirmation' => ['required','min:8','same:password'],
+            'password'   => ['required', 'string', 'min:8', 'different:currentpassword', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'],
+            'password_confirmation' => ['required','min:8','same:password', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'],
 
         ], getCommonValidationRuleMsgs());
         if($request->ajax()){

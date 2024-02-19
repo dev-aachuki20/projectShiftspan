@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Location;
 
+use App\Rules\NoMultipleSpacesRule;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
@@ -29,6 +30,7 @@ class StoreRequest extends FormRequest
                 'required',
                 'string',
                 // 'regex:/^[\pL\s\-]+$/u',
+                new NoMultipleSpacesRule,
                 'max:191',
                 'unique:locations,name,NULL,id,deleted_at,NULL',
             ]

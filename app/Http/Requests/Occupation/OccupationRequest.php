@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests\Occupation;
 
+use App\Rules\NoMultipleSpacesRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -39,6 +40,7 @@ class OccupationRequest extends FormRequest
                     'required',
                     'string',
                     'max:255',
+                    new NoMultipleSpacesRule,
                     'unique:occupations,name,'. $this->occupation.',uuid,deleted_at,NULL',
                 ],
             ];
@@ -49,6 +51,7 @@ class OccupationRequest extends FormRequest
                     'required',
                     'string',
                     'max:255',
+                    new NoMultipleSpacesRule,
                     'unique:occupations,name,NULL,id,deleted_at,NULL',
                 ],
             ];

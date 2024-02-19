@@ -21,7 +21,10 @@ if (!function_exists('getCommonValidationRuleMsgs')) {
 			'email.required' => 'Please enter email address.',
 			'email.email' => 'Email is not valid. Enter email address for example test@gmail.com',
             'email.exists' => "Please Enter Valid Registered Email!",
-            'password_confirmation.same' => 'The confirm password and new password must match.'
+            'password_confirmation.same' => 'The confirm password and new password must match.',
+
+			'password.regex' => 'The :attribute must be at least 8 characters and contain at least one uppercase character, one number, and one special character.',
+			'password.regex' => 'The :attribute must be at least 8 characters and contain at least one uppercase character, one number, and one special character.',
 		];
 	}
 }
@@ -120,5 +123,9 @@ if (!function_exists('str_limit_custom')) {
     }
 }
 
-
+if (!function_exists('getSvgIcon')) {    
+    function getSvgIcon($icon){
+        return view('components.svg-icons', ['icon' => $icon])->render();
+    }
+}
 ?>

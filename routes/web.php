@@ -61,6 +61,9 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::get('settings', [SettingController::class, 'index'])->name('show.setting');
         Route::post('update-settings', [SettingController::class, 'update'])->name('update.setting');
 
+        Route::get('settings/contact-details', [SettingController::class, 'showContactDetails'])->name('show.contact-detail');
+        Route::post('settings/update-contact-details', [SettingController::class, 'updateContactDetails'])->name('update.contact-detail');
+
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 

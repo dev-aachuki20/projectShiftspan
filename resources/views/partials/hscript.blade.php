@@ -4,7 +4,7 @@
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 
 	<!-- Favicon -->
-    <link rel="icon" href="{{ asset('images/favicon.png') }}">
+    <link rel="icon" href="{{ getSetting('site_logo') ? getSetting('site_logo') : asset(config('constant.default.favicon')) }}">
 	<!-- Poppins Google Font -->
 	<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 	<!-- Bootstrap css -->
