@@ -87,7 +87,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function getIsAdminAttribute()
     {
-        return $this->roles()->where('id', config('constant.roles.admin'))->exists();
+        return $this->roles()->where('id', config('constant.roles.sub_admin'))->exists();
     }
 
     public function getIsStaffAttribute()

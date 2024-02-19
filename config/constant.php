@@ -14,7 +14,7 @@ return [
 
     'roles' =>[
         'super_admin' => 1,
-        'admin' => 2,
+        'sub_admin' => 2,
         'staff' => 3,
     ],
 
