@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Location\StoreRequest;
 use App\Http\Requests\Location\UpdateRequest;
 use App\Models\Location;
+use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -35,11 +36,23 @@ class LocationController extends Controller
     {
         abort_if(Gate::denies('location_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
-            try{
-                $viewHTML = view('admin.location.create')->render();
-                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            try{                
+                if((auth()->user()->is_super_admin)){
+                    $subAdmins = User::whereHas('roles', function($q){
+                        $q->where('id', config('constant.roles.sub_admin'));
+                    })->pluck('name', 'uuid');
+                    $viewHTML = view('admin.location.create', compact('subAdmins'))->render();
+                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                } else {
+                    $assignedLocationIds = auth()->user()->locations()->pluck('locations.id')->toArray();
+
+                    $locations = Location::whereNotIn('id', $assignedLocationIds)->get()->pluck('name', 'uuid');
+                    $viewHTML = view('admin.location.create', compact('locations'))->render();
+                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                }
             } 
-            catch (\Exception $e) {     
+            catch (\Exception $e) {
+                // dd($e);
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -56,8 +69,23 @@ class LocationController extends Controller
         {
             DB::beginTransaction();
             try{
-                Location::create($request->all());
-                
+                if((auth()->user()->is_super_admin)){
+                    $location = Location::create($request->all());
+
+                    if($location && !empty($request->sub_admin)){
+                        $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
+                        $location->subAdmins()->sync($subAdminUsers);
+                    }
+                } else {
+                    if($request->has('save_type') && $request->save_type == 'new_location'){
+                        $location = Location::create($request->all());
+                    } else {
+                        $location = Location::where('uuid', $request->location_name)->first();
+                    }
+                    if($location){
+                        $location->subAdmins()->attach(auth()->user()->id);
+                    }
+                }
                 DB::commit();
 
                 $response = [
@@ -87,12 +115,22 @@ class LocationController extends Controller
     public function edit(Request $request, $id)
     {
         if($request->ajax()) {        
-            try{    
+            try{
                 $location = Location::where('uuid', $id)->first();
-                $viewHTML = view('admin.location.edit', compact('location'))->render();
-                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                if((auth()->user()->is_super_admin)){
+                    $subAdmins = User::whereHas('roles', function($q){
+                        $q->where('id', config('constant.roles.sub_admin'));
+                    })->pluck('name', 'uuid');
+                    $selectedSubAdmins = $location->subAdmins()->pluck('uuid')->toArray();
+                    $viewHTML = view('admin.location.edit', compact('subAdmins', 'selectedSubAdmins', 'location'))->render();
+                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                } else {                    
+                    $locations = Location::all()->pluck('name', 'id'); 
+                    $viewHTML = view('admin.location.edit', compact('locations'))->render();
+                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                }
             } 
-            catch (\Exception $e) {     
+            catch (\Exception $e) {
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -111,7 +149,21 @@ class LocationController extends Controller
             $location = Location::where('uuid', $id)->first();
             DB::beginTransaction();
             try {
-                $location->update($request->all());
+                if((auth()->user()->is_super_admin)){
+                    $location->update($request->all());
+
+                    if($location && !empty($request->sub_admin)){
+                        $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
+                        $location->subAdmins()->sync($subAdminUsers);
+                    }
+                } else {
+                    $location = Location::create($request->all());
+                    if($location && !empty($request->sub_admin)){
+                        $location->subAdmins()->sync($request->sub_admin);
+                    }
+                }
+                
+                // $location->update($request->all());
                 DB::commit();
                 $response = [
                     'success'    => true,
@@ -137,7 +189,12 @@ class LocationController extends Controller
             $location = Location::where('uuid', $id)->first();
             DB::beginTransaction();
             try {
-                $location->delete();
+                if((auth()->user()->is_super_admin)){
+                    $location->subAdmins()->sync([]);
+                    $location->delete();
+                } else {
+                    $location->subAdmins()->detach(auth()->user()->id);
+                }
                 DB::commit();
                 $response = [
                     'success'    => true,
@@ -166,7 +223,15 @@ class LocationController extends Controller
                 DB::beginTransaction();
                 try {
                     $ids = $request->input('ids');
-                    Location::whereIn('uuid', $ids)->delete();
+                    $locations = Location::whereIn('uuid', $ids)->get();
+                    foreach($locations as $location){
+                        if((auth()->user()->is_super_admin)){
+                            $location->subAdmins()->sync([]);
+                            $location->delete();
+                        } else {
+                            $location->subAdmins()->detach(auth()->user()->id);
+                        }
+                    }
                     DB::commit();
                     $response = [
                         'success'    => true,

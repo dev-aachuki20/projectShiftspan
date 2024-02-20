@@ -25,22 +25,26 @@ class StoreRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name'     => [
-                'required',
-                'string',
-                // 'regex:/^[\pL\s\-]+$/u',
-                new NoMultipleSpacesRule,
-                'max:191',
-                'unique:locations,name,NULL,id,deleted_at,NULL',
-            ]
-        ];
+        $rules = [];
+        if($this->has('location_name')){
+            $rules['location_name'] = ['required','exists:locations,uuid'];
+        }
+        if($this->has('name')){
+            $rules['name'] = ['required','string',new NoMultipleSpacesRule,'max:191','unique:locations,name,NULL,id,deleted_at,NULL'];
+        }
+
+        if($this->has('sub_admin')){
+            $rules['sub_admin'] = ['nullable','array'];
+            $rules['sub_admin.*'] = ['exists:users,uuid'];
+        }
+        return $rules;
     }
 
     public function attributes()
     {
         return [
             'name' => 'location name',
+            'sub_admin.*' => 'sub admin',
         ];
     }
 }

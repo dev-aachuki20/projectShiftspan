@@ -227,5 +227,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Shift::class, 'staff_shift', 'user_id', 'shift_id');
     }
-
+    public function locations(){
+        return $this->belongsToMany(Location::class);
+    }
 }

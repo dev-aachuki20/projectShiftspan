@@ -21,6 +21,15 @@ class LocationDataTable extends DataTable
      *
      * @param QueryBuilder $query Results from query() method.
      */
+
+    private $authUser;
+
+    public function __construct()
+    {
+        $this->authUser = auth()->user();
+    }
+
+
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -38,10 +47,11 @@ class LocationDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('location_edit')) {
-                    
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" title="'.__('global.edit').'" data-href="'.route('locations.edit', $record->uuid).'">
-                        '.(getSvgIcon('edit')).'
-                    </button>';
+                    if($this->authUser->is_super_admin){
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" title="'.__('global.edit').'" data-href="'.route('locations.edit', $record->uuid).'">
+                            '.(getSvgIcon('edit')).'
+                        </button>';
+                    }
                 }
                 if (Gate::check('location_delete')) {
 				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" title="'.__('global.delete').'" data-href="'.route('locations.destroy', $record->uuid).'">
@@ -59,7 +69,17 @@ class LocationDataTable extends DataTable
      */
     public function query(Location $model): QueryBuilder
     {
-        return $model->newQuery();
+        $user = $this->authUser;
+        if($user->is_super_admin){
+            return $model->newQuery();
+        } else {
+            // return $user->locations()->newQuery();
+
+            return Location::join('location_user', function ($join) use ($user) {
+                $join->on('location_user.location_id', '=', 'locations.id')
+                     ->where('location_user.user_id', '=', $user->id);
+            })->select('locations.*');
+        }
     }
 
     /**

@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('title', trans('cruds.location.title_singular'))
 @section('customCss')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .modal:nth-of-type(even) {
+        z-index: 1062 !important;
+    }
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1061 !important;
+    }
+</style>
 @endsection
 
 @section('main-content')
@@ -22,12 +31,53 @@
         </div>
     </div>
 
+    {{-- add new location by sub-admin --}}
+    <div class="modal fade common-modal modal-size-l" id="addNewLocationModal" tabindex="-1" aria-labelledby="addLocationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-820">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center green-bg">
+                    <h5 class="modal-title text-center" id="addLocationLabel">+ @lang('global.add') @lang('cruds.location.title_singular')</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >
+                    <form class="msg-form" id="addNewLocationForm" action="{{route('locations.store')}}">
+                        @csrf
+                        <div class="form-label">
+                            <label>@lang('cruds.location.title_singular') @lang('cruds.location.fields.name'):</label>
+                            <input type="text" name="name" value="">
+                        </div>
+                        <div class="form-label justify-content-center">
+                            <button type="submit" class="cbtn submitBtn">
+                                @lang('global.new') @lang('global.add') @lang('cruds.location.title_singular')
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
+
 @section('customJS')
+
 @parent
 {!! $dataTable->scripts() !!}
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).on('shown.bs.modal', function() {
+        $(".select2").select2({
+            width: 'calc(100% - 180px)',
+            dropdownParent: $('.select-label'),
+            selectOnClose: false
+        }).on('select2:close', function() {
+            var el = $(this);
+            if(el.val()==="new") {
+                el.val('').change();
+                $('#addNewLocationModal').modal('show');
+            }
+        });;
+    });
     @can('location_create')
         // Add Location Modal
         $(document).on('click', '#addLocationBtn', function(e){
@@ -71,6 +121,7 @@
                     if(response.success) {
                         $('#location-table').DataTable().ajax.reload(null, false);
                         $('#addLocationModal').modal('hide');
+                        $('.popup_render_div').html('');
                         toasterAlert('success',response.message);
                     }
                 },
@@ -81,12 +132,60 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                            if(key == 'resume' || key == 'gender'){
-                                $('#'+key).html(errorLabelTitle);
+                            if (key.indexOf('sub_admin') !== -1) {
+                                $(".sub_admin_error").html(errorLabelTitle);
+                            } else if (key.indexOf('location_name') !== -1) {
+                                $(".location_name_error").html(errorLabelTitle);
                             }
                             else{
                                 $(errorLabelTitle).insertAfter("input[name='"+key+"']");
                             }                    
+                        });
+                    }
+                },
+                complete: function(res){
+                    $(".submitBtn").attr('disabled', false);
+                }
+            });                    
+        });
+
+        $(document).on('submit', '#addNewLocationForm', function (e) {
+            e.preventDefault();
+            $('.validation-error-block').remove();
+            $(".submitBtn").attr('disabled', true);
+
+            var formData = new FormData(this);
+
+            formData.append('save_type', 'new_location')
+
+            $.ajax({
+                type: 'post',
+                url: "{{route('locations.store')}}",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {                
+                    if(response.success) {
+                        $('#location-table').DataTable().ajax.reload(null, false);
+                        $('#addLocationModal').modal('hide');
+                        $('#addNewLocationModal').modal('hide');
+
+                        $('#addNewLocationForm')[0].reset();
+                        $('.popup_render_div').html('');
+
+                        toasterAlert('success',response.message);
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } else {                    
+                        var errorLabelTitle = '';
+                        $.each(response.responseJSON.errors, function (key, item) {
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                            
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
                         });
                     }
                 },
@@ -153,8 +252,11 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
-                            
-                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            if (key.indexOf('sub_admin') !== -1) {
+                                $(".sub_admin_error").html(errorLabelTitle);
+                            } else {
+                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            }
                         });
                     }
                 },
@@ -222,8 +324,7 @@
             denyButtonText: "No, cancel it!",
             })
             .then(function(result) {
-                if (result.isConfirmed) {       
-                    console.log(selectedIds);   
+                if (result.isConfirmed) {
                     $.ajax({
                         url: "{{route('locations.massDestroy')}}",
                         type: "POST",
@@ -249,6 +350,8 @@
             });
         })
     @endcan
+
+    
 </script>
 
 @endsection

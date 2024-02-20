@@ -43,16 +43,22 @@
                         <li><a href="{{route('show.change.password')}}" title="@lang('global.change_password')">@lang('global.change_password')</a></li>
                         <li class="d-lg-none"><a title="Company ID">Company ID:<span>SS12457</span></a></li>
                         <li class="d-lg-none"><a href="javascript:void(0)" title="Help">Help</a></li>
+                        @if(auth()->user()->is_super_admin)
                         <li class="d-lg-none"><a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a></li>
+                        @endif
                         <li class="d-lg-none"><a href="javascript:void(0)" title="Log Out">Log Out</a></li>
                     </ul>
                 </li>
-                @if(auth()->user()->is_super_admin)
+                
                 <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="@lang('global.help')" data-bs-toggle="modal" data-bs-target="#HelpPdf">@lang('global.help')</a></li>
-                @endif
-                <li class="d-none d-lg-inline-block">
-                    <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
-                </li>
+                
+                @can('setting_access')
+                    @if(auth()->user()->is_super_admin)                    
+                        <li class="d-none d-lg-inline-block">
+                            <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
+                        </li>
+                    @endif
+                @endcan
                 <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
             </ul>
         </div>

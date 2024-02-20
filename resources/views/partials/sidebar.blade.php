@@ -44,11 +44,13 @@
                     <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('cruds.occupation.title')">@lang('cruds.occupation.title')</a>
                 </li>
             @endcan
-            @if(auth()->user()->is_super_admin)
-                <li>
-                    <a href="{{route('show.setting')}}" class="{{ request()->is('admin/settings') ? 'active' : '' }}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
-                </li>
-            @endif
+            @can('setting_access')
+                @if(auth()->user()->is_super_admin)
+                    <li>
+                        <a href="{{route('show.setting')}}" class="{{ request()->is('admin/settings') ? 'active' : '' }}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
+                    </li>
+                @endif
+            @endcan
         </ul>
     </aside>
 </div>

@@ -55,6 +55,7 @@ return [
         'title_singular' => 'Location',
         'fields' => [
             'name'              => 'Name',
+            'sub_admin'         => 'Sub Admin',
             'status'            => 'Status',
             'created_by'        => 'Created By',
             'created_at'        => 'Created at',
