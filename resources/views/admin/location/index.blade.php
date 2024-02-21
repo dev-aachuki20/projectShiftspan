@@ -28,7 +28,7 @@
         <div class="modal-dialog modal-dialog-centered mw-820">
             <div class="modal-content">
                 <div class="modal-header justify-content-center green-bg">
-                    <h5 class="modal-title text-center" id="addLocationLabel">+ @lang('global.add') @lang('cruds.location.title_singular')</h5>
+                    <h5 class="modal-title text-center" id="addLocationLabel">+ @lang('global.add') @lang('global.new') @lang('cruds.location.title_singular')</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body" >
@@ -40,7 +40,7 @@
                         </div>
                         <div class="form-label justify-content-center">
                             <button type="submit" class="cbtn submitBtn">
-                                @lang('global.new') @lang('global.add') @lang('cruds.location.title_singular')
+                                @lang('global.new') @lang('global.add') @lang('global.new') @lang('cruds.location.title_singular')
                             </button>
                         </div>
                     </form>
@@ -68,7 +68,7 @@
                 el.val('').change();
                 $('#addNewLocationModal').modal('show');
             }
-        });;
+        });
     });
     @can('location_create')
         // Add Location Modal

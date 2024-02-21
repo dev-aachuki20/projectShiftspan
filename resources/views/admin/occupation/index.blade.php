@@ -1,6 +1,15 @@
 @extends('layouts.app')
 @section('title', trans('quickadmin.occupation.title'))
 @section('customCss')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<style>
+    .modal:nth-of-type(even) {
+        z-index: 1062 !important;
+    }
+    .modal-backdrop.show:nth-of-type(even) {
+        z-index: 1061 !important;
+    }
+</style>
 @endsection
 
 @section('main-content')
@@ -22,13 +31,53 @@
         </div>
     </div>
 
+    {{-- add new occupation by sub-admin --}}
+    <div class="modal fade common-modal modal-size-l" id="addNewOccupationModal" tabindex="-1" aria-labelledby="addOccupationLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-820">
+            <div class="modal-content">
+                <div class="modal-header justify-content-center green-bg">
+                    <h5 class="modal-title text-center" id="addOccupationLabel">+ @lang('global.add') @lang('global.new') @lang('cruds.occupation.title_singular')</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" >
+                    <form class="msg-form" id="addNewOccupationForm" >
+                        @csrf
+                        <div class="form-label">
+                            <label>@lang('cruds.occupation.title_singular') @lang('cruds.occupation.fields.name'):</label>
+                            <input type="text" name="name" value="">
+                        </div>
+                        <div class="form-label justify-content-center">
+                            <button type="submit" class="cbtn submitBtn">
+                                @lang('global.new') @lang('global.add') @lang('global.new') @lang('cruds.occupation.title_singular')
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('customJS')
 
 @parent
 {!! $dataTable->scripts() !!}
 
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).on('shown.bs.modal', function() {
+        $(".select2").select2({
+            width: 'calc(100% - 180px)',
+            dropdownParent: $('.select-label'),
+            selectOnClose: false
+        }).on('select2:close', function() {
+            var el = $(this);
+            if(el.val()==="new") {
+                el.val('').change();
+                $('#addNewOccupationModal').modal('show');
+            }
+        });
+    });
     @can('occupation_create')
         $(document).on('click', '#addOccupationBtn', function(e){
             e.preventDefault();
@@ -72,6 +121,52 @@
                         $('#addOccupationModal').modal('hide');
                         toasterAlert('success',response.message);
                         $('#occupation-table').DataTable().ajax.reload(null, false);
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } else {                    
+                        var errorLabelTitle = '';
+                        $.each(response.responseJSON.errors, function (key, item) {
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                            
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                        });
+                    }
+                },
+                complete: function(res){
+                    $(".submitBtn").attr('disabled', false);
+                }
+            });                    
+        });
+
+        $(document).on('submit', '#addNewOccupationForm', function (e) {
+            e.preventDefault();
+            $('.validation-error-block').remove();
+            $(".submitBtn").attr('disabled', true);
+
+            var formData = new FormData(this);
+
+            formData.append('save_type', 'new_occupation')
+
+            $.ajax({
+                type: 'post',
+                url: "{{route('occupations.store')}}",
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {                
+                    if(response.success) {
+                        $('#occupation-table').DataTable().ajax.reload(null, false);
+                        $('#addOccupationModal').modal('hide');
+                        $('#addNewOccupationModal').modal('hide');
+
+                        $('#addNewOccupationForm')[0].reset();
+                        $('.popup_render_div').html('');
+
+                        toasterAlert('success',response.message);
                     }
                 },
                 error: function (response) {

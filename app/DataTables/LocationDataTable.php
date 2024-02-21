@@ -3,14 +3,10 @@
 namespace App\DataTables;
 
 use App\Models\Location;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Html\Editor\Editor;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Gate;
-use PhpParser\Node\Expr\FuncCall;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 
@@ -48,14 +44,18 @@ class LocationDataTable extends DataTable
                 $actionHtml = '';
                 if (Gate::check('location_edit')) {
                     if($this->authUser->is_super_admin){
-                        $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" title="'.__('global.edit').'" data-href="'.route('locations.edit', $record->uuid).'">
-                            '.(getSvgIcon('edit')).'
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editLocationBtn"  data-href="'.route('locations.edit', $record->uuid).'">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
+                                '.(getSvgIcon('edit')).'
+                            </span>
                         </button>';
                     }
                 }
                 if (Gate::check('location_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" title="'.__('global.delete').'" data-href="'.route('locations.destroy', $record->uuid).'">
-                    '.(getSvgIcon('delete')).'
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
+                            '.(getSvgIcon('delete')).'
+                        </span>
                     </button>';
                 }
                 return $actionHtml;
@@ -73,8 +73,6 @@ class LocationDataTable extends DataTable
         if($user->is_super_admin){
             return $model->newQuery();
         } else {
-            // return $user->locations()->newQuery();
-
             return Location::join('location_user', function ($join) use ($user) {
                 $join->on('location_user.location_id', '=', 'locations.id')
                      ->where('location_user.user_id', '=', $user->id);
@@ -97,6 +95,30 @@ class LocationDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy($orderByColumn)
+                    ->parameters([
+                        'responsive' => true,
+                        "scrollCollapse" => true,
+                        'autoWidth' => true,
+                        'language' => [
+                            "sZeroRecords" => __('cruds.datatable.data_not_found'),
+                            "sProcessing" => __('cruds.datatable.processing'),
+                            "sLengthMenu" => __('cruds.datatable.show') . " _MENU_ " . __('cruds.datatable.entries'),
+                            "sInfo" => config('app.locale') == 'en' ?
+                                __('cruds.datatable.showing') . " _START_ " . __('cruds.datatable.to') . " _END_ " . __('cruds.datatable.of') . " _TOTAL_ " . __('cruds.datatable.entries') :
+                                __('cruds.datatable.showing') . "_TOTAL_" . __('cruds.datatable.to') . __('cruds.datatable.of') . "_START_-_END_" . __('cruds.datatable.entries'),
+                            "sInfoEmpty" => __('cruds.datatable.showing') . " 0 " . __('cruds.datatable.to') . " 0 " . __('cruds.datatable.of') . " 0 " . __('cruds.datatable.entries'),
+                            "search" => __('cruds.datatable.search'),
+                            "paginate" => [
+                                "first" => __('cruds.datatable.first'),
+                                "last" => __('cruds.datatable.last'),
+                                "next" => __('cruds.datatable.next'),
+                                "previous" => __('cruds.datatable.previous'),
+                            ],
+                            "autoFill" => [
+                                "cancel" => __('message.cancel'),
+                            ],
+                        ],
+                    ])
                     ->selectStyleSingle();
     }
 

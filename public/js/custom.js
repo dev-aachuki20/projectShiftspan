@@ -3,6 +3,10 @@
 -------------------------------------- */
 "use strict";
 $(document).ready(function($){
+    $('table').on('draw.dt', function() {
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]')
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl))
+    })
 	// Sidebar Open/Close
 	$(".mobile-humberger").on("click", function(){
 		$("body").addClass("sidebar-open");

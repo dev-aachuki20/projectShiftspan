@@ -6,6 +6,7 @@ use App\DataTables\OccupationDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Occupation\OccupationRequest;
 use App\Models\Occupation;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,16 +33,23 @@ class OccupationController extends Controller
     public function create(Request $request)
     {
         abort_if(Gate::denies('occupation_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            if($request->ajax()) {
-                $viewHTML = view('admin.occupation.create')->render();
+        if($request->ajax()) {
+            try {
+                if((auth()->user()->is_super_admin)){
+                    $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'uuid');
+                    $viewHTML = view('admin.occupation.create', compact('subAdmins'))->render();
+                } else {
+                    $assignedOccupationIds = auth()->user()->occupations()->pluck('occupations.id')->toArray();
+                    $occupations = Occupation::whereNotIn('id', $assignedOccupationIds)->get()->pluck('name', 'uuid');
+                    $viewHTML = view('admin.occupation.create', compact('occupations'))->render();
+                }
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            } catch (\Exception $e) {
+                dd($e);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
-        } catch (\Exception $e) {
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -50,21 +58,36 @@ class OccupationController extends Controller
     public function store(OccupationRequest $request)
     {
         abort_if(Gate::denies('occupation_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        DB::beginTransaction();
-        try {
-            if($request->ajax()) {
-                $store = Occupation::create($request->all());
-                if($store){
-                    DB::commit();
-                    return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.add_record')]);
+        if($request->ajax()) {
+            DB::beginTransaction();
+            try {
+                if((auth()->user()->is_super_admin)){
+                    $occupation = Occupation::create($request->all());
+
+                    if($occupation && !empty($request->sub_admin)){
+                        $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
+                        $occupation->subAdmins()->sync($subAdminUsers);
+                    }
+                } else {
+                    if($request->has('save_type') && $request->save_type == 'new_occupation'){
+                        $occupation = Occupation::create($request->all());
+                    } else {
+                        $occupation = Occupation::where('uuid', $request->occupation_name)->first();
+                    }
+                    if($occupation){
+                        $occupation->subAdmins()->attach(auth()->user()->id);
+                    }
                 }
+                DB::commit();
+                
+                return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.add_record')]);
+                
+            } catch (\Exception $e) {
+                DB::rollBack();
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -81,16 +104,22 @@ class OccupationController extends Controller
     public function edit(Request $request, $id)
     {
         abort_if(Gate::denies('occupation_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            if($request->ajax()) {
-                $occupation = Occupation::where('uuid', $id)->first();
-                $viewHTML = view('admin.occupation.edit', compact('occupation'))->render();
-                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));   
+        if($request->ajax()) {
+            try {
+                if((auth()->user()->is_super_admin)){
+                    $occupation = Occupation::where('uuid', $id)->first();
+                    $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin'));})->pluck('name', 'uuid');
+                    $selectedSubAdmins = $occupation->subAdmins()->pluck('uuid')->toArray();
+                    $viewHTML = view('admin.occupation.edit', compact('occupation', 'subAdmins', 'selectedSubAdmins'))->render();
+                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));   
+                }
+                return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.update_record')]);
+            } catch (\Exception $e) {
+                // dd($e);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
-        }catch (\Exception $e) {
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
     
     /**
@@ -100,21 +129,26 @@ class OccupationController extends Controller
     {
         abort_if(Gate::denies('occupation_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         DB::beginTransaction();
-        try {
-            if($request->ajax()) {       
-                $update = Occupation::where('uuid', $id)->update(['name' => $request['name']]);
+        if($request->ajax()) {       
+            $occupation = Occupation::where('uuid', $id)->first();
+            try {
+                if((auth()->user()->is_super_admin)){
+                    $occupation->update($request->all());
 
-                if($update){
+                    if($occupation && !empty($request->sub_admin)){
+                        $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
+                        $occupation->subAdmins()->sync($subAdminUsers);
+                    }
                     DB::commit();
                     return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.update_record')]);
                 }
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
-            }
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
-        }   
+            } catch (\Exception $e) {
+                DB::rollBack();
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }  
+        }  
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -123,35 +157,43 @@ class OccupationController extends Controller
     public function destroy(Request $request, $id)
     {
         abort_if(Gate::denies('occupation_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            if($request->ajax()) {       
-                $delete = Occupation::where('uuid', $id)->first();
-                
-                if($delete->delete()) {
-                    return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.delete_record')]);
+        if($request->ajax()) {
+            try {
+                $occupation = Occupation::where('uuid', $id)->first();
+                if((auth()->user()->is_super_admin)){
+                    $occupation->subAdmins()->sync([]);
+                    $occupation->delete();
+                } else {
+                    $occupation->subAdmins()->detach(auth()->user()->id);
                 }
+                
+                return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.delete_record')]);
+            } catch (\Exception $e) {
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
-        } catch (\Exception $e) {
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     public function deleteMultipleOccupation(OccupationRequest $request){
         abort_if(Gate::denies('occupation_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        try {
-            if($request->ajax()){
+        if($request->ajax()){
+            try {
                 $ids = $request->input('ids');
-                $delete = Occupation::whereIn('uuid', $ids)->delete();
-                if($delete) {
-                    return response()->json(['success' => true, 'message' => trans('messages.crud.delete_record')]);
+                $occupations = Occupation::whereIn('uuid', $ids)->get();
+                foreach($occupations as $occupation){
+                    if((auth()->user()->is_super_admin)){
+                        $occupation->subAdmins()->sync([]);
+                        $occupation->delete();
+                    } else {
+                        $occupation->subAdmins()->detach(auth()->user()->id);
+                    }
                 }
+                return response()->json(['success' => true, 'message' => trans('messages.crud.delete_record')]);
+            } catch (\Exception $e) {
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
-        } catch (\Exception $e) {
-            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
-            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 }

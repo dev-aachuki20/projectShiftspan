@@ -18,7 +18,7 @@
         <label>@lang('cruds.location.title_singular') @lang('cruds.location.fields.name'):</label>
         <select name="location_name" id="location_name" class="select2" required>
             <option value="">@lang('global.select') @lang('cruds.location.title_singular')</option>
-            <option value="new"> + Add Location</option>
+            <option value="new"> + @lang('global.add') @lang('cruds.location.title_singular')</option>
             @foreach ($locations as $key => $value)
                 <option value="{{$key}}">{{ $value}}</option>
             @endforeach

@@ -25,36 +25,39 @@ class OccupationRequest extends FormRequest
      */
     public function rules(): array
     {
+        $rules = [];
+
         $ids = $this->input('ids');
         
         if (!empty($ids)) {
             /* For Delete Multiple Data */
-            $rules = [
-                'ids'   => 'required|array',
-                'ids.*' => 'exists:occupations,uuid',
-            ];
+            $rules['ids'] = ['required', 'array'];
+            $rules['ids.*'] = ['exists:occupations,uuid'];
         }elseif(isset($this->occupation)){
-            /* For Update the Value */
-            $rules = [
-                'name'    => [
-                    'required',
-                    'string',
-                    'max:255',
-                    new NoMultipleSpacesRule,
-                    'unique:occupations,name,'. $this->occupation.',uuid,deleted_at,NULL',
-                ],
-            ];
+            /* For Update the Value */            
+            if($this->has('sub_admin')){
+                $rules['sub_admin'] = ['nullable','array'];
+                $rules['sub_admin.*'] = ['exists:users,uuid'];
+            }
+            if($this->has('occupation_name')){
+                $rules['occupation_name'] = ['required','integer','exists:occupations,uuid'];
+            }
+            if($this->has('name')){
+                $rules['name'] = ['required','string',new NoMultipleSpacesRule,'max:191','unique:occupations,name,'. $this->occupation.',uuid,deleted_at,NULL'];
+            }
         }else{
             /* For Create the Value */
-            $rules = [
-                'name'     => [
-                    'required',
-                    'string',
-                    'max:255',
-                    new NoMultipleSpacesRule,
-                    'unique:occupations,name,NULL,id,deleted_at,NULL',
-                ],
-            ];
+            if($this->has('occupation_name')){
+                $rules['occupation_name'] = ['required','exists:occupations,uuid'];
+            }
+            if($this->has('name')){
+                $rules['name'] = ['required','string',new NoMultipleSpacesRule,'max:191','unique:occupations,name,NULL,id,deleted_at,NULL'];
+            }
+    
+            if($this->has('sub_admin')){
+                $rules['sub_admin'] = ['nullable','array'];
+                $rules['sub_admin.*'] = ['exists:users,uuid'];
+            }
         }
 
         return $rules;
@@ -67,6 +70,14 @@ class OccupationRequest extends FormRequest
             'name.string' => __('validation.string', ['attribute' => strtolower(__('cruds.occupation.fields.occupation_name'))]),
             'name.unique' => __('validation.unique', ['attribute' => strtolower(__('cruds.occupation.fields.occupation_name'))]),
             'name.max' => __('validation.max.string', ['attribute' => strtolower(__('cruds.occupation.fields.occupation_name')), 'max' => ':max']),
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'name' => 'occupation name',
+            'sub_admin.*' => 'sub admin',
         ];
     }
 }

@@ -6,15 +6,20 @@ use App\Models\Occupation;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
-use Yajra\DataTables\Html\Editor\Editor;
-use Yajra\DataTables\Html\Editor\Fields;
 use Yajra\DataTables\Services\DataTable;
 use Illuminate\Support\Facades\Gate;
 
 class OccupationDataTable extends DataTable
 {
+
+    private $authUser;
+
+    public function __construct()
+    {
+        $this->authUser = auth()->user();
+    }
+
     /**
      * Build the DataTable class.
      *
@@ -33,18 +38,23 @@ class OccupationDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('occupation_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editOccupationBtn" title="'.__('global.edit').'" data-href="'.route('occupations.edit', $record->uuid).'">
-                        '.(getSvgIcon('edit')).'
-                    </button>';
+                    if($this->authUser->is_super_admin){
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
+                                '.(getSvgIcon('edit')).'
+                            </span>
+                        </button>';
+                    }
                 }
                 if (Gate::check('occupation_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteOccupationBtn" title="'.__('global.delete').'" data-href="'.route('occupations.destroy', $record->uuid).'">
-                    '.(getSvgIcon('delete')).'
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteOccupationBtn" data-href="'.route('occupations.destroy', $record->uuid).'">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
+                            '.(getSvgIcon('delete')).'
+                        </span>
                     </button>';
                 }
                 return $actionHtml;
             })
-
             ->setRowId('id')
             ->rawColumns(['action', 'checkbox']);
     }
@@ -54,7 +64,15 @@ class OccupationDataTable extends DataTable
      */
     public function query(Occupation $model): QueryBuilder
     {
-        return $model->newQuery();
+        $user = $this->authUser;
+        if($user->is_super_admin){
+            return $model->newQuery();
+        } else {
+            return Occupation::join('occupation_user', function ($join) use ($user) {
+                $join->on('occupation_user.occupation_id', '=', 'occupations.id')
+                     ->where('occupation_user.user_id', '=', $user->id);
+            })->select('occupations.*');
+        }
     }
 
     /**
@@ -96,15 +114,7 @@ class OccupationDataTable extends DataTable
                             ],
                         ],
                     ])
-                    ->selectStyleSingle()
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
-                    ]);
+                    ->selectStyleSingle();
     }
 
     /**

@@ -1,6 +1,21 @@
 <?php
 
 return [
+    'datatable' => [
+        'show' => 'Show',
+        'entries' => 'entries',
+        'showing' => 'Showing',
+        'to' => 'to',
+        'of'    => 'of',
+        'search' => 'Search',
+        'previous' => 'Previous',
+        'next' => 'Next',
+        'first' => 'First',
+        'last'  => 'Last',
+        'data_not_found' => 'Data not found',
+        'processing'   => 'Processing...',
+    ],
+
     'userManagement' => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',
@@ -70,6 +85,7 @@ return [
         'fields' => [
             'id'                => 'ID',
             'name'              => 'Name',
+            'sub_admin'         => 'Sub Admin',
             'occupation_name'   => 'Occupation Name',
             'status'            => 'Status',
             'created_by'        => 'Created By',
@@ -98,20 +114,7 @@ return [
             ]
         ],
     ],
-    'datatable' => [
-        'show' => 'Show',
-        'entries' => 'entries',
-        'showing' => 'Showing',
-        'to' => 'To',
-        'of'    => 'Of',
-        'search' => 'Search',
-        'previous' => 'Previous',
-        'next' => 'Next',
-        'first' => 'First',
-        'last'  => 'Last',
-        'data_not_found' => 'Data not found',
-        'processing'   => 'Processing...',
-    ],
+    
 
     'client_admin' => [
         'title' => 'Client Admins',
