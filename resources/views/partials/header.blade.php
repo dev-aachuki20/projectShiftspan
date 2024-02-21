@@ -29,7 +29,7 @@
             </ul>
         </div>
         <div class="logo-area px-2 px-xl-4">
-            <a href="route('dashboard')"><img src="{{ getSetting('site_logo') ? getSetting('site_logo') : asset(config('constant.default.logo')) }}" alt="{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | logo" class=""></a>
+            <a href="{{ route('dashboard') }}"><img src="{{ getSetting('site_logo') ? getSetting('site_logo') : asset(config('constant.default.logo')) }}" alt="{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | logo" class=""></a>
         </div>
         <div class="menu-right">
             <ul>

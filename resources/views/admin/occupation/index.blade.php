@@ -1,15 +1,7 @@
 @extends('layouts.app')
 @section('title', trans('quickadmin.occupation.title'))
-@section('customCss')
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-<style>
-    .modal:nth-of-type(even) {
-        z-index: 1062 !important;
-    }
-    .modal-backdrop.show:nth-of-type(even) {
-        z-index: 1061 !important;
-    }
-</style>
+@section('customCss')
 @endsection
 
 @section('main-content')
@@ -48,7 +40,7 @@
                         </div>
                         <div class="form-label justify-content-center">
                             <button type="submit" class="cbtn submitBtn">
-                                @lang('global.new') @lang('global.add') @lang('global.new') @lang('cruds.occupation.title_singular')
+                                @lang('global.add') @lang('global.new') @lang('cruds.occupation.title_singular')
                             </button>
                         </div>
                     </form>

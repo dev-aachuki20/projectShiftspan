@@ -40,7 +40,7 @@
                         </div>
                         <div class="form-label justify-content-center">
                             <button type="submit" class="cbtn submitBtn">
-                                @lang('global.new') @lang('global.add') @lang('global.new') @lang('cruds.location.title_singular')
+                                @lang('global.add') @lang('global.new') @lang('cruds.location.title_singular')
                             </button>
                         </div>
                     </form>
