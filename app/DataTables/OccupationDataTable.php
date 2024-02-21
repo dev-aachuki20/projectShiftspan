@@ -37,14 +37,13 @@ class OccupationDataTable extends DataTable
             
             ->addColumn('action', function($record){
                 $actionHtml = '';
-                if (Gate::check('occupation_edit')) {
-                    if($this->authUser->is_super_admin){
-                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'">
-                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
-                                '.(getSvgIcon('edit')).'
-                            </span>
-                        </button>';
-                    }
+                
+                if (Gate::check('occupation_edit') && ($this->authUser->is_super_admin)) {
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
+                            '.(getSvgIcon('edit')).'
+                        </span>
+                    </button>';
                 }
                 if (Gate::check('occupation_delete')) {
 				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteOccupationBtn" data-href="'.route('occupations.destroy', $record->uuid).'">
@@ -124,7 +123,7 @@ class OccupationDataTable extends DataTable
     {
         $columns = [];
         if (Gate::check('occupation_delete')) {
-            $columns[] = Column::make('checkbox')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('position-relative');
+            $columns[] = Column::make('checkbox')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('pe-0 position-relative');
         } 
         $columns[] = Column::make('name')->title('<span>'.trans('cruds.occupation.title_singular').' '.trans('cruds.occupation.fields.name').'</span>');
         $columns[] = Column::make('created_at')->title(trans('cruds.occupation.fields.created_at'))->searchable(false)->visible(false);

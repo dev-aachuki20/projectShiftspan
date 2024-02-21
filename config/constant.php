@@ -8,6 +8,7 @@ return [
         'staff-image' => 'default/staff-img.png',
         'help_pdf' => 'default/help_pdf.pdf',
         'user_icon' => 'default/user-icon.svg',
+        'datatable_loader' => 'default/datatable_loader.gif',
     ],
     'profile_max_size' => 2048,
     'profile_max_size_in_mb' => '2MB',

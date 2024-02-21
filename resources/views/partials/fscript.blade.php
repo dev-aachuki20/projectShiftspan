@@ -11,3 +11,12 @@
 
 <!-- datatable -->
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+
+
+<script>
+    $( document ).ajaxError(function( event, response, settings ) {
+        if(response.status == 401){
+            window.location.href = "{{ route('admin/login') }}";
+        }
+    });
+</script>
