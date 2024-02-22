@@ -16,7 +16,7 @@
 <script>
     $( document ).ajaxError(function( event, response, settings ) {
         if(response.status == 401){
-            window.location.href = "{{ route('admin/login') }}";
+            window.location.href = "{{ route('login') }}";
         }
     });
 </script>
