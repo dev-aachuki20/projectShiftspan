@@ -19,4 +19,20 @@
             window.location.href = "{{ route('login') }}";
         }
     });
+
+    // Datatable global default configuration
+    $(document).ready(function(e){
+        (function ($, DataTable) {
+            $.extend(true, DataTable.defaults, {
+                drawCallback : function() { 
+                                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
+                                pagination.toggle(this.api().page.info().pages > 1); 
+                            },
+                language: {
+                    "sProcessing": '<img src="{{asset(config('constant.default.datatable_loader'))}}" width="100"/>',
+                    "sEmptyTable": 'No record found',
+                }
+            });
+        })(jQuery, jQuery.fn.dataTable);
+    })
 </script>

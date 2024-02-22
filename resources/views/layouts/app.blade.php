@@ -18,9 +18,9 @@
 		</div>
 	</div>
 	<div class="popup_render_div"></div>
+	
     @include('partials.fscript')
+
+	@yield('customJS')
 </body>
-
-
-@yield('customJS')
 </html>

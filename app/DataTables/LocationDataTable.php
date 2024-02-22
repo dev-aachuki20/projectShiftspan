@@ -101,7 +101,7 @@ class LocationDataTable extends DataTable
                         'autoWidth' => true,
                         'language' => [
                             "sZeroRecords" => __('cruds.datatable.data_not_found'),
-                            "sProcessing" => __('cruds.datatable.processing'),
+                            // "sProcessing" => __('cruds.datatable.processing'),
                             "sLengthMenu" => __('cruds.datatable.show') . " _MENU_ " . __('cruds.datatable.entries'),
                             "sInfo" => config('app.locale') == 'en' ?
                                 __('cruds.datatable.showing') . " _START_ " . __('cruds.datatable.to') . " _END_ " . __('cruds.datatable.of') . " _TOTAL_ " . __('cruds.datatable.entries') :
