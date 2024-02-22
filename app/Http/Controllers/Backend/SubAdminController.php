@@ -19,8 +19,7 @@ class SubAdminController extends Controller
     {
         abort_if(Gate::denies('sub_admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            // return $dataTable->render('admin.sub_admin.index');
-            return view('admin.sub_admin.index');
+            return $dataTable->render('admin.sub_admin.index');
         } catch (\Exception $e) {
             return abort(500);
         }

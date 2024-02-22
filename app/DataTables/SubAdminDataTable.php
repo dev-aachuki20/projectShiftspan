@@ -3,14 +3,10 @@
 namespace App\DataTables;
 
 use App\Models\User;
-use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
-use Yajra\DataTables\Html\Editor\Fields;
-use Yajra\DataTables\Html\Editor\Editor;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Gate;
-use PhpParser\Node\Expr\FuncCall;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
 
@@ -26,7 +22,7 @@ class SubAdminDataTable extends DataTable
         return (new EloquentDataTable($query))
             // ->addIndexColumn()
             ->addColumn('checkbox', function($record){
-                return '<label class="custom-checkbox"><input type="checkbox" class="dt_cb location_cb" data-id="'.$record->uuid.'" /><span></span></label>';
+                return '<label class="custom-checkbox"><input type="checkbox" class="dt_cb client_admin_cb" data-id="'.$record->uuid.'" /><span></span></label>';
             })
             ->editColumn('name', function($record){
                 return $record->name ?? '';
@@ -35,10 +31,10 @@ class SubAdminDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('sub_admin_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editLocationBtn" data-href="'.route('client-admins.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editClientAdminBtn" data-href="'.route('client-admins.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
                 }
                 if (Gate::check('sub_admin_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteLocationBtn" data-href="'.route('client-admins.destroy', $record->uuid).'">'.__('global.delete').'</button>';
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteClientAdminBtn" data-href="'.route('client-admins.destroy', $record->uuid).'">'.__('global.delete').'</button>';
                 }
                 return $actionHtml;
             })
@@ -61,9 +57,9 @@ class SubAdminDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $orderByColumn = 1;
+        $orderByColumn = 2;
         if (Gate::check('sub_admin_delete')) {
-            $orderByColumn = 2;
+            $orderByColumn = 3;
         }
         return $this->builder()
                     ->setTableId('client-admin-table')
@@ -71,6 +67,30 @@ class SubAdminDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy($orderByColumn)
+                    ->parameters([
+                        'responsive' => true,
+                        "scrollCollapse" => true,
+                        'autoWidth' => true,
+                        'language' => [
+                            "sZeroRecords" => __('cruds.datatable.data_not_found'),
+                            // "sProcessing" => __('cruds.datatable.processing'),
+                            "sLengthMenu" => __('cruds.datatable.show') . " _MENU_ " . __('cruds.datatable.entries'),
+                            "sInfo" => config('app.locale') == 'en' ?
+                                __('cruds.datatable.showing') . " _START_ " . __('cruds.datatable.to') . " _END_ " . __('cruds.datatable.of') . " _TOTAL_ " . __('cruds.datatable.entries') :
+                                __('cruds.datatable.showing') . "_TOTAL_" . __('cruds.datatable.to') . __('cruds.datatable.of') . "_START_-_END_" . __('cruds.datatable.entries'),
+                            "sInfoEmpty" => __('cruds.datatable.showing') . " 0 " . __('cruds.datatable.to') . " 0 " . __('cruds.datatable.of') . " 0 " . __('cruds.datatable.entries'),
+                            "search" => __('cruds.datatable.search'),
+                            "paginate" => [
+                                "first" => __('cruds.datatable.first'),
+                                "last" => __('cruds.datatable.last'),
+                                "next" => __('cruds.datatable.next'),
+                                "previous" => __('cruds.datatable.previous'),
+                            ],
+                            "autoFill" => [
+                                "cancel" => __('message.cancel'),
+                            ],
+                        ],
+                    ])
                     ->selectStyleSingle();
     }
 
@@ -81,10 +101,10 @@ class SubAdminDataTable extends DataTable
     {
         $columns = [];
         if (Gate::check('sub_admin_delete')) {
-            $columns[] = Column::make('checkbox')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('position-relative');
+            $columns[] = Column::make('checkbox')->titleAttr('')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('pe-0 position-relative');
         } 
-        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_admin.fields.name').'</span>');
-        $columns[] = Column::make('email')->title('<span>'.trans('cruds.client_admin.fields.email').'</span>');
+        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_admin.fields.name').'</span>')->titleAttr(trans('cruds.client_admin.fields.name'));
+        $columns[] = Column::make('email')->title('<span>'.trans('cruds.client_admin.fields.email').'</span>')->titleAttr(trans('cruds.client_admin.fields.email'));
         $columns[] = Column::make('created_at')->title(trans('cruds.client_admin.fields.created_at'))->searchable(false)->visible(false);
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
