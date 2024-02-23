@@ -31,10 +31,29 @@ return [
     'verified_otp'=> 'OTP successfully Verified.',
     'invalid_token_email'=> 'Invalid Token or Email!',
     'success'=>'Success',
-    'register_success'=>'Your Account created Successfully! Please wait for the Approval!',
+    'register_success'=>'Your account created successfully! Please wait for the approval!',
     'login_success'=>'You have logged in successfully!',
     'logout_success'=>'Logged out successfully!',
     'warning_select_record'=> 'Please select at least one record',
+    'required_role'=> "User with the specified email doesn't have the required role.",
+    
+    'invalid_token'                 => 'Your access token has been expired. Please login again.',
+    'not_authorized'                => 'Not Authorized to access this resource/api',
+    'not_found'                     => 'Not Found!',
+    'endpoint_not_found'            => 'Endpoint not found',
+    'resource_not_found'            => 'Resource not found',
+    'token_invalid'                 => 'Token is invalid',
+    'unexpected'                    => 'Unexpected Exception. Try later',
+    
+    'data_retrieved_successfully'   => 'Data retrieved successfully',
+    'record_retrieved_successfully' => 'Record retrieved successfully',
+    'record_created_successfully'   => 'Record created successfully',
+    'record_updated_successfully'   => 'Record updated successfully',
+    'record_deleted_successfully'   => 'Record deleted successfully',
+    'password_updated_successfully' => 'Password updated successfully',
+
+    'profile_updated_successfully'   => 'Profile updated successfully',
+
 ];
 
 ?>

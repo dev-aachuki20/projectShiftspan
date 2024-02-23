@@ -100,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     public function company(){
-        return $this->belongsTo(User::class,'sub_admin_id','id');
+        return $this->belongsTo(User::class,'company_id','id');
     }
 
     public function sendPasswordResetOtpNotification($user,$token, $subject , $expiretime)

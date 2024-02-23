@@ -31,6 +31,7 @@ class IsActive implements Rule
      */
     public function message()
     {
-        return trans('messages.not_activate');
+        // return trans('messages.not_activate');
+        return trans('auth.messages.account_approval');
     }
 }

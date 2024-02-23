@@ -1604,6 +1604,11 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     display: block;
 }
 .common-table.dataTable thead th.pe-0{
+    min-width: 50px;
+    width: 50px;
+}
+.common-table.dataTable thead th.pe-0,
+.common-table.dataTable tbody td.pe-0{
     padding-right: 0 !important;
 }
 
@@ -1645,6 +1650,18 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
 .password-area .toggle-password.close-eye svg + svg,
 .password-area .toggle-password.open-eye svg:first-child{
     display: none;
+}
+.dataTables_processing{
+    height: 50px !important;
+    padding: 0 !important;
+    top: 50vh !important;
+    transform: translateY(-50%) !important;
+    -webkit-transform: translateY(-50%) !important;
+    position: fixed !important;
+}
+.dataTables_processing img{
+    width: 80px;
+    margin-top: -15px;
 }
 
 /* Responsive css */
@@ -1737,26 +1754,29 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
         padding-right: 2px;
     }
     .header-inner ul>li>a{
-        padding: 10px 5px;
+        padding: 10px 8px;
         font-size: 14px;
     }
     .menu-right>ul>li:last-child a{
-        padding: 14px 24px;
+        padding: 10px 16px;
+    }
+    .logo-area img {
+        max-width: 90px;
     }
     .header-inner .dropdown-menu{
         width: calc(100% - 4px);
         left: 2px !important;
     }
     .header-inner .has_noti{
-        padding-left: 42px;
-        padding-right: 42px;
+        padding-left: 35px;
+        padding-right: 26px;
     }
     .notifications_area {
         padding-left: 10px;
         padding-right: 10px;
     }
     .has_noti::before{
-        left: 20px;
+        left: 14px;
     }
     .header-inner .dropdown-menu>li a{
         padding: 10px 12px;
@@ -1974,9 +1994,13 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     .sidebar-close{
         padding: 12px;
     }
+    .sidebar-close svg{
+        height: 15px;
+        width: auto;
+    }
     .sidebar-menu ul li>a{
         font-size: 14px;
-        padding: 20px;
+        padding: 15px 20px;
     }
     .sidebar_overlay{
         position: fixed;
@@ -2060,6 +2084,9 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     }
     #message-centre-table{
         margin-top: 0;
+    }
+    .content-area.dashboard-page{
+        z-index: auto;
     }
 }
 @media screen and (max-width: 767px){

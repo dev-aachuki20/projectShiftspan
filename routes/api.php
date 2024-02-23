@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\Auth\LoginController;
+use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LogoutController;
 use App\Http\Controllers\Api\OccupationController;
 use App\Http\Controllers\Api\SettingController;
 use App\Http\Controllers\Api\StaffController;
-use App\Http\Controllers\Api\SubAdminController;
+use App\Http\Controllers\Api\UserController;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -20,22 +23,159 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::controller(LoginController::class)->group(function(){
-    Route::post('login', 'login');
-    Route::post('register', 'registerUser');
-    Route::post('forgot-password', 'forgotPassword');
-    Route::post('password/verify-otp', 'verifyOtp');
-    Route::post('password/reset-password', 'resetPassword');
+Route::group(['namespace' => 'Api'], function () {
+    /*
+    |--------------------------------------------------------------------------
+    | Login API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route 		: http://localhost:8000/api/login
+    | Parameter 	: Email, Password
+    | Method 		: Post
+    |
+    */
+	Route::post('login',[LoginController::class,'login']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Forgot Password API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route 		: http://localhost:8000/api/forgot-password
+    | Parameter 	: Email
+    | Method 		: Post
+    |
+    */
+	Route::post('forgot-password',[LoginController::class,'forgotPassword']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password Verify OTP API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route 		: http://localhost:8000/api/password/verify-otp
+    | Parameter 	: Email, otp
+    | Method 		: Post
+    |
+    */
+	Route::post('password/verify-otp',[LoginController::class,'verifyOtp']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Reset Password API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route 		: http://localhost:8000/api/password/reset-password
+    | Parameter 	: Email
+    | Method 		: Post
+    |
+    */
+	Route::post('password/reset-password',[LoginController::class,'resetPassword']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Register API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route 		: http://localhost:8000/api/register
+    | Parameter 	: Multiple
+    | Method 		: Post
+    |
+    */
+	Route::post('register',[RegisterController::class,'create']);
+	
+	
+	/*
+    |--------------------------------------------------------------------------
+    | Open API Routes
+    |--------------------------------------------------------------------------
+    | Method        : Get
+    |
+    */
+    Route::get('companies', [HomeController::class,'companyList']);
+    
 });
 
 
-Route::middleware(['auth:sanctum'])->group(function () {
-    Route::post('/logout', [LogoutController::class, 'logout']);
+/*
+| Auth Common Api List
+|--------------------------------------------------------------------------
+| Base Route : http://localhost:8000/api/
+|--------------------------------------------------------------------------
+|
+*/ 
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (){
+    /*
+    |--------------------------------------------------------------------------
+    |  Logout API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/logout
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : Get
+    |
+    */
+    Route::post('logout', [HomeController::class,'logout']);
 
-    Route::post('user/profile/{user}', [StaffController::class, 'updateProfile']);
-    Route::get('/setting-doc', [SettingController::class, 'getPolicyDoc']);
+    /*
+    |--------------------------------------------------------------------------
+    |  Get Occupations API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/occupations
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : Get
+    | Parameters    : company_id
+    |
+    */
+    Route::get('occupations', [HomeController::class, 'occupationsList']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Auth User Details API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/profile
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : Get
+    |
+    */
+    Route::get('profile', [UserController::class,'profile']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Profile Update API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/profile
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : post
+    |
+    | Parameters    : name, address, phone, occupation_id
+    |
+    */
+    Route::post('profile', [UserController::class,'updateProfile']);
+
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Setting API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/settings
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET    |
+    |
+    */
+    Route::get('settings', [HomeController::class,'setting']);
 });
-
-Route::get('/all-sub-admin', [SubAdminController::class, 'AllSubAdmins']);
-
-Route::get('/occupations', [OccupationController::class, 'AllOccupations']);
