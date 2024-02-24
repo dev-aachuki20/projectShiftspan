@@ -13,7 +13,7 @@
             <form class="msg-form" id="change-password-form">
                 @csrf
                 <div class="form-label password-area">
-                    <label>Old Password:</label>
+                    <label>@lang('global.old_password'):</label>
                     <input type="password" name="currentpassword" value="">
                     <span class="toggle-password close-eye">
                         <x-svg-icons icon="close-eye" />
@@ -21,7 +21,7 @@
                     </span>
                 </div>
                 <div class="form-label password-area">
-                    <label>New Password:</label>
+                    <label>@lag('global.name_password'):</label>
                     <input type="password" name="password" value="">
 
                     <span class="toggle-password close-eye">
@@ -30,7 +30,7 @@
                     </span>
                 </div>
                 <div class="form-label password-area">
-                    <label>Confirm Password:</label>
+                    <label>@lag('global.confirm_password'):</label>
                     <input type="password" name="password_confirmation" value="">
 
                     <span class="toggle-password close-eye">
@@ -82,7 +82,6 @@
                         if(key == 'profile_image'){
                             $(errorLabelTitle).insertAfter("#"+key);
                         }
-                        
                     });
                 }
             },
@@ -90,17 +89,6 @@
                 $(".submitBtn").attr('disabled', false);
             }
         });
-    });
-     // Password field hide/show functiolity
-    $('.toggle-password').click(function () {        
-        var passwordInput = $(this).prev('input');        
-        if (passwordInput.attr('type') === 'password') {
-            passwordInput.attr('type', 'text');
-            $(this).removeClass('close-eye').addClass('open-eye');
-        } else {
-            passwordInput.attr('type', 'password');
-            $(this).removeClass('open-eye').addClass('close-eye');
-        }
-    });
+    });    
 </script>
 @endsection

@@ -121,11 +121,29 @@ return [
         'title_singular' => 'Client Admin',
         'fields' => [
             'id'                => 'ID',
-            'name'              => 'Client Name',
+            'name'              => 'Name',
             'email'             => 'Email',
+            'password'             => 'Password',
             'status'            => 'Status',
             'created_by'        => 'Created By',
             'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ],
+
+    'staff' => [
+        'title' => 'Staffs',
+        'title_singular' => 'Staff',
+        'fields' => [
+            'id'                => 'ID',
+            'name'              => 'Staff Name',
+            'staff_image'       => 'Staff Image',
+            'email'             => 'Email',
+            'status'            => 'Status',
+            'set_status'        => 'Set Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Date',
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
         ]

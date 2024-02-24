@@ -30,10 +30,11 @@
                 <a href="{{ route('shifts.index')}}" class="{{ request()->is('admin/shifts') || request()->is('admin/shifts/*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a>
             </li>
 
+            @can('staff_access')
             <li>
-                <a href="javascript:void(0);" title="Staff">Staff</a>
+                <a href="{{ route('staffs.index')}}" class="{{ request()->is('admin/staffs') || request()->is('admin/staffs/*') ? 'active' : '' }}" title="@lang('cruds.staff.title')">@lang('cruds.staff.title')</a>
             </li>
-
+            @endcan
             @can('location_access')
                 <li>
                     <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title')</a>

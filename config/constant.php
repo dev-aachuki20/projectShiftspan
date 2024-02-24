@@ -19,6 +19,10 @@ return [
         'staff' => 3,
     ],
 
+    'user_status' => [
+        1 => 'Active',
+        0 => 'Deactive'
+    ],
 
     'staff_file_fields' => [
         'user_dbs_certificate',

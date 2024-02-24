@@ -45,7 +45,7 @@ class OccupationController extends Controller
                 }
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } catch (\Exception $e) {
-                dd($e);
+                // dd($e);
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -80,8 +80,7 @@ class OccupationController extends Controller
                 }
                 DB::commit();
                 
-                return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.add_record')]);
-                
+                return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.add_record')]);                
             } catch (\Exception $e) {
                 DB::rollBack();
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
@@ -138,6 +137,8 @@ class OccupationController extends Controller
                     if($occupation && !empty($request->sub_admin)){
                         $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
                         $occupation->subAdmins()->sync($subAdminUsers);
+                    } else {
+                        $occupation->subAdmins()->sync([]);
                     }
                     DB::commit();
                     return response()->json(['success' => true, 'message' => trans('cruds.occupation.title_singular').' '.trans('messages.crud.update_record')]);

@@ -252,12 +252,12 @@
         $(document).on("click",".deleteOccupationBtn", function() {
             var url = $(this).data('href');
             Swal.fire({
-            title: "{{ trans('global.areYouSure') }}",
-            text: "{{ trans('global.onceClickedRecordDeleted') }}",
-            icon: "warning",
-            showDenyButton: true,  
-            confirmButtonText: "Yes, I am sure",  
-            denyButtonText: "No, cancel it!",
+                title: "{{ trans('global.areYouSure') }}",
+                text: "{{ trans('global.onceClickedRecordDeleted') }}",
+                icon: "warning",
+                showDenyButton: true,  
+                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+                denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
             })
             .then(function(result) {
                 if (result.isConfirmed) {  
@@ -295,13 +295,13 @@
                 return false;
             }
             Swal.fire({
-            title: "{{ trans('global.areYouSure') }}",
-            text: "{{ trans('global.onceClickedRecordDeleted') }}",
-            icon: "warning",
-            showDenyButton: true,  
-            //   showCancelButton: true,  
-            confirmButtonText: "Yes, I am sure",  
-            denyButtonText: "No, cancel it!",
+                title: "{{ trans('global.areYouSure') }}",
+                text: "{{ trans('global.onceClickedRecordDeleted') }}",
+                icon: "warning",
+                showDenyButton: true,  
+                //   showCancelButton: true,  
+                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+                denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
             })
             .then(function(result) {
                 if (result.isConfirmed) {       

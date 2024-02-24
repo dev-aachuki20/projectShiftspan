@@ -1,5 +1,13 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
+
+const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+        },
+        buttonsStyling: false
+    });
     
     @if (session()->has('status'))
         toasterAlert('success',"{{ session()->get('status') }}");
@@ -41,5 +49,38 @@
             title: message
         });
 
+    }
+
+    function fireSuccessSwal(title,message){
+        Swal.fire({
+            title: title, 
+            text: message, 
+            type: "success",
+            icon: "success",
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#04a9f5"
+        });
+    }
+
+    function fireWarningSwal(title,message){
+    Swal.fire({
+            title: title, 
+            text: message, 
+            type: "warning",
+            icon: "warning",
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#04a9f5"
+        });
+    }
+
+    function fireErrorSwal(title,message){
+        Swal.fire({
+            title: title, 
+            text: message, 
+            type: "error",
+            icon: "error",
+            confirmButtonText: "Okay",
+            confirmButtonColor: "#04a9f5"
+        });
     }
 </script>

@@ -145,6 +145,8 @@ class LocationController extends Controller
                     if($location && !empty($request->sub_admin)){
                         $subAdminUsers = User::whereIn('uuid', $request->sub_admin)->pluck('id');
                         $location->subAdmins()->sync($subAdminUsers);
+                    } else {
+                        $location->subAdmins()->sync([]);
                     }
                     DB::commit();
                     return response()->json(['success'    => true, 'message'    => trans('cruds.location.title_singular').' '.trans('messages.crud.update_record')]);

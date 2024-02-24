@@ -12,8 +12,51 @@
 <!-- datatable -->
 <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 
+@php
+$arr = [
+    "sZeroRecords" => __('cruds.datatable.data_not_found'),
+    "sProcessing" => '<img src="'.(asset(config('constant.default.datatable_loader'))).'" width="100"/>',
+    "sLengthMenu" => __('cruds.datatable.show') . " _MENU_ " . __('cruds.datatable.entries'),
+    "sInfo" => config('app.locale') == 'en' ?
+        __('cruds.datatable.showing') . " _START_ " . __('cruds.datatable.to') . " _END_ " . __('cruds.datatable.of') . " _TOTAL_ " . __('cruds.datatable.entries') :
+        __('cruds.datatable.showing') . "_TOTAL_" . __('cruds.datatable.to') . __('cruds.datatable.of') . "_START_-_END_" . __('cruds.datatable.entries'),
+    "sInfoEmpty" => __('cruds.datatable.showing') . " 0 " . __('cruds.datatable.to') . " 0 " . __('cruds.datatable.of') . " 0 " . __('cruds.datatable.entries'),
+    "search" => __('cruds.datatable.search'),
+    "paginate" => [
+        "first" => __('cruds.datatable.first'),
+        "last" => __('cruds.datatable.last'),
+        "next" => __('cruds.datatable.next'),
+        "previous" => __('cruds.datatable.previous'),
+    ],
+    "autoFill" => [
+        "cancel" => __('message.cancel'),
+    ],
+];
+
+$jsonArr = json_encode($arr);
+@endphp
 
 <script>
+    document.addEventListener('shown.bs.modal', function(event) {
+        // Get the modal instance
+        const modal = bootstrap.Modal.getInstance(event.target);
+
+        // Update the backdrop option to "static"
+        modal._config.backdrop = 'static';
+    });
+
+    // Password field hide/show functiolity
+    $(document).on('click', '.toggle-password',function () {        
+        var passwordInput = $(this).prev('input');        
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).removeClass('close-eye').addClass('open-eye');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).removeClass('open-eye').addClass('close-eye');
+        }
+    });
+    
     $( document ).ajaxError(function( event, response, settings ) {
         if(response.status == 401){
             window.location.href = "{{ route('login') }}";
@@ -24,15 +67,38 @@
     $(document).ready(function(e){
         (function ($, DataTable) {
             $.extend(true, DataTable.defaults, {
-                drawCallback : function() { 
-                                var pagination = $(this).closest('.dataTables_wrapper').find('.dataTables_paginate');
-                                pagination.toggle(this.api().page.info().pages > 1); 
-                            },
-                language: {
-                    "sProcessing": '<img src="{{asset(config('constant.default.datatable_loader'))}}" width="100"/>',
-                    "sEmptyTable": 'No record found',
-                }
+                'responsive': true,
+                "scrollCollapse" : true,
+                'autoWidth' : true,
+                language: {!! $jsonArr !!}
             });
         })(jQuery, jQuery.fn.dataTable);
-    })
+    });
+
+    
+    
+    $(document).on('change', '#dt_cb_all', function(e){
+        var t = $(this);
+        if(t.prop('checked') === true){
+            $('.dt_cb').prop('checked', true);
+        } else {
+            $('.dt_cb').prop('checked', false);
+        }
+    });
+
+    $(document).on('change', '.dt_cb', function(e){    
+        if ($('.dt_cb:checked').length == $('.dt_cb').length) {
+            $('#dt_cb_all').prop('checked', true);
+        } else {
+            $('#dt_cb_all').prop('checked', false);
+        }
+    });
+
+    function updateHeaderProfile(profile_image, user_name){
+        if(profile_image != ''){
+            $('#header_profile_image').removeClass('default-image');
+            $('#header_profile_image').attr('src', profile_image);
+        }
+        $('#header_auth_name').text(user_name);
+    }
 </script>

@@ -3,12 +3,13 @@
 return [
 
     'crud'=>[
-        'add_record'=>'Successfully Added !',
-        'update_record'=>'Successfully Updated !',
-        'delete_record'=> 'This record has been succesfully deleted!',
+        'add_record'    => 'Successfully Added !',
+        'update_record' => 'Successfully Updated !',
+        'delete_record' => 'This record has been succesfully deleted!',
         'restore_record'=> 'This record has been succesfully Restored!',
-        'merge_record'=> 'This record has been succesfully Merged!',
-        'approve_record'=>'Record Successfully Approved !',
+        'merge_record'  => 'This record has been succesfully Merged!',
+        'approve_record'=> 'Record Successfully Approved !',
+        'status_update' => 'Status successfully updated!',
     ],
 
     'areYouSure'=>'Are you sure you want to delete this record?',

@@ -31,10 +31,18 @@ class SubAdminDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('sub_admin_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn editClientAdminBtn" data-href="'.route('client-admins.edit', $record->uuid).'">'.__('global.edit').'</button><br>';
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editSubAdminBtn" data-href="'.route('client-admins.edit', $record->uuid).'">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
+                            '.(getSvgIcon('edit')).'
+                        </span>
+                    </button>';
                 }
                 if (Gate::check('sub_admin_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn deleteClientAdminBtn" data-href="'.route('client-admins.destroy', $record->uuid).'">'.__('global.delete').'</button>';
+                    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteSubAdminBtn" data-href="'.route('client-admins.destroy', $record->uuid).'">
+                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
+                            '.(getSvgIcon('delete')).'
+                        </span>
+                    </button>';
                 }
                 return $actionHtml;
             })
@@ -67,30 +75,6 @@ class SubAdminDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy($orderByColumn)
-                    ->parameters([
-                        'responsive' => true,
-                        "scrollCollapse" => true,
-                        'autoWidth' => true,
-                        'language' => [
-                            "sZeroRecords" => __('cruds.datatable.data_not_found'),
-                            // "sProcessing" => __('cruds.datatable.processing'),
-                            "sLengthMenu" => __('cruds.datatable.show') . " _MENU_ " . __('cruds.datatable.entries'),
-                            "sInfo" => config('app.locale') == 'en' ?
-                                __('cruds.datatable.showing') . " _START_ " . __('cruds.datatable.to') . " _END_ " . __('cruds.datatable.of') . " _TOTAL_ " . __('cruds.datatable.entries') :
-                                __('cruds.datatable.showing') . "_TOTAL_" . __('cruds.datatable.to') . __('cruds.datatable.of') . "_START_-_END_" . __('cruds.datatable.entries'),
-                            "sInfoEmpty" => __('cruds.datatable.showing') . " 0 " . __('cruds.datatable.to') . " 0 " . __('cruds.datatable.of') . " 0 " . __('cruds.datatable.entries'),
-                            "search" => __('cruds.datatable.search'),
-                            "paginate" => [
-                                "first" => __('cruds.datatable.first'),
-                                "last" => __('cruds.datatable.last'),
-                                "next" => __('cruds.datatable.next'),
-                                "previous" => __('cruds.datatable.previous'),
-                            ],
-                            "autoFill" => [
-                                "cancel" => __('message.cancel'),
-                            ],
-                        ],
-                    ])
                     ->selectStyleSingle();
     }
 

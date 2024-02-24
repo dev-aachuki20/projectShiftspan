@@ -8,6 +8,7 @@ use App\Http\Controllers\Backend\LocationController;
 use App\Http\Controllers\Backend\OccupationController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\ShiftController;
+use App\Http\Controllers\Backend\StaffController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\SubAdminController;
 use App\Http\Controllers\Backend\SubAdminDetailController;
@@ -57,6 +58,7 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('change-password', [UserController::class, 'updateChangePassword'])->name('update.change.password');
 
         Route::resource('/client-admins',SubAdminController::class);
+        Route::post('/client-admins/mass-destroy', [SubAdminController::class, 'massDestroy'])->name('client-admins.massDestroy');
 
         Route::get('settings', [SettingController::class, 'index'])->name('show.setting');
         Route::post('update-settings', [SettingController::class, 'update'])->name('update.setting');
@@ -74,6 +76,10 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('/multiple-occupations-delete', [OccupationController::class, 'deleteMultipleOccupation'])->name('getMultipleOccupationToDelete');
 
         Route::resource('/shifts',ShiftController::class);
+
+        Route::resource('/staffs',StaffController::class);
+        Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
+        Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
     });
 });
 
