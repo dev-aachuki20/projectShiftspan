@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('type',191)->default(null)->nullable();
             $table->string('display_name',191)->default(null)->nullable();
             $table->text('details')->default(null)->nullable();
-            $table->enum('group', ['web','support'])->nullable();
+            $table->enum('group', ['web','support','api'])->nullable();
             $table->tinyInteger('status')->default(1)->comment('0=> inactive, 1=> active');
             $table->tinyInteger('position')->nullable();
             $table->timestamp('created_at')->useCurrent();

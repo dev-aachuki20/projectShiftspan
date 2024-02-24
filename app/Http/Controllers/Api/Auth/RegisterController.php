@@ -23,7 +23,7 @@ class RegisterController extends APIController
     {
         $request->validate([
             'name'              => ['required','string','max:150'],
-            'email'             => ['required','email:dns','unique:users,email,deleted_at,NULL'],
+            'email'             => ['required','email:dns','unique:users,email,NULL,id,deleted_at,NULL'],
             'password'          => ['required', 'string', 'min:8','confirmed'],
             'company_id'        => ['required','numeric','exists:users,id,deleted_at,NULL','exists:role_user,role_id,user_id,'.config('constant.roles.sub_admin')],
             

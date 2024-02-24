@@ -17,7 +17,6 @@ class UserController extends APIController
     */
     public function profile(){
         $user = auth()->user();
-
         return $this->respondOk([
             'status'        => true,
             'message'       => trans('messages.record_retrieved_successfully'),
@@ -29,6 +28,7 @@ class UserController extends APIController
                 'email'     => $user->email,
                 'address'   => $user->profile->address,
                 'occupation_name'       => $user->profile->occupation->name ?? null,
+                'occupation_id'         => $user->profile->occupation->id ?? null,
                 'company_id'            => $user->company->id ?? null,
                 'company_name'          => $user->company->name ?? null,
                 'profile_image'         => $user->profile_image_url ? $user->profile_image_url : asset(config('constant.default.staff-image')),

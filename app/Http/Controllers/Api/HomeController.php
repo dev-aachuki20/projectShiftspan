@@ -38,13 +38,8 @@ class HomeController extends APIController
      */
     public function setting(Request $request)
     {
-        /*$settingData = [
-            'privacy_policy'=> getSetting('privacy_policy') ? getSetting('privacy_policy') : "",
-            'gdpr_policy'=> getSetting('gdpr_policy') ? getSetting('gdpr_policy') : "",
-        ];*/
-        
-        $setting = Setting::whereIn('key',['privacy_policy','gdpr_policy'])->where('status',1)->get();
-        dd($setting);
+        $setting = Setting::where('group','api')->where('status',1)->get();
+        // $setting = Setting::whereIn('key',['privacy_policy','gdpr_policy'])->where('status',1)->get();
         $settingData = $setting->map(function ($input) {
         	if ($input->type == 'image') {
                 $keyValue = $input->image_url;
@@ -54,25 +49,17 @@ class HomeController extends APIController
                 $keyValue = $input->value;
             }
 			return [
-				'id' => $input->id,
-				'key' => $input->user->name,
-				'value' 	=> $input->message,
+				'key'       => $input->key,
+				'value' 	=> $keyValue,
+				'display_name' 	=> $input->display_name,
 			];
 
 		});
-		if ($setting->type == 'image') {
-            $result = $setting->image_url;
-        } elseif ($setting->type == 'file') {
-            $result = $setting->doc_url;
-        } else {
-            $result = $setting->value;
-        }
-		return $result;
         
         return $this->respondOk([
             'status'   => true,
             'message'   => trans('messages.record_retrieved_successfully'),
-            'data'      => $companyList,
+            'data'      => $settingData,
         ])->setStatusCode(Response::HTTP_OK);
     }
     
@@ -92,12 +79,7 @@ class HomeController extends APIController
 
 
     public function occupationsList(){
-        $occupationList = auth()->user()->company->occupations()->select('id','name')->orderBy('name', 'asc')->get()->map(function($row){
-            return [
-                'id' => $row->id,
-                'name' => $row->name,
-            ];
-        });
+        $occupationList = auth()->user()->company->occupations()->select('id','name')->orderBy('name', 'asc')->get()->makeHidden('pivot');
         return $this->respondOk([
             'status'   => true,
             'message'   => trans('messages.record_retrieved_successfully'),
