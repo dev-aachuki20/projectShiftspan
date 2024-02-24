@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
 
         $rules['email'] = ['required',"email:dns", 'unique:users,email,NULL,id,deleted_at,NULL'];
 
-        $rules['password'] = ['required', 'string', 'min:8', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/'];
+        $rules['password'] = ['required', 'string', 'min:8'];
 
         return $rules;
     }

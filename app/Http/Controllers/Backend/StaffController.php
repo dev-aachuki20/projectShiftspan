@@ -18,7 +18,7 @@ class StaffController extends Controller
      */
     public function index(StaffDataTable $dataTable)
     {
-        abort_if(Gate::denies('sub_admin_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
             return $dataTable->render('admin.staff.index');
         } catch (\Exception $e) {

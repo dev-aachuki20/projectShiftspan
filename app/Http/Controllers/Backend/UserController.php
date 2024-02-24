@@ -111,8 +111,8 @@ class UserController extends Controller
         $user = auth()->user();
         $request->validate([
             'currentpassword'  => ['required', 'string','min:8',new MatchOldPassword],
-            'password'   => ['required', 'string', 'min:8', 'different:currentpassword', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/'],
-            'password_confirmation' => ['required','min:8','same:password', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/'],
+            'password'   => ['required', 'string', 'min:8', 'different:currentpassword'],
+            'password_confirmation' => ['required','min:8','same:password'],
 
         ], getCommonValidationRuleMsgs());
         if($request->ajax()){

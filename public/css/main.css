@@ -181,10 +181,12 @@ textarea:disabled{
 .white-bg{
     background-color: var(--white);
 }
-.green-bg{
+.green-bg,
+.swal2-container .swal2-confirm{
     background-color: var(--primary);
 }
-.red-bg{
+.red-bg,
+.swal2-container .swal2-deny{
     background-color: #ee4242;
 }
 .sky-bg{
@@ -209,12 +211,19 @@ textarea:disabled{
 .lyellow-bg:hover img{
     filter: invert(1);
 }
-.yellow-bg img{
+.yellow-bg:hover svg path{
+    fill: #fff;
+}
+.yellow-bg img,
+.yellow-bg svg{
     height: auto !important;
     width: 20px;
 }
 .yellow-bg[title="Cancel"] img{
     width: 12px;
+}
+.yellow-bg svg{
+    height: 16px !important;
 }
 .color-blue{
     color: #1e50cf;
@@ -656,7 +665,9 @@ textarea:disabled{
 }
 
 /* Messages Page */
-.dash-btn{
+.dash-btn,
+.swal2-container .swal2-confirm,
+.swal2-container .swal2-deny{
     font-size: var(--body-font-size);
     color: var(--white);
     font-weight: var(--fw-600);
@@ -667,11 +678,20 @@ textarea:disabled{
     border: none;
     text-align: center;
 }
-.dash-btn:hover{
+.dash-btn:hover,
+.swal2-container .swal2-confirm:hover,
+.swal2-container .swal2-deny:hover{
     background-color: var(--secondary);
     color: var(--white);
 }
-.w-115{
+.swal2-container .swal2-confirm:focus,
+.swal2-container .swal2-deny:focus{
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+.w-115,
+.swal2-confirm,
+.swal2-deny{
     min-width: 115px;
 }
 .add_btn{
@@ -1616,18 +1636,16 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
 .common-table.dataTable.no-footer{
     border: none;
 }
-.form-label .validation-error-block{
+.form-label .validation-error-block,
+.invalid-feedback{
     color: #f00;
     font-size: 12px;
     display: block;
     margin-left: 8px;
     line-height: 14px;
-    position: absolute;
-    bottom: -14px;
-}
-.invalid-feedback{
-    position: absolute;
-    margin: 0;
+    /*position: absolute;
+    bottom: -14px;*/
+    text-align: left !important;
 }
 .swal2-toast .swal2-close{
     display: block !important;
@@ -1641,11 +1659,11 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
 .password-area .toggle-password{
     position: absolute;
     right: 0;
-    top: 50%;
+    top: 0px;
     padding: 17px;
     cursor: pointer;
-    transform: translateY(-50%);
-    -webkit-transform: translateY(-50%);
+    /*transform: translateY(-50%);
+    -webkit-transform: translateY(-50%);*/
 }
 .password-area .toggle-password.close-eye svg + svg,
 .password-area .toggle-password.open-eye svg:first-child{
@@ -2283,6 +2301,9 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     .msg-form .select2-container--default .select2-selection--multiple .select2-selection__choice{
         white-space: normal;
     }
+    #change-password-form .password-area .toggle-password{
+        top: 8px;
+    }
 }
 
 @media screen and (max-width: 400px){
@@ -2330,6 +2351,11 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     }
     .msg-form .select2 .select2-selection{
         min-height: 48px;
+    }
+    .password-area .toggle-password:not(.login-form .password-area .toggle-password),
+    #change-password-form .password-area .toggle-password{
+        top: 47px;
+        padding: 14px 17px;
     }
 }
 

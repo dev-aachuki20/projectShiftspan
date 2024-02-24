@@ -32,6 +32,8 @@ class LoginController extends APIController
         $credentials = $request->validate([
             'email'    => ['required','email:dns','exists:users,email,deleted_at,NULL',new UserHasRole($request->email, config('constant.roles.staff')),new IsActive],
             'password' => 'required|min:8',
+        ],[
+            'email.exists' => trans('validation.invalid'),
         ]);
 
         if(Auth::attempt($credentials)){

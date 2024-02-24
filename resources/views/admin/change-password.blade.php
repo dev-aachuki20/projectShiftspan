@@ -21,7 +21,7 @@
                     </span>
                 </div>
                 <div class="form-label password-area">
-                    <label>@lag('global.name_password'):</label>
+                    <label>@lang('global.new_password'):</label>
                     <input type="password" name="password" value="">
 
                     <span class="toggle-password close-eye">
@@ -30,7 +30,7 @@
                     </span>
                 </div>
                 <div class="form-label password-area">
-                    <label>@lag('global.confirm_password'):</label>
+                    <label>@lang('global.confirm_password'):</label>
                     <input type="password" name="password_confirmation" value="">
 
                     <span class="toggle-password close-eye">
