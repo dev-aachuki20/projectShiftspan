@@ -38,7 +38,7 @@ class UserController extends Controller
             'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
             'phone' => [
                 'nullable',
-                'integer',
+                'numeric',
                 'regex:/^[0-9]{7,15}$/',
                 'not_in:-',
                 'unique:users,phone,'. $user->id.',id,deleted_at,NULL',
