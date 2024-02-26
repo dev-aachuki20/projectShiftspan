@@ -21,9 +21,9 @@
             @endcan
 
             @can('sub_admin_detail_access')
-            <li>
-                <a href="javascript:void(0);" title="Client Details">Client Details</a>
-            </li>
+                <li>
+                    <a href="{{ route('client-details.index') }}" class="{{ request()->is('admin/client-details') || request()->is('admin/client-details/*') ? 'active' : '' }}" title="@lang('cruds.client_detail.title')">@lang('cruds.client_detail.title')</a>
+                </li>
             @endcan
 
             <li>

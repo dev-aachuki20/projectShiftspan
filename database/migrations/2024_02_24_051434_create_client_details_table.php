@@ -11,15 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clients', function (Blueprint $table) {
-            $table->id();
-            $table->string('name')->unique();
+        Schema::create('client_details', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->uuid('uuid');
+            $table->unsignedBigInteger('sub_admin_id')->nullable();
+            $table->string('name',255)->nullable();
             $table->string('address',255)->nullable();
             $table->text('shop_description')->nullable();
-            $table->text('parking_description')->nullable();
-            $table->unsignedBigInteger('sub_admin_id')->nullable();
+            $table->text('travel_info')->nullable();
+            $table->tinyInteger('status')->default(1)->comment('1=> active, 0=>deactive');
             $table->unsignedBigInteger('created_by')->nullable();
-            $table->tinyInteger('is_active')->default(1)->comment('1=> active, 0=>deactive');
             $table->timestamps();
             $table->softDeletes();
         });
@@ -30,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clients');
+        Schema::dropIfExists('client_details');
     }
 };

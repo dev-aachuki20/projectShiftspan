@@ -6,6 +6,7 @@ return [
         'favicon' => 'default/favicon.png',
         'no_image' => 'default/no-image.jpg',
         'staff-image' => 'default/staff-img.png',
+        'building-image' => 'default/building-image.png',
         'help_pdf' => 'default/help_pdf.pdf',
         'user_icon' => 'default/user-icon.svg',
         'datatable_loader' => 'default/datatable_loader.gif',
@@ -23,6 +24,9 @@ return [
         1 => 'Active',
         0 => 'Deactive'
     ],
+
+    'shop_description_length' => 200, 
+    'travel_info_length' => 200, 
 
     'staff_file_fields' => [
         'user_dbs_certificate',

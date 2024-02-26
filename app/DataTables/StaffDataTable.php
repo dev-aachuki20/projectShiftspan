@@ -53,17 +53,22 @@ class StaffDataTable extends DataTable
             })
 
             ->editColumn('is_active', function($record){
-                $statusHtml = '<select class="select changeStaffStatus" data-id="'.$record->uuid.'" data-old_value="'.$record->is_active.'">';
-                    foreach(config('constant.user_status') as $key => $value){
-                        $statusHtml .= '<option value="'.$key.'" '.($record->is_active == $key ? 'selected' : '').'>'.$value.'</option>';
-                    }
-                $statusHtml .= '</select>';
+                $statusHtml = '<div class="custom-select position-relative">
+                    <div class="select-styled main-select-box" >'.(config('constant.user_status')[$record->is_active]).'</div>
+                    <div class="select-options">
+                        <ul class="">';
+                            foreach(config('constant.user_status') as $key => $value){
+                                $statusHtml .= '<li class="select-option changeStaffStatus" data-selected_value="'.($record->is_active).'" data-val="'.$key.'" data-id="'.$record->uuid.'">'.$value.'</li>';
+                            }
+                        $statusHtml .= '</ul>
+                    </div>
+                </div>';
                 return $statusHtml;
             })
             
             ->addColumn('action', function($record){
                 $actionHtml = '';
-                if (Gate::check('staff_edit')) {
+                if (Gate::check('staff_view')) {
                     $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn viewStaffBtn"  data-href="'.route('staffs.show', $record->uuid).'">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.view').'">
                             '.(getSvgIcon('view')).'

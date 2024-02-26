@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title','Client Admin')
+@section('title', trans('cruds.client_admin.title_singular'))
 @section('customCss')
 @endsection
 

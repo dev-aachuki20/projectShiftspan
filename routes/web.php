@@ -80,6 +80,9 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::resource('/staffs',StaffController::class);
         Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
         Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
+
+        Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
+        Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
     });
 });
 

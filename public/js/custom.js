@@ -14,16 +14,7 @@ $(document).ready(function($){
 	$(".sidebar-close>span, .sidebar_overlay").on("click", function(){
 		$("body").removeClass("sidebar-open");
 	});
-	// Custom select box
-	$('.select-styled').on('click', function() {
-		$('.select-options').not($(this).next('.select-options')).slideUp();
-		$(this).next('.select-options').slideToggle();
-	});
-	$('.select-option').on('click', function() {
-		var value = $(this).text();
-		$(this).parents(".select-options").prev('.select-styled').text(value);
-		$(this).parents(".select-options").slideUp();
-	});
+	
 	$(document).on('click', function(event) {
 		if (!$(event.target).closest('.custom-select,.modal-dropdown').length) {
 			$('.select-options,.options').slideUp();

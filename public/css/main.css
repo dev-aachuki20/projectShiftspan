@@ -1682,6 +1682,16 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     margin-top: -15px;
 }
 
+.datatable_desription {
+	white-space: normal !important;
+}
+.datatable_desription div {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;  
+	overflow: hidden;
+}
+
 /* Responsive css */
 @media screen and (min-width: 1300px) and (max-width: 1599px){
     .header-inner ul>li>a{

@@ -37,10 +37,14 @@ $jsonArr = json_encode($arr);
 @endphp
 
 <script>
+    // Custom select box
+    $(document).on('click', '.select-styled', function() {
+		$('.select-options').not($(this).next('.select-options')).slideUp();
+		$(this).next('.select-options').slideToggle();
+	});
+    
     document.addEventListener('shown.bs.modal', function(event) {
-        // Get the modal instance
         const modal = bootstrap.Modal.getInstance(event.target);
-
         // Update the backdrop option to "static"
         modal._config.backdrop = 'static';
     });

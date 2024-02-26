@@ -302,14 +302,19 @@
     //     })
     // @endcan
 
-    $(document).on("change",".changeStaffStatus", function(e) {
+    $(document).on("click",".changeStaffStatus", function(e) {
         e.preventDefault();
 
         var t =$(this);
 
-        var val = t.val();
-        var staff_id = t.data('id');
-        var old_val = t.data('old_value');
+        var old_val     = t.data('selected_value');
+        var staff_id    = t.data('id');
+        var status_val  = t.data('val');
+        var selectedText  = t.text();
+
+        if(old_val == status_val){
+            return false;
+        }
 
         Swal.fire({
             title: "{{ trans('global.areYouSure') }}",
@@ -329,7 +334,9 @@
                     data: { _token: "{{ csrf_token() }}", 'id' : staff_id },
                     success: function (response) {
                         if(response.success) {
-                            t.data('old_value', val);
+                            t.closest(".custom-select").find('.main-select-box').text(selectedText);
+                            t.closest(".select-options").slideUp();
+
                             $('#staff-table').DataTable().ajax.reload(null, false);
                             toasterAlert('success',response.message);
                         }
@@ -339,12 +346,9 @@
                         }
                     },
                     error: function(res){
-                        t.val(old_val)
                         toasterAlert('error',res.responseJSON.error);
                     }
                 });
-            } else {
-                t.val(old_val)
             }
         });
     });

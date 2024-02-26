@@ -150,6 +150,13 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => $updateDate,
             ],
             [
+                'name'      => 'staff_view',
+                'title'      => 'View',
+                'route_name'=>'staffs',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
                 'name'      => 'staff_delete',
                 'title'      => 'Delete',
                 'route_name'=>'staff',
@@ -215,6 +222,13 @@ class PermissionsTableSeeder extends Seeder
             [
                 'name'      => 'sub_admin_detail_edit',
                 'title'      => 'Edit',
+                'route_name'=>'client',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'      => 'sub_admin_detail_view',
+                'title'      => 'View',
                 'route_name'=>'client',
                 'created_at' => $createDate,
                 'updated_at' => $updateDate,

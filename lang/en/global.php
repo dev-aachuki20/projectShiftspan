@@ -282,4 +282,5 @@ return [
     'swl_deny_button_text'                  => 'No, cancel it',
     'old_password'                          => 'Old Password',
     'new_password'                          => 'New Password',
+    'upload'                                => 'Upload',
 ];

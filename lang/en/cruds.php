@@ -70,7 +70,7 @@ return [
         'title_singular' => 'Location',
         'fields' => [
             'name'              => 'Name',
-            'sub_admin'         => 'Sub Admin',
+            'sub_admin'         => 'Client Admin',
             'status'            => 'Status',
             'created_by'        => 'Created By',
             'created_at'        => 'Created at',
@@ -85,7 +85,7 @@ return [
         'fields' => [
             'id'                => 'ID',
             'name'              => 'Name',
-            'sub_admin'         => 'Sub Admin',
+            'sub_admin'         => 'Client Admin',
             'occupation_name'   => 'Occupation Name',
             'status'            => 'Status',
             'created_by'        => 'Created By',
@@ -124,6 +124,26 @@ return [
             'name'              => 'Name',
             'email'             => 'Email',
             'password'             => 'Password',
+            'status'            => 'Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ],
+
+    'client_detail' => [
+        'title' => 'Client Details',
+        'title_singular' => 'Client Detail',
+        'fields' => [
+            'id'                => 'ID',
+            'client_admin'       => 'Client Admin',
+            'client_name'       => 'Client Name',
+            'name'              => 'Name',
+            'address'           => 'Address',
+            'shop_description'  => 'Shops Nearby',
+            'travel_info'       => 'Travel info',
+            'building_image'    => 'Building Image',
             'status'            => 'Status',
             'created_by'        => 'Created By',
             'created_at'        => 'Created at',
