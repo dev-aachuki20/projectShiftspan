@@ -38,14 +38,14 @@
         
         @if($setting->type == 'file')                    
             <div class="form-label">
-                <label>@lang('cruds.setting.fields.help_pdf'):</label>
+                <label>{{$setting->display_name}}:</label>
                 <div class="right-sidebox">
                     <div class="chose-btn-area position-relative">
                         <a href="javascript:void(0)" class="chose-btn mt-0">@lang('global.choose') @lang('global.pdf')</a>
                         <input type="file" name="{{$setting->key}}" id="pdf-input" class="fileInputPdf" accept=".pdf">
 
                         @if($setting->doc_url)
-                            <a target="blank" href="{{ $setting->doc_url }}" class="chose-btn mt-0">
+                            <a target="_blank" href="{{ $setting->doc_url }}" class="chose-btn mt-0">
                                 <x-svg-icons icon="help-pdf" />
                             </a>
                         @endif

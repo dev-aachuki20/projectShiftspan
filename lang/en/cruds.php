@@ -103,7 +103,7 @@ return [
             'site_logo'     => 'Logo Image',
             'icon_image'    => 'Icon Image',
             'change_logo'   => 'Change Logo',
-            'help_pdf'      => 'Upload Help PDF',
+            'help_pdf'      => 'Help PDF',
         ],
         'contact_details' => [
             'title' => 'Contact Us',

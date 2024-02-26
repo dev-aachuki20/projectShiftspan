@@ -161,7 +161,7 @@ class SubAdminDetailController extends Controller
                 if($subAdminDetail && $request->has('building_image')){
                     $uploadId = null;
                     $actionType = 'save';
-                    if($profileImageRecord = $subAdminDetail->profileImage){
+                    if($profileImageRecord = $subAdminDetail->buildingImage){
                         $uploadId = $profileImageRecord->id;
                         $actionType = 'update';
                     }

@@ -34,6 +34,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'phone',
         'password',
         'sub_admin_id',
+        'company_number',
         'created_by',
         'created_at',
         'updated_at',
@@ -85,7 +86,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles()->where('id', config('constant.roles.super_admin'))->exists();
     }
 
-    public function getIsAdminAttribute()
+    public function getIsSubAdminAttribute()
     {
         return $this->roles()->where('id', config('constant.roles.sub_admin'))->exists();
     }

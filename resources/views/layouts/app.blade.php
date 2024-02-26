@@ -4,6 +4,9 @@
 	<title>{{ getSetting('site_title') ? getSetting('site_title') : config('app.name') }} | @yield('title')</title>
     @include('partials.hscript')
     @yield('customCss')
+
+	<!-- Main css -->
+	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
 </head>
 <body>
 

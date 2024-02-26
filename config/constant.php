@@ -27,6 +27,8 @@ return [
 
     'shop_description_length' => 200, 
     'travel_info_length' => 200, 
+    'company_number_prefix' => 'SS', 
+    'company_number_start' => '000001', 
 
     'staff_file_fields' => [
         'user_dbs_certificate',

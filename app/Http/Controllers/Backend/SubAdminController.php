@@ -59,7 +59,10 @@ class SubAdminController extends Controller
             try{
                 $input = $request->all();
 
+                $companyNumber = getCompanyNumber();
+
                 $input['password'] = bcrypt($request->password);
+                $input['company_number'] = $companyNumber;
                 $input['email_verified_at'] = date('Y-m-d H:i:s');
 
                 $subAdmin = User::create($input);

@@ -27,11 +27,15 @@
     <textarea name="travel_info" maxlength="{{config('constant.travel_info_length')}}" required >{{ isset($subAdminDetail) ? $subAdminDetail->travel_info : '' }}</textarea>
 </div>
 <div class="form-label">
-    <label>@lang('cruds.client_detail.fields.building_image'):</label>
-    <div class="upload-file">
-        <h6>@lang('global.upload')</h6>
-        <input type="file" name="building_image" accept="image/jpeg,image/png,image/jpg'">
-        <img src="{{asset('default/upload-icon.png')}}" alt="upload-img"/>
+    <label>@lang('cruds.client_detail.fields.building_image'):</label>    
+    <div class="right-sidebox">
+        <div class="img-prevarea img-prePro">
+            <img src="{{ isset($subAdminDetail) && $subAdminDetail->building_image_url ? $subAdminDetail->building_image_url : asset(config('constant.default.building-image'))}}" >
+        </div>
+        <div class="chose-btn-area position-relative">
+            <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('cruds.user.admin_profile.fields.image')</a>
+            <input type="file" id="image-input" name="building_image" class="fileInputBoth" accept="image/jpeg,image/png,image/jpg'">
+        </div>
     </div>
     <div class="building_image_error" style="width: 100%"></div>
 </div>

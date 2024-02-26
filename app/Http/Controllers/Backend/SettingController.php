@@ -15,7 +15,7 @@ class SettingController extends Controller
     public function index()
     {
         abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $settings = Setting::whereStatus(1)->whereGroup('web')->orderBy('position', 'asc')->get();
+        $settings = Setting::whereStatus(1)->whereIn('group', ['web', 'api'])->orderBy('id', 'asc')->orderBy('position', 'asc')->get();
         return view('admin.setting.index',compact('settings'));
     }
 
@@ -43,7 +43,7 @@ class SettingController extends Controller
                         if ($value) {
                             $uploadId = $setting->image ? $setting->image->id : null;
                             if($uploadId){
-                                uploadImage($setting, $value, 'settings/doc/',"setting-file", 'original', 'update', $uploadId);
+                                uploadImage($setting, $value, 'settings/doc/', "setting-file", 'original', 'update', $uploadId);
                             }else{
                                 uploadImage($setting, $value, 'settings/doc/',"setting-file", 'original', 'save', null);
                             }

@@ -287,7 +287,19 @@
         })
     @endcan
 
-    
+    // Image show in profile page
+    $(document).on('change', ".fileInputBoth",function(e){
+        var files = e.target.files;
+        for (var i = 0; i < files.length; i++) {
+            var reader2 = new FileReader();
+            reader2.onload = function(e) {
+                $('.img-prePro img').attr('src', e.target.result);
+                $('.img-prePro img').removeClass('d-none');
+                $('x-svg-icons').addClass('d-none');
+            };
+            reader2.readAsDataURL(files[i]);
+        }
+    });
 </script>
 
 @endsection

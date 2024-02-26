@@ -3,6 +3,7 @@
 use App\Models\Order;
 use App\Models\Setting;
 use App\Models\Uploads;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str as Str;
@@ -127,5 +128,20 @@ if (!function_exists('getSvgIcon')) {
     function getSvgIcon($icon){
         return view('components.svg-icons', ['icon' => $icon])->render();
     }
+}
+
+if (!function_exists('getCompanyNumber')) {
+	function getCompanyNumber(){
+		$companyNumber = '';
+		$lastEmployee = User::withTrashed()->whereHas('roles', function($query){
+		   $query->where('id', config('constant.roles.sub_admin'));
+		})->count();
+		if($lastEmployee > 0){
+			$companyNumber = config('constant.company_number_prefix').(sprintf("%06d", $lastEmployee+config('constant.company_number_start')));
+		}else{
+			$companyNumber = config('constant.company_number_prefix').(config('constants.company_number_start'));
+		}
+		return $companyNumber;
+	}
 }
 ?>
