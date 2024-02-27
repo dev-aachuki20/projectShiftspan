@@ -26,42 +26,50 @@ class StaffRequest extends FormRequest
 
         $rules = [];
         $method = $this->input('_method');
-        if(!empty($method == 'PUT')){
-            $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
-            $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/','unique:users,phone,'. $this->staff.',uuid,deleted_at,NULL'];
-            $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
+        $ids = $this->input('ids');
+        if (!empty($ids)) {
+            /* For Delete Multiple Data */
+            $rules['ids'] = ['required', 'array'];
+            $rules['ids.*'] = ['exists:users,uuid'];
         }else{
-            $rules['company_id']            = ['nullable'];
-            $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
-            $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
-            $rules['email']                 = ['required', 'email', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
-            $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/', Rule::unique('users', 'phone')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
-            $rules['password']              = ['required', 'string', 'min:8', 'max:15', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'];
-            $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
+            if(!empty($method == 'PUT')){
+                $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
+                $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/','unique:users,phone,'. $this->staff.',uuid,deleted_at,NULL'];
+                $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
+            }else{
+                $rules['company_id']            = ['nullable'];
+                $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
+                $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                $rules['email']                 = ['required', 'email', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/', Rule::unique('users', 'phone')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                $rules['password']              = ['required', 'string', 'min:8', 'max:15', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'];
+                $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
+            }
+    
+            $rules['previous_name']             = ['nullable', 'string'];
+            $rules['national_insurance_number'] = ['nullable', 'string'];
+            $rules['address']                   = ['nullable', 'string'];
+            $rules['education']                 = ['nullable', 'string'];
+            $rules['prev_emp_1']                = ['nullable', 'string'];
+            $rules['prev_emp_2']                = ['nullable', 'string'];
+            $rules['reference_1']               = ['nullable', 'string'];
+            $rules['reference_2']               = ['nullable', 'string'];
+            $rules['date_sign']                 = ['required', 'date','before_or_equal:' . now()->format('Y-m-d')];
+            $rules['is_criminal']               = ['required','boolean'];
+            $rules['is_rehabilite']             = ['required','boolean'];
+            $rules['is_enquire']                = ['required','boolean'];
+            $rules['is_health_issue']           = ['required','boolean'];
+            $rules['is_statement']              = ['required','boolean'];
+            
+            $rules['image']                     = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['relevant_training']         = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['dbs_certificate']           = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['cv_image']                  = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['staff_budge']               = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['dbs_check']                 = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['training_check']            = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
         }
-
-        $rules['previous_name']             = ['nullable', 'string'];
-        $rules['national_insurance_number'] = ['nullable', 'string'];
-        $rules['address']                   = ['nullable', 'string'];
-        $rules['education']                 = ['nullable', 'string'];
-        $rules['prev_emp_1']                = ['nullable', 'string'];
-        $rules['prev_emp_2']                = ['nullable', 'string'];
-        $rules['reference_1']               = ['nullable', 'string'];
-        $rules['reference_2']               = ['nullable', 'string'];
-        $rules['date_sign']                 = ['required', 'date','before_or_equal:' . now()->format('Y-m-d')];
-        $rules['is_criminal']               = ['required','boolean'];
-        $rules['is_rehabilite']             = ['required','boolean'];
-        $rules['is_enquire']                = ['required','boolean'];
-        $rules['is_health_issue']           = ['required','boolean'];
-        $rules['is_statement']              = ['required','boolean'];
         
-        $rules['image']                     = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['relevant_training']         = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['dbs_certificate']           = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['cv_image']                  = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['staff_budge']               = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['dbs_check']                 = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-        $rules['training_check']            = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
 
         return $rules;
     }

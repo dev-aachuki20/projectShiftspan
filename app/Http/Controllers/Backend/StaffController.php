@@ -288,32 +288,25 @@ class StaffController extends Controller
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
-    public function massDestroy(Request $request)
+    public function massDestroy(StaffRequest $request)
     {
         abort_if(Gate::denies('staff_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) {
-            $validator = Validator::make($request->all(), [
-                'ids'   => 'required|array',
-                'ids.*' => 'exists:users,uuid',
-            ]);
-            if (!$validator->passes()) {
-                return response()->json(['success'=>false,'errors'=>$validator->getMessageBag()->toArray(),'message'=>trans('messages.error_message')],400);
-            }else{
-                DB::beginTransaction();
-                try {
-                    $ids = $request->input('ids');
-                    $users = User::whereIn('uuid', $ids)->delete();
-
-                    DB::commit();
-                    $response = [
+            DB::beginTransaction();
+            try {
+                $ids = $request->input('ids');
+                $users = User::whereIn('uuid', $ids)->delete();
+                DB::commit();
+                
+                if($users){
+                    return response()->json($response = [
                         'success'    => true,
                         'message'    => trans('messages.crud.delete_record'),
-                    ];
-                    return response()->json($response);
-                } catch (\Exception $e) {
-                    DB::rollBack();      
-                    return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+                    ]);
                 }
+            } catch (\Exception $e) {
+                DB::rollBack();      
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
