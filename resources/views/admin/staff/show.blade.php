@@ -15,7 +15,7 @@
                             @if(isset($subAdmins->name))
                                 <p>{{$subAdmins->name}}</p>
                             @endif
-                            {{-- <span>{{$users->roles->first()->name}}</span> --}}
+                            <span>{{$subAdmins->roles->first()->name}}</span>
                         </div>
                     @endif
                     <div class="form-label">
