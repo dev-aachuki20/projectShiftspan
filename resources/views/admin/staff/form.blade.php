@@ -2,7 +2,7 @@
     <div class="form-label select-label">
         <label>@lang('cruds.staff.fields.staff_admin'):</label>
         <select name="company_id" id="company_id" class="select2" required>
-            <option value="">@lang('global.select') @lang('cruds.client_detail.fields.client_admin')</option>
+            <option value="">@lang('global.select') @lang('cruds.staff.fields.staff_admin')</option>
             @foreach ($subAdmins as $key => $value)
                 <option value="{{$key}}" {{ isset($staff) && $staff->company_id == $key ? 'selected' : ''  }}>{{ $value}}</option>
 
