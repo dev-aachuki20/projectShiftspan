@@ -14,6 +14,9 @@
             @can('staff_delete')
                 <button class="del_btn dash-btn red-bg w-115 me-md-1" id="deleteAllStaff">@lang('global.delete')</button>
             @endcan
+            @can('staff_access')
+                <button class="dash-btn blue-bg w-115 ms-sm-2 mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#NnotificationSettings">Send Notification</button>
+            @endcan
         </div>
         <div class="c-admin position-relative">
             <div class="table-responsive">
@@ -83,14 +86,19 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                            if (key.indexOf('sub_admin') !== -1) {
+                           /*  if (key.indexOf('sub_admin') !== -1) {
                                 $(".sub_admin_error").html(errorLabelTitle);
                             } else if (key.indexOf('staff_name') !== -1) {
                                 $(".staff_name_error").html(errorLabelTitle);
                             }
                             else{
                                 $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            }                    
+                            }  */   
+                            if (key.indexOf('sub_admin') !== -1) {
+                                $(".sub_admin_error").html(errorLabelTitle);
+                            } else{
+                                $(document).find('[name='+key+']').after(errorLabelTitle);
+                            }
                         });
                     }
                 },
@@ -150,15 +158,13 @@
     @can('staff_edit')
         // Edit Staff Modal
         $(document).on("click",".editStaffBtn", function() {
-            // $('#pageloader').css('display', 'flex');
+            $('#staffDetails').modal('hide');
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
                 url: url,
                 dataType: 'json',
-                //data: formData,
                 success: function (response) {
-                    // $('#pageloader').css('display', 'none');
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#editStaffModal').modal('show');
@@ -203,10 +209,15 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
-                            if (key.indexOf('sub_admin') !== -1) {
+                            /* if (key.indexOf('sub_admin') !== -1) {
                                 $(".sub_admin_error").html(errorLabelTitle);
                             } else {
                                 $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            } */
+                            if (key.indexOf('sub_admin') !== -1) {
+                                $(".sub_admin_error").html(errorLabelTitle);
+                            } else{
+                                $(document).find('[name='+key+']').after(errorLabelTitle);
                             }
                         });
                     }
@@ -218,89 +229,111 @@
         });
     @endcan
 
-    // @can('staff_delete')
-    //     $(document).on("click",".deleteStaffBtn", function() {
-    //         var url = $(this).data('href');
-    //         Swal.fire({
-    //             title: "{{ trans('global.areYouSure') }}",
-    //             text: "{{ trans('global.onceClickedRecordDeleted') }}",
-    //             icon: "warning",
-    //             showDenyButton: true,  
-    //             //   showCancelButton: true,  
-    //             confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
-    //             denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
-    //         })
-    //         .then(function(result) {
-    //             if (result.isConfirmed) {  
-    //                 $.ajax({
-    //                     type: 'DELETE',
-    //                     url: url,
-    //                     dataType: 'json',
-    //                     data: { _token: "{{ csrf_token() }}" },
-    //                     success: function (response) {
-    //                         if(response.success) {
-    //                             $('#staff-table').DataTable().ajax.reload(null, false);
-    //                             toasterAlert('success',response.message);
-    //                         }
-    //                         else {
-    //                             toasterAlert('error',response.error);
-    //                         }
-    //                     },
-    //                     error: function(res){
-    //                         toasterAlert('error',res.responseJSON.error);
-    //                     }
-    //                 });
-    //             }
-    //         });
-    //     });
+    @can('staff_delete')
+        $(document).on("click",".deleteStaffBtn", function() {
+            var url = $(this).data('href');
+            Swal.fire({
+                title: "{{ trans('global.areYouSure') }}",
+                text: "{{ trans('global.onceClickedRecordDeleted') }}",
+                icon: "warning",
+                showDenyButton: true,  
+                //   showCancelButton: true,  
+                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+                denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
+            })
+            .then(function(result) {
+                if (result.isConfirmed) {  
+                    $.ajax({
+                        type: 'DELETE',
+                        url: url,
+                        dataType: 'json',
+                        data: { _token: "{{ csrf_token() }}" },
+                        success: function (response) {
+                            if(response.success) {
+                                $('#staff-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
+                            }
+                            else {
+                                toasterAlert('error',response.error);
+                            }
+                        },
+                        error: function(res){
+                            toasterAlert('error',res.responseJSON.error);
+                        }
+                    });
+                }
+            });
+        });
 
-    //     $(document).on('click', '#deleteAllStaff', function(e){
-    //         e.preventDefault();
-    //         var t = $(this);
-    //         var selectedIds = [];
-    //         $('.dt_cb:checked').each(function() {
-    //             selectedIds.push($(this).data('id'));
-    //         });
-    //         if(selectedIds.length == 0){
-    //             fireWarningSwal('Warning', "{{ trans('messages.warning_select_record') }}");
-    //             return false;
-    //         }
-    //         Swal.fire({
-    //             title: "{{ trans('global.areYouSure') }}",
-    //             text: "{{ trans('global.onceClickedRecordDeleted') }}",
-    //             icon: "warning",
-    //             showDenyButton: true,  
-    //             //   showCancelButton: true,  
-    //             confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
-    //             denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
-    //         })
-    //         .then(function(result) {
-    //             if (result.isConfirmed) {
-    //                 $.ajax({
-    //                     url: "{{route('staffs.massDestroy')}}",
-    //                     type: "POST",
-    //                     data: { 
-    //                         ids: selectedIds,
-    //                         _token: "{{ csrf_token() }}",
-    //                     },
-    //                     dataType: 'json',
-    //                     success: function (response) {
-    //                         if(response.success) {
-    //                             $('#staff-table').DataTable().ajax.reload(null, false);
-    //                             toasterAlert('success',response.message);
-    //                         }
-    //                         else {
-    //                             toasterAlert('error',response.error);
-    //                         }
-    //                     },
-    //                     error: function(res){
-    //                         toasterAlert('error',res.responseJSON.error);
-    //                     }
-    //                 })
-    //             }
-    //         });
-    //     })
-    // @endcan
+        $(document).on('click', '#deleteAllStaff', function(e){
+            e.preventDefault();
+            var t = $(this);
+            var selectedIds = [];
+            $('.dt_cb:checked').each(function() {
+                selectedIds.push($(this).data('id'));
+            });
+            if(selectedIds.length == 0){
+                fireWarningSwal('Warning', "{{ trans('messages.warning_select_record') }}");
+                return false;
+            }
+            Swal.fire({
+                title: "{{ trans('global.areYouSure') }}",
+                text: "{{ trans('global.onceClickedRecordDeleted') }}",
+                icon: "warning",
+                showDenyButton: true,  
+                //   showCancelButton: true,  
+                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+                denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
+            })
+            .then(function(result) {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "{{route('staffs.massDestroy')}}",
+                        type: "POST",
+                        data: { 
+                            ids: selectedIds,
+                            _token: "{{ csrf_token() }}",
+                        },
+                        dataType: 'json',
+                        success: function (response) {
+                            if(response.success) {
+                                $('#staff-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
+                            }
+                            else {
+                                toasterAlert('error',response.error);
+                            }
+                        },
+                        error: function(res){
+                            toasterAlert('error',res.responseJSON.error);
+                        }
+                    })
+                }
+            });
+        })
+    @endcan
+
+    @can('staff_view')
+        $(document).on("click",".viewStaffBtn", function() {
+            var url = $(this).data('href');
+            $.ajax({
+                type: 'get',
+                url: url,
+                dataType: 'json',
+                success: function (response) {
+                    if(response.success) {
+                        $('.popup_render_div').html(response.htmlView);
+                        $('#staffDetails').modal('show');
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } 
+                }
+            });
+        });
+    @endcan
 
     $(document).on("click",".changeStaffStatus", function(e) {
         e.preventDefault();

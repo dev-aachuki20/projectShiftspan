@@ -25,6 +25,11 @@ return [
         0 => 'Deactive'
     ],
 
+    'staff_info' => [
+        1 => 'Yes',
+        0 => 'No'
+    ],
+
     'shop_description_length' => 200, 
     'travel_info_length' => 200, 
     'company_number_prefix' => 'SS', 
