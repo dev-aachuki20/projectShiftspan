@@ -43,6 +43,25 @@ return [
         'user_dbs_check',
         'user_training_check'
     ],
+
+    'date_format' => [
+        'date' => 'd-m-Y',
+        'time' => 'H:i',
+        'date_time' => 'd-m-Y H:i:s'
+    ],
+
+    'search_date_format' => [ //$whereFormat = '%m/%d/%Y %h:%i %p';
+        'date' => '%d-%m-%Y',
+        'time' => '%H:%i',
+        'date_time' => '%d-%m-%Y %H:%i:%p'
+    ],
+
+    'shift_status' => [
+        'open' => 'Open', 
+        'picked' => 'Picked', 
+        'cancel' => 'Cancel', 
+        'complete' => 'Complete'
+    ],
 ]
 
 

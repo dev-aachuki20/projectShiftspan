@@ -283,4 +283,5 @@ return [
     'old_password'                          => 'Old Password',
     'new_password'                          => 'New Password',
     'upload'                                => 'Upload',
+    'want_to_cancel_shift'                  => 'Do you want to cancel this shift ?'
 ];

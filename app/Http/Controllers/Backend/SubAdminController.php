@@ -176,7 +176,7 @@ class SubAdminController extends Controller
             ]);
 
             if (!$validator->passes()) {
-                return response()->json(['success'=>false,'errors'=>$validator->getMessageBag()->toArray(),'message'=>trans('messages.error_message')],400);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }else{
                 DB::beginTransaction();
                 try {

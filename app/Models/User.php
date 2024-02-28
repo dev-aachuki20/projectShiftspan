@@ -34,7 +34,6 @@ class User extends Authenticatable implements MustVerifyEmail
         'email',
         'phone',
         'password',
-        'sub_admin_id',
         'company_number',
         'created_by',
         'created_at',
@@ -235,5 +234,10 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function staffs(){
         return $this->hasMany(User::class, 'company_id', 'id');
+    }
+
+    public function clientDetails()
+    {
+        return $this->hasMany(ClientDetail::class, 'sub_admin_id', 'id');
     }
 }

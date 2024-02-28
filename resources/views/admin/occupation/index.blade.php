@@ -307,7 +307,7 @@
                 if (result.isConfirmed) {       
                     console.log(selectedIds);   
                     $.ajax({
-                        url: "{{route('getMultipleOccupationToDelete')}}",
+                        url: "{{route('occupations.massDestroy')}}",
                         type: "POST",
                         data: { 
                             ids: selectedIds,

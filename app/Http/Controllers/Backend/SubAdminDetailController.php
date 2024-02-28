@@ -187,12 +187,16 @@ class SubAdminDetailController extends Controller
      */
     public function destroy(Request $request, $id)
     {
-        abort_if(Gate::denies('location_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        abort_if(Gate::denies('sub_admin_detail_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
             $subAdminDetail = ClientDetail::where('uuid', $id)->first();
             DB::beginTransaction();
             try {
+                if ($subAdminDetail->building_image_url) {
+                    $uploadImageId = $subAdminDetail->buildingImage->id;
+                    deleteFile($uploadImageId);
+                }
                 $subAdminDetail->delete();
                 DB::commit();
                 $response = [
@@ -217,13 +221,19 @@ class SubAdminDetailController extends Controller
             ]);
 
             if (!$validator->passes()) {
-                return response()->json(['success'=>false,'errors'=>$validator->getMessageBag()->toArray(),'message'=>trans('messages.error_message')],400);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }else{
                 DB::beginTransaction();
                 try {
                     $ids = $request->input('ids');
-                    $locations = ClientDetail::whereIn('uuid', $ids)->delete();
-                    
+
+                    $subAdminDetails = ClientDetail::whereIn('uuid', $ids)->get();
+                    foreach($subAdminDetails as $subAdminDetail){
+                        if ($subAdminDetail->building_image_url) {
+                            $uploadImageId = $subAdminDetail->buildingImage->id;
+                            deleteFile($uploadImageId);
+                        }
+                    }
                     DB::commit();
                     $response = [
                         'success'    => true,

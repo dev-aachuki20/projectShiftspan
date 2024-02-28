@@ -4,7 +4,7 @@
         <select name="sub_admin_id" id="client_name" class="select2" required>
             <option value="">@lang('global.select') @lang('cruds.client_detail.fields.client_admin')</option>
             @foreach ($subAdmins as $key => $value)
-                <option value="{{$key}}" {{ isset($subAdminDetail) && $subAdminDetail->client->uuid == $key ? 'selected' : ''  }}>{{ $value}}</option>
+                <option value="{{$key}}" @selected(isset($subAdminDetail) && $subAdminDetail->client->uuid == $key )>{{ $value}}</option>
             @endforeach
         </select>
         <div class="client_name_error" style="width: 100%"></div>

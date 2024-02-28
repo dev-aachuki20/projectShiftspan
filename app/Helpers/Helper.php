@@ -144,4 +144,12 @@ if (!function_exists('getCompanyNumber')) {
 		return $companyNumber;
 	}
 }
+
+if (!function_exists('dateFormat')) {
+	function dateFormat($date, $format=''){
+		$startDate = Carbon::parse($date);
+		$formattedDate = $startDate->format($format);
+		return $formattedDate;
+	}
+}
 ?>

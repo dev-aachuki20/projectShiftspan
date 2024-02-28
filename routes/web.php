@@ -73,16 +73,21 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('/location/mass-destroy', [LocationController::class, 'massDestroy'])->name('locations.massDestroy');
 
         Route::resource('/occupations',OccupationController::class);
-        Route::post('/multiple-occupations-delete', [OccupationController::class, 'deleteMultipleOccupation'])->name('getMultipleOccupationToDelete');
+        Route::post('/occupations/massDestroy', [OccupationController::class, 'massDestroy'])->name('occupations.massDestroy');
 
-        Route::resource('/shifts',ShiftController::class);
-
+        
         Route::resource('/staffs',StaffController::class);
         Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
         Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
-
+        
         Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
         Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
+        
+        Route::resource('/shifts',ShiftController::class);
+        Route::post('/shifts/mass-destroy', [ShiftController::class, 'massDestroy'])->name('shifts.massDestroy');
+        Route::post('/shifts/cancel/{id}', [ShiftController::class, 'CancelShift'])->name('shifts.cancel');
+        Route::post('/shifts/rating/{id}', [ShiftController::class, 'RateShift'])->name('shifts.rating');
+        Route::get('/shifts-get-sub-admin-details', [ShiftController::class, 'getSubAdminData'])->name('shifts.get-sub-admin-details');
     });
 });
 

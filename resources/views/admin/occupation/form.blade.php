@@ -9,7 +9,7 @@
         <label>@lang('cruds.occupation.fields.sub_admin'):</label>
         <select name="sub_admin[]" id="sub_admin" class="select2" multiple>
             @foreach ($subAdmins as $key => $subAdmin)
-                <option value="{{$key}}" {{ isset($selectedSubAdmins) && in_array($key, $selectedSubAdmins) ? 'selected' : '' }}>{{ $subAdmin }}</option>
+                <option value="{{$key}}" @selected(isset($selectedSubAdmins) && in_array($key, $selectedSubAdmins))>{{ $subAdmin }}</option>
             @endforeach
         </select>
         <div class="sub_admin_error" style="width: 100%"></div>

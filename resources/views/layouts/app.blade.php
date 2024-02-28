@@ -9,7 +9,7 @@
 	<link rel="stylesheet" type="text/css" href="{{ asset('css/main.css') }}">
 </head>
 <body>
-
+	<div class="loader-div" style="display: none"><div><img src="http://localhost:8000/default/datatable_loader.gif" width="100"></div></div>
 	<div class="main-dashboard ">
         @include('partials.header')
 

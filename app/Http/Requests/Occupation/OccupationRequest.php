@@ -27,13 +27,7 @@ class OccupationRequest extends FormRequest
     {
         $rules = [];
 
-        $ids = $this->input('ids');
-        
-        if (!empty($ids)) {
-            /* For Delete Multiple Data */
-            $rules['ids'] = ['required', 'array'];
-            $rules['ids.*'] = ['exists:occupations,uuid'];
-        }elseif(isset($this->occupation)){
+        if(isset($this->occupation)){
             /* For Update the Value */            
             if($this->has('sub_admin')){
                 $rules['sub_admin'] = ['nullable','array'];

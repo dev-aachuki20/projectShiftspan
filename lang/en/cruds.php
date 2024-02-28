@@ -195,4 +195,31 @@ return [
             'staff_rating'                  => 'Staff Rating',
         ]
     ],
+
+    'shift' => [
+        'title' => 'Shifts',
+        'title_singular' => 'Shift',
+        'fields' => [
+            'id'                => 'ID',
+            'client_name'      => 'Client Name',
+            'client_detail_name'=> 'Client Detail Name',
+            'staff_name'        => 'Staff Name',
+            'start_date'        => 'Start Date',
+            'end_date'          => 'End Date',
+            'start_time'        => 'Start Time',
+            'end_time'          => 'End Time',
+            'picked_at'         => 'Picked Time',
+            'cancel_at'         => 'Time Cancelled',
+            'rating'            => 'Rating',
+            'occupation_id'     => 'Occupation',
+            'location_id'       => 'Location',
+            'assign_staff'      => 'Assign Staff',
+            'quantity'          => 'Quantity',
+            'status'            => 'Status',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ],
 ];

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class OccupationController extends Controller
 {
@@ -176,23 +177,37 @@ class OccupationController extends Controller
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
-    public function deleteMultipleOccupation(OccupationRequest $request){
+    public function massDestroy(Request $request){
         abort_if(Gate::denies('occupation_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $validator = Validator::make($request->all(), [
+            'ids'   => 'required|array',
+            'ids.*' => 'exists:occupations,uuid',
+        ]);
+
         if($request->ajax()){
-            try {
-                $ids = $request->input('ids');
-                $occupations = Occupation::whereIn('uuid', $ids)->get();
-                foreach($occupations as $occupation){
-                    if((auth()->user()->is_super_admin)){
-                        $occupation->subAdmins()->sync([]);
-                        $occupation->delete();
-                    } else {
-                        $occupation->subAdmins()->detach(auth()->user()->id);
-                    }
-                }
-                return response()->json(['success' => true, 'message' => trans('messages.crud.delete_record')]);
-            } catch (\Exception $e) {
+            if (!$validator->passes()) {
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }else{
+                DB::beginTransaction();
+                try {
+                    $ids = $request->input('ids');
+                    $occupations = Occupation::whereIn('uuid', $ids)->get();
+                    foreach($occupations as $occupation){
+                        if((auth()->user()->is_super_admin)){
+                            $occupation->subAdmins()->sync([]);
+                            $occupation->delete();
+                        } else {
+                            $occupation->subAdmins()->detach(auth()->user()->id);
+                        }
+                    }
+                    DB::commit();
+                    return response()->json(['success' => true, 'message' => trans('messages.crud.delete_record')]);
+                } catch (\Exception $e) {
+                    dd($e);
+                    DB::rollBack();
+                    
+                    return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+                }
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
