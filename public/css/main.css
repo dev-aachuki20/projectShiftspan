@@ -2434,3 +2434,7 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     }
 }
 
+/* For DatePicker */
+.ui-datepicker select.ui-datepicker-month,.ui-datepicker select.ui-datepicker-year {
+    width: 50% !important;
+}

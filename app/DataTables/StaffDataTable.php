@@ -96,6 +96,14 @@ class StaffDataTable extends DataTable
             ->filterColumn('created_at', function ($query, $keyword) {
                 $query->whereRaw("DATE_FORMAT(created_at,'%d-%m-%Y') like ?", ["%$keyword%"]); //date_format when searching using date
             })
+
+            ->filterColumn('is_active', function ($query, $keyword) {
+                if ($keyword == 'deactive') {
+                    $query->whereRaw("is_active = '0'");
+                } elseif ($keyword == 'active') {
+                    $query->whereRaw("is_active = '1'");
+                }
+            })      
             ->rawColumns(['action', 'checkbox', 'staff_image', 'is_active']);
     }
 

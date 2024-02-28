@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('title', trans('cruds.staff.title_singular'))
+
 @section('customCss')
+<link href="{{asset('plugins/jquery-ui/jquery.ui.min.css')}}" rel="stylesheet" />
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endsection
 
 @section('main-content')
@@ -30,7 +33,31 @@
 
 @parent
 {!! $dataTable->scripts() !!}
+<script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).on('shown.bs.modal', function() {
+        $('.select2').each(function() {
+            if (this.isConnected) {
+                $(this).select2({
+                    width: 'calc(100% - 180px)',
+                    dropdownParent: $(this).closest('.select-label'),
+                    selectOnClose: false
+                });
+            }
+        });
+
+        $(function () {
+            $(".datepicker").datepicker({
+                maxDate: 0,
+                dateFormat: 'yy-mm-dd',
+                changeMonth: true,
+                changeYear: true,
+                yearRange: "-100:+0",
+                showButtonPanel: true,
+            });
+        });
+    });
     
     @can('staff_create')
         // Add Staff Modal

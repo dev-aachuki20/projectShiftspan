@@ -40,9 +40,9 @@ class StaffRequest extends FormRequest
                 $rules['company_id']            = ['nullable'];
                 $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
                 $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
-                $rules['email']                 = ['required', 'email', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                $rules['email']                 = ['required', 'email', 'regex:/(.+)@(.+)\.(.+)/i', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/', Rule::unique('users', 'phone')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
-                $rules['password']              = ['required', 'string', 'min:8', 'max:15', 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/'];
+                $rules['password']              = ['required', 'string', 'min:8', 'max:15', /* 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/' */];
                 $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
             }
     
@@ -62,12 +62,13 @@ class StaffRequest extends FormRequest
             $rules['is_statement']              = ['required','boolean'];
             
             $rules['image']                     = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['relevant_training']         = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['dbs_certificate']           = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['cv_image']                  = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['staff_budge']               = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['dbs_check']                 = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
-            $rules['training_check']            = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
+            $rules['relevant_training']         = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['dbs_certificate']           = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['cv_image']                  = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['staff_budge']               = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['dbs_check']                 = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['training_check']            = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+
         }
         
 
@@ -86,7 +87,7 @@ class StaffRequest extends FormRequest
             'password.string' => __('validation.string', ['attribute' => strtolower(__('cruds.user.fields.password'))]),
             'password.min' => __('validation.min.string', ['attribute' => strtolower(__('cruds.user.fields.password')), 'min' => ':min']),
             'password.max' => __('validation.max.string', ['attribute' => strtolower(__('cruds.user.fields.password')), 'max' => ':max']),
-            'password.regex' => __('validation.password.regex', ['attribute' => strtolower(__('cruds.user.fields.password'))]),
+            // 'password.regex' => __('validation.password.regex', ['attribute' => strtolower(__('cruds.user.fields.password'))]),
 
             'email.required' => __('validation.required', ['attribute' => strtolower(__('cruds.user.fields.email'))]),
             'email.ends_with' => __('validation.ends_with', ['attribute' => strtolower(__('cruds.user.fields.email'))]),
