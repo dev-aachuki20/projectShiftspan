@@ -9,7 +9,7 @@
                 <form class="msg-form">
                     <div class="user-image text-center">
                         <div class="staff-img">
-                            <img src="{{asset('images/staff-img.png')}}" alt="staff-image">
+                            <img src="{{ isset($users) && $users->profile_image_url ? $users->profile_image_url : asset('images/staff-img.png')}}" alt="staff-image">
                         </div>
                         @if(isset($users->name))
                             <p>{{$users->name}}</p>
@@ -70,28 +70,43 @@
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.dbs_check'):</label>
                         <div class="upload-file">
-                            <input type="file" disabled>
-                            <div id="image-preview" class="img-prevarea img-prePro">
-                                <embed src="{{ isset($users) && $users->dbs_certificate_url ? $users->dbs_certificate_url : asset('images/download-icon.png')}}" alt="">
-                            </div>
+                            @if(isset($users) && $users->dbs_certificate_url)
+                                <a target="_blank" href="{{ $users->dbs_certificate_url }}" class="chose-btn mt-0">
+                                    <x-svg-icons icon="help-pdf" />
+                                </a>
+                            @else
+                                <div id="image-preview" class="img-prevarea img-prePro">
+                                    <image src="{{asset('images/download-icon.png')}}" alt="">
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.cv'):</label>
                         <div class="upload-file">
-                            <input type="file" disabled>
-                            <div id="image-preview" class="img-prevarea img-prePro">
-                                <embed src="{{ isset($users) && $users->cv_url ? $users->cv_url : asset('images/download-icon.png')}}" alt="">
-                            </div>
+                            @if(isset($users) && $users->cv_url)
+                                <a target="_blank" href="{{ $users->cv_url }}" class="chose-btn mt-0">
+                                    <x-svg-icons icon="help-pdf" />
+                                </a>
+                            @else
+                                <div id="image-preview" class="img-prevarea img-prePro">
+                                    <image src="{{asset('images/download-icon.png')}}" alt="">
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.relevant_training_image'):</label>
                         <div class="upload-file">
-                            <input type="file" disabled>
-                            <div id="image-preview" class="img-prevarea img-prePro">
-                                <embed src="{{ isset($users) && $users->training_document_url ? $users->training_document_url : asset('images/download-icon.png')}}" alt="">
-                            </div>                            
+                            @if(isset($users) && $users->training_document_url)
+                                <a target="_blank" href="{{ $users->training_document_url }}" class="chose-btn mt-0">
+                                    <x-svg-icons icon="help-pdf" />
+                                </a>
+                            @else
+                                <div id="image-preview" class="img-prevarea img-prePro">
+                                    <image src="{{asset('images/download-icon.png')}}" alt="">
+                                </div>
+                            @endif
                         </div>
                     </div>
                 </form>

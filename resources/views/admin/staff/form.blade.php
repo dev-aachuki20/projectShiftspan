@@ -146,13 +146,14 @@
     <div class="form-label">
         <label>@lang('cruds.staff.fields.relevant_training_image'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_2" class="img-prevarea imagePreviewContainer">
-                {{-- <img id="relevant_training" src="{{ isset($staff) && $staff->training_document_url ? $staff->training_document_url : asset("images/dummy-image-square.jpg")}}"> --}}
-                <embed id="relevant_training" src="{{ isset($staff) && $staff->training_document_url ? $staff->training_document_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->training_document_url)
+                <a target="_blank" href="{{ $staff->training_document_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="relevant_training" id="fileInput1_2" class="fileInput" accept=".pdf" onchange="document.getElementById('relevant_training').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="relevant_training" id="fileInput1_2" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -160,61 +161,70 @@
     <div class="form-label">
         <label>@lang('cruds.staff.fields.dbs_certificate'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_3" class="img-prevarea imagePreviewContainer">
-                {{-- <img id="dbs_certificate" src="{{ isset($staff) && $staff->dbs_certificate_url ? $staff->dbs_certificate_url : asset("images/dummy-image-square.jpg")}}"> --}}
-                <embed id="dbs_certificate" src="{{ isset($staff) && $staff->dbs_certificate_url ? $staff->dbs_certificate_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->dbs_certificate_url)
+                <a target="_blank" href="{{ $staff->dbs_certificate_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="dbs_certificate" id="fileInput1_3" class="fileInput" accept=".pdf" onchange="document.getElementById('dbs_certificate').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="dbs_certificate" id="fileInput1_3" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.cv'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_4" class="img-prevarea imagePreviewContainer">
-                <embed id="cv_image" src="{{ isset($staff) && $staff->cv_url ? $staff->cv_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->cv_url)
+                <a target="_blank" href="{{ $staff->cv_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="cv_image" id="fileInput1_4" class="fileInput" accept=".pdf" onchange="document.getElementById('cv_image').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="cv_image" id="fileInput1_4" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.staff_budge'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_5" class="img-prevarea imagePreviewContainer">
-                <embed id="staff_budge" src="{{ isset($staff) && $staff->staff_budge_url ? $staff->staff_budge_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->staff_budge_url)
+                <a target="_blank" href="{{ $staff->staff_budge_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="staff_budge" id="fileInput1_5" class="fileInput" accept=".pdf" onchange="document.getElementById('staff_budge').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="staff_budge" id="fileInput1_5" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.dbs_check'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_6" class="img-prevarea imagePreviewContainer">
-                <embed id="dbs_check" src="{{ isset($staff) && $staff->dbs_check_url ? $staff->dbs_check_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->dbs_check_url)
+                <a target="_blank" href="{{ $staff->dbs_check_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="dbs_check" id="fileInput1_6" class="fileInput" accept=".pdf" onchange="document.getElementById('dbs_check').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="dbs_check" id="fileInput1_6" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.training_check'):</label>
         <div class="right-sidebox">
-            <div id="imagePreviewContainer1_7" class="img-prevarea imagePreviewContainer">
-                <embed id="training_check" src="{{ isset($staff) && $staff->training_check_url ? $staff->training_check_url : asset("images/dummy-image-square.jpg")}}">
-            </div>
+            @if(isset($staff) && $staff->training_check_url)
+                <a target="_blank" href="{{ $staff->training_check_url }}" class="chose-btn mt-0">
+                    <x-svg-icons icon="help-pdf" />
+                </a>
+            @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="training_check" id="fileInput1_7" class="fileInput" accept=".pdf" onchange="document.getElementById('training_check').src = window.URL.createObjectURL(this.files[0])" multiple>
+                <input type="file" name="training_check" id="fileInput1_7" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
