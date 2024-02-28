@@ -14,14 +14,16 @@
                         @if(isset($users->name))
                             <p>{{$users->name}}</p>
                         @endif
-                        <span>{{$users->roles->first()->name}}</span>
+                        <span>
+                            {{ isset($users->profile->occupation->name) ? $users->profile->occupation->name : '' }}
+                        </span>
                     </div>
-                    <div class="form-label">
+                    {{-- <div class="form-label">
                         <label>@lang('cruds.staff.fields.name'):</label>
                         <div class="right-sidebox d-flex align-items-center justify-content-start">
                             <span class="fw-600">{{$users->name}}</span>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.staff_rating'):</label>
                         <div class="form-rating">
