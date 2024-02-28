@@ -11,13 +11,21 @@
     </div>
 @endif
     <div class="form-label">
+        <label>@lang('cruds.staff.fields.title'):</label>
+        <input type="text" name="title" value="{{ (isset($staff) && !empty($staff->title)) ? $staff->title : ''}}">
+    </div>
+    <div class="form-label">
+        <label>@lang('cruds.staff.fields.username'):</label>
+        <input type="text" name="name" value="{{ (isset($staff) && !empty($staff->name)) ? $staff->name : ''}}" @if(isset($staff) && !empty($staff->name)) readonly @endif>
+    </div>
+    {{-- <div class="form-label">
         <label>@lang('cruds.staff.fields.name'):</label>
         <input type="text" name="name" value="{{ (isset($staff) && !empty($staff->name)) ? $staff->name : ''}}">
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.username'):</label>
         <input type="text" name="username" value="{{ (isset($staff) && !empty($staff->username)) ? $staff->username : ''}}" @if(isset($staff) && !empty($staff->username)) readonly @endif>
-    </div>
+    </div> --}}
     <div class="form-label">
         <label>@lang('cruds.staff.fields.email'):</label>
         <input type="email" name="email" value="{{ (isset($staff) && !empty($staff->email)) ? $staff->email : ''}}" @if(isset($staff) && !empty($staff->username)) readonly @endif>

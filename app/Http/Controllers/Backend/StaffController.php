@@ -69,7 +69,10 @@ class StaffController extends Controller
                 } else {
                     $input['company_id'] = User::where('uuid', $request->company_id)->first()->id;
                 }
+                
+                $input['username'] = $request->name;
                 $input['password'] = Hash::make($request->password);
+
                 $staff = User::create($input);
                 $input['user_id'] = $staff->id;
                 $staff->profile()->create($input);

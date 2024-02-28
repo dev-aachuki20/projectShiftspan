@@ -33,13 +33,16 @@ class StaffRequest extends FormRequest
             $rules['ids.*'] = ['exists:users,uuid'];
         }else{
             if(!empty($method == 'PUT')){
-                $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
+                $rules['title']                 = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:10', new NoMultipleSpacesRule];
                 $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/','unique:users,phone,'. $this->staff.',uuid,deleted_at,NULL'];
                 $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
             }else{
                 $rules['company_id']            = ['nullable'];
-                $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
-                $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                /* $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
+                $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')]; */
+
+                $rules['title']                 = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:10', new NoMultipleSpacesRule];
+                $rules['name']                  = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['email']                 = ['required', 'email', 'regex:/(.+)@(.+)\.(.+)/i', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/', Rule::unique('users', 'phone')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['password']              = ['required', 'string', 'min:8', 'max:15', /* 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/' */];

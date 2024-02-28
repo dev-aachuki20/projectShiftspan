@@ -159,6 +159,7 @@ return [
         'fields' => [
             'id'                            => 'ID',
             'staff_admin'                   => 'Staff Admin',
+            'title'                         => 'Title',
             'name'                          => 'Staff Name',
             'username'                      => 'Username',
             'staff_image'                   => 'Staff Image',

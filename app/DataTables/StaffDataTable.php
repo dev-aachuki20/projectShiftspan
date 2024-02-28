@@ -98,12 +98,12 @@ class StaffDataTable extends DataTable
             })
 
             ->filterColumn('is_active', function ($query, $keyword) {
-                if ($keyword == 'deactive') {
-                    $query->whereRaw("is_active = '0'");
-                } elseif ($keyword == 'active') {
-                    $query->whereRaw("is_active = '1'");
+                if ($keyword == 'de' || $keyword == 'deac' || $keyword == 'deacti' || $keyword == 'deactive') {
+                    $query->where('is_active', 0);
+                } elseif ($keyword == 'act' || $keyword == 'activ' || $keyword == 'active') {
+                    $query->where('is_active', 1);
                 }
-            })      
+            })                  
             ->rawColumns(['action', 'checkbox', 'staff_image', 'is_active']);
     }
 
