@@ -1759,6 +1759,107 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     color: orange;
 }
 
+input.datepicker{
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><g clip-path="url(%23clip0_124_2)"><path d="M17.6565 1.5625H16.719V0H15.1565V1.5625H4.844V0H3.2815V1.5625H2.344C1.0515 1.5625 0 2.614 0 3.9065V17.6565C0 18.949 1.0515 20.0005 2.344 20.0005H17.6565C18.949 20.0005 20.0005 18.949 20.0005 17.6565V3.9065C20.0005 2.614 18.949 1.5625 17.6565 1.5625ZM18.438 17.6565C18.438 18.0875 18.0875 18.438 17.6565 18.438H2.344C1.913 18.438 1.5625 18.0875 1.5625 17.6565V7.344H18.4375L18.438 17.6565ZM18.438 5.7815H1.5625V3.9065C1.5625 3.4755 1.913 3.125 2.344 3.125H3.2815V4.6875H4.844V3.125H15.1565V4.6875H16.719V3.125H17.6565C18.0875 3.125 18.438 3.4755 18.438 3.9065V5.7815Z" fill="%23444444"/><path d="M2.96924 8.98438H4.53174V10.5469H2.96924V8.98438ZM6.09424 8.98438H7.65674V10.5469H6.09424V8.98438ZM9.21924 8.98438H10.7817V10.5469H9.21924V8.98438ZM12.3442 8.98438H13.9067V10.5469H12.3442V8.98438ZM15.4692 8.98438H17.0317V10.5469H15.4692V8.98438ZM2.96924 12.1094H4.53174V13.6719H2.96924V12.1094ZM6.09424 12.1094H7.65674V13.6719H6.09424V12.1094ZM9.21924 12.1094H10.7817V13.6719H9.21924V12.1094ZM12.3442 12.1094H13.9067V13.6719H12.3442V12.1094ZM2.96924 15.2344H4.53174V16.7969H2.96924V15.2344ZM6.09424 15.2344H7.65674V16.7969H6.09424V15.2344ZM9.21924 15.2344H10.7817V16.7969H9.21924V15.2344ZM12.3442 15.2344H13.9067V16.7969H12.3442V15.2344ZM15.4692 12.1094H17.0317V13.6719H15.4692V12.1094Z" fill="%23444444"/></g><defs><clipPath id="clip0_124_2"><rect width="20" height="20" fill="white"/></clipPath></defs></svg>');
+    background-size: 18px;
+    background-position: calc(100% - 20px) center;
+    background-repeat: no-repeat;
+}
+input.timepicker{
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" viewBox="0 0 21 21" fill="none"><path d="M10.333 0.333008C8.3552 0.333008 6.4218 0.919497 4.77731 2.01831C3.13282 3.11712 1.85109 4.67891 1.09422 6.50617C0.337341 8.33343 0.139307 10.3441 0.525159 12.2839C0.911012 14.2237 1.86342 16.0055 3.26194 17.4041C4.66047 18.8026 6.4423 19.755 8.38211 20.1409C10.3219 20.5267 12.3326 20.3287 14.1598 19.5718C15.9871 18.8149 17.5489 17.5332 18.6477 15.8887C19.7465 14.2442 20.333 12.3108 20.333 10.333C20.3299 7.6818 19.2753 5.14008 17.4006 3.26539C15.5259 1.39071 12.9842 0.336136 10.333 0.333008ZM10.333 18.5148C8.7148 18.5148 7.13293 18.035 5.78744 17.1359C4.44194 16.2369 3.39326 14.9591 2.774 13.4641C2.15474 11.969 1.99271 10.3239 2.3084 8.73681C2.6241 7.1497 3.40334 5.69183 4.54759 4.54759C5.69184 3.40334 7.1497 2.6241 8.73682 2.3084C10.3239 1.9927 11.969 2.15473 13.4641 2.77399C14.9591 3.39325 16.2369 4.44194 17.1359 5.78743C18.035 7.13292 18.5148 8.71479 18.5148 10.333C18.5122 12.5021 17.6493 14.5817 16.1155 16.1155C14.5817 17.6493 12.5022 18.5122 10.333 18.5148Z" fill="%23444444"/><path d="M11.242 9.957V4.87882C11.242 4.63771 11.1462 4.40648 10.9757 4.23599C10.8053 4.06551 10.574 3.96973 10.3329 3.96973C10.0918 3.96973 9.86058 4.06551 9.69009 4.23599C9.51961 4.40648 9.42383 4.63771 9.42383 4.87882V10.3334C9.42388 10.5744 9.51969 10.8056 9.69019 10.9761L12.4175 13.7034C12.5889 13.869 12.8186 13.9606 13.0569 13.9585C13.2953 13.9564 13.5233 13.8608 13.6918 13.6923C13.8604 13.5237 13.956 13.2957 13.9581 13.0574C13.9601 12.819 13.8685 12.5894 13.7029 12.4179L11.242 9.957Z" fill="%23444444"/></svg>');
+    background-size: 18px;
+    background-position: calc(100% - 20px) center;
+    background-repeat: no-repeat;
+}
+/*Datepicker css*/
+.ui-widget.ui-widget-content{
+    border: none;
+    background-color: var(--gray-color);
+    font-family: var(--font-Poppins);
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+.ui-widget-header{
+    border: none;
+    background-color: transparent;
+}
+.ui-datepicker-calendar thead th{
+    font-weight: 400;
+}
+.ui-datepicker-calendar tbody td .ui-state-default{
+    text-align: center;
+    background-color: transparent;
+    border: none;
+    color: #000;
+    padding: 6px;
+    border-radius: 50%;
+}
+.ui-datepicker-calendar .ui-state-disabled, 
+.ui-widget-content .ui-datepicker-calendar .ui-state-disabled{
+    opacity: 0.55;
+}
+.ui-widget-content .ui-datepicker-calendar .ui-state-active{
+    background-color: var(--black);
+    color: var(--white);
+}
+.ui-datepicker-calendar .ui-state-highlight, 
+.ui-widget-content .ui-datepicker-calendar .ui-state-highlight{
+    background-color: var(--primary);
+    color: var(--white);
+    border: none;
+}
+li.ui-timepicker-selected, 
+.ui-timepicker-list li:hover, 
+.ui-timepicker-list .ui-timepicker-selected:hover{
+    background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+.ui-timepicker-wrapper{
+    width: 280px;
+    border: none;
+    background-color: var(--gray-color);
+    font-family: var(--font-Poppins);
+    border-radius: 10px;
+    box-shadow: 0 0 4px rgba(0,0,0,0.5);
+    -webkit-box-shadow: 0 0 4px rgba(0,0,0,0.5);
+}
+.ui-timepicker-wrapper .ui-timepicker-list li{
+    padding: 8px 20px;
+    text-align: center;
+}
+.ui-timepicker-wrapper::-webkit-scrollbar-track{
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    border-radius: 6px;
+    background-color: transparent;
+}
+.ui-timepicker-wrapper::-webkit-scrollbar{
+    width: 6px;
+    background-color: transparent;
+}
+.ui-timepicker-wrapper::-webkit-scrollbar-thumb{
+    border-radius: 6px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0);
+    background-color: #cbcbcb;
+}
+.ui-datepicker-title .ui-datepicker-month,
+.ui-datepicker-title .ui-datepicker-year{
+    min-height: auto;
+    padding: 5px 10px;
+}
+.ui-datepicker-buttonpane .ui-state-default{
+    background-color: var(--black);
+    color: var(--white);
+    border-radius: 5px;
+    opacity: 1;
+    font-weight: 400;
+}
+.ui-datepicker-buttonpane .ui-state-default.ui-datepicker-current{
+    background-color: var(--primary);
+    color: var(--white);
+}
+
+
 /* Responsive css */
 @media screen and (min-width: 1300px) and (max-width: 1599px){
     .header-inner ul>li>a{
@@ -2384,6 +2485,9 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     }
     #change-password-form .password-area .toggle-password{
         top: 8px;
+    }
+    .ui-timepicker-wrapper{
+        width: 200px;
     }
 }
 

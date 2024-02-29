@@ -58,13 +58,13 @@
                     </div>
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.email'):</label>
-                        <div class="right-sidebox d-flex align-items-center justify-content-start">
+                        <div class="right-sidebox d-flex align-items-center justify-content-center">
                             <span class="fw-600">{{$users->email}}</span>
                         </div>
                     </div>
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.phone'):</label>
-                        <div class="right-sidebox d-flex align-items-center justify-content-start">
+                        <div class="right-sidebox d-flex align-items-center justify-content-center">
                         <span class="fw-600">{{$users->phone}}</span>
                         </div>
                     </div>

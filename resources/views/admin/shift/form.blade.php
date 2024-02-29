@@ -24,7 +24,7 @@
     <div class="client_detail_name_error error_select" style="width: 100%"></div>
 </div>
 
-<div class="form-label">
+<div class="form-label position-relative">
     <label>@lang('cruds.shift.fields.start_date'):</label>
     <input type="text" name="start_date" id="start_date" class="datepicker" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
 </div>
