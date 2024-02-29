@@ -49,6 +49,6 @@ class Occupation extends Model
     }
 
     public function subAdmins() {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class, 'occupation_user', 'occupation_id', 'user_id');
     }
 }

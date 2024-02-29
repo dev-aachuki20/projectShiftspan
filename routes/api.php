@@ -4,11 +4,8 @@ use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
 use App\Http\Controllers\Api\Auth\LogoutController;
-use App\Http\Controllers\Api\OccupationController;
 use App\Http\Controllers\Api\SettingController;
-use App\Http\Controllers\Api\StaffController;
 use App\Http\Controllers\Api\UserController;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -85,8 +82,8 @@ Route::group(['namespace' => 'Api'], function () {
     |
     */
 	Route::post('register',[RegisterController::class,'create']);
-	
-	
+
+
 	/*
     |--------------------------------------------------------------------------
     | Open API Routes
@@ -95,7 +92,7 @@ Route::group(['namespace' => 'Api'], function () {
     |
     */
     Route::get('companies', [HomeController::class,'companyList']);
-    
+
 });
 
 
@@ -105,13 +102,13 @@ Route::group(['namespace' => 'Api'], function () {
 | Base Route : http://localhost:8000/api/
 |--------------------------------------------------------------------------
 |
-*/ 
+*/
 Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (){
     /*
     |--------------------------------------------------------------------------
     |  Logout API Routes
     |--------------------------------------------------------------------------
-    | 
+    |
     | Route         : http://localhost:8000/api/logout
     | Header        : Content-Type:application/json
     |               : Authorization : Token
@@ -124,7 +121,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     |--------------------------------------------------------------------------
     |  Get Occupations API Routes
     |--------------------------------------------------------------------------
-    | 
+    |
     | Route         : http://localhost:8000/api/occupations
     | Header        : Content-Type:application/json
     |               : Authorization : Token
@@ -134,12 +131,26 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     */
     Route::get('occupations', [HomeController::class, 'occupationsList']);
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Get Locations API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route         : http://localhost:8000/api/locations
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : Get
+    | Parameters    : company_id
+    |
+    */
+    Route::get('locations', [HomeController::class, 'locationsList']);
+
 
     /*
     |--------------------------------------------------------------------------
     |  Auth User Details API Routes
     |--------------------------------------------------------------------------
-    | 
+    |
     | Route         : http://localhost:8000/api/profile
     | Header        : Content-Type:application/json
     |               : Authorization : Token
@@ -153,7 +164,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     |--------------------------------------------------------------------------
     |  Profile Update API Routes
     |--------------------------------------------------------------------------
-    | 
+    |
     | Route         : http://localhost:8000/api/profile
     | Header        : Content-Type:application/json
     |               : Authorization : Token
@@ -170,7 +181,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     |--------------------------------------------------------------------------
     |  Setting API Routes
     |--------------------------------------------------------------------------
-    | 
+    |
     | Route         : http://localhost:8000/api/settings
     | Header        : Content-Type:application/json
     |               : Authorization : Token

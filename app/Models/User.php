@@ -97,10 +97,6 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->roles()->where('id', config('constant.roles.staff'))->exists();
     }
 
-    public function occupations(){
-        return $this->belongsToMany(Occupation::class);
-    }
-
     public function company(){
         return $this->belongsTo(User::class,'company_id','id');
     }
@@ -230,7 +226,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Shift::class, 'staff_shift', 'user_id', 'shift_id');
     }
     public function locations(){
-        return $this->belongsToMany(Location::class);
+        return $this->belongsToMany(Location::class,'location_user', 'user_id', 'location_id');
     }
 
     public function staffs(){
@@ -241,4 +237,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(ClientDetail::class, 'sub_admin_id', 'id');
     }
+
+    public function occupations()
+    {
+        return $this->belongsToMany(Occupation::class, 'occupation_user', 'user_id', 'occupation_id');
+    }
+
 }
