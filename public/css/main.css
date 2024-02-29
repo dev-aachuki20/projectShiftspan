@@ -1421,13 +1421,23 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     background: transparent !important;
     padding: 0 !important;
 }
-.dataTables_wrapper .dataTables_paginate span .paginate_button.current{
+.dataTables_wrapper .dataTables_paginate span .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button:not(.disabled):hover,
+.dataTables_wrapper .dataTables_paginate .paginate_button.previous:not(.disabled):focus,
+.dataTables_wrapper .dataTables_paginate .paginate_button.next:not(.disabled):focus{
     background: var(--primary) !important;
     border-color: var(--primary) !important;
     color: var(--white) !important;
 }
 .dataTables_wrapper .dataTables_paginate span .paginate_button.current:hover{
     color: var(--white) !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button:active,
+.dataTables_wrapper .dataTables_paginate .paginate_button:focus-visible{
+    outline: none;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
 }
 #shift-table tr{
     position: relative;

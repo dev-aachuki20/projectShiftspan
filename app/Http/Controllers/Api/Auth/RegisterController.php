@@ -22,6 +22,7 @@ class RegisterController extends APIController
     public function create(Request $request)
     {
         $request->validate([
+            'title'             => ['required','string','max:10'],
             'name'              => ['required','string','max:150'],
             'email'             => ['required','email:dns','unique:users,email,NULL,id,deleted_at,NULL'],
             'password'          => ['required', 'string', 'min:8','confirmed'],
@@ -39,6 +40,7 @@ class RegisterController extends APIController
         DB::beginTransaction();
         try {
             $user = User::create([
+                'title' => ucfirst($request->title),
                 'name' => $request->name,
                 'email' => $request->email,
                 'company_id' => $request->company_id,
