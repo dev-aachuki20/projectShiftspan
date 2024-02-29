@@ -89,8 +89,8 @@ class ShiftDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
 
-                if ($record->status == 'open') {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn cancelShiftBtn"  data-href="'.route('shifts.cancel', $record->uuid).'">
+                if ($record->status != 'complete') {
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn cancelShiftBtn" title="'.__('global.cancel').'" data-href="'.route('shifts.cancel', $record->uuid).'">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.cancel').'">
                             '.(getSvgIcon('cancel')).'
                         </span>
@@ -121,6 +121,32 @@ class ShiftDataTable extends DataTable
                 return $actionHtml;
             })
             ->setRowId('id')
+
+            ->filterColumn('start_date', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(start_date, '".config('constant.search_date_format.date')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
+
+            ->filterColumn('end_date', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(end_date, '".config('constant.search_date_format.date')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
+
+            ->filterColumn('start_time', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(start_time, '".config('constant.search_date_format.time')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
+
+
+            ->filterColumn('end_time', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(end_time, '".config('constant.search_date_format.time')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
+
+            ->filterColumn('picked_at', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(picked_at, '".config('constant.search_date_format.date_time')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
+
+
+            ->filterColumn('cancel_at', function ($query, $keyword) {
+                $query->whereRaw("DATE_FORMAT(cancel_at, '".config('constant.search_date_format.date_time')."') like ?", ["%$keyword%"]); //date_format when searching using date
+            })
             ->rawColumns(['action', 'checkbox', 'rating']);
     }
 
@@ -175,7 +201,7 @@ class ShiftDataTable extends DataTable
         $columns[] = Column::make('end_time')->title('<span>'.trans('cruds.shift.fields.end_time').'</span>')->titleAttr(trans('cruds.shift.fields.end_time'));
         $columns[] = Column::make('picked_at')->title('<span>'.trans('cruds.shift.fields.picked_at').'</span>')->titleAttr(trans('cruds.shift.fields.picked_at'));
         $columns[] = Column::make('cancel_at')->title('<span>'.trans('cruds.shift.fields.cancel_at').'</span>')->titleAttr(trans('cruds.shift.fields.cancel_at'));
-        $columns[] = Column::make('rating')->title('<span>'.trans('cruds.shift.fields.rating').'</span>')->titleAttr(trans('cruds.shift.fields.rating'));
+        $columns[] = Column::make('rating')->title('<span>'.trans('cruds.shift.fields.rating').'</span>')->titleAttr(trans('cruds.shift.fields.rating'))->searchable(false);
         $columns[] = Column::make('status')->title('<span>'.trans('cruds.shift.fields.status').'</span>')->titleAttr(trans('cruds.shift.fields.status'));
         
         $columns[] = Column::make('created_at')->title(trans('cruds.shift.fields.created_at'))->visible(false)->searchable(false);

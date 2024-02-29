@@ -30,7 +30,7 @@ class LoginController extends APIController
     public function login(Request $request)
     {
         $credentials = $request->validate([
-            'email'    => ['required','email:dns','exists:users,email,deleted_at,NULL',new UserHasRole($request->email, config('constant.roles.staff')),new IsActive],
+            'email'    => ['required','email:dns','exists:users,email,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), $request->email),new IsActive],
             'password' => 'required|min:8',
         ],[
             'email.exists' => trans('validation.invalid'),
@@ -74,7 +74,7 @@ class LoginController extends APIController
 
     public function forgotPassword(Request $request)
     {
-        $validator = $request->validate(['email' => ['required','email','exists:users,email,deleted_at,NULL', new UserHasRole($request->email, config('constant.roles.staff')), new IsActive]]);
+        $validator = $request->validate(['email' => ['required','email','exists:users,email,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), $request->email), new IsActive]]);
 
         DB::beginTransaction();
         try {

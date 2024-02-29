@@ -9,8 +9,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-
-use function Laravel\Prompts\select;
+use Illuminate\Support\Str;
 
 class StaffDataTable extends DataTable
 {
@@ -103,7 +102,16 @@ class StaffDataTable extends DataTable
                 } elseif ($keyword == 'act' || $keyword == 'activ' || $keyword == 'active') {
                     $query->where('is_active', 1);
                 }
-            })                  
+            })
+            ->filterColumn('is_active', function ($query, $keyword) {
+                $statusSearch  = null;
+                if (Str::contains('active', strtolower($keyword))) {
+                        $statusSearch = 1;
+                } else if (Str::contains('inactive', strtolower($keyword))) {
+                        $statusSearch = 0;
+                }
+                $query->where('is_active', $statusSearch); 
+            })
             ->rawColumns(['action', 'checkbox', 'staff_image', 'is_active']);
     }
 

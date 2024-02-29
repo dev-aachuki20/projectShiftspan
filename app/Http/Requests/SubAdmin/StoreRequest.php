@@ -26,7 +26,7 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [];
-        $rules['name'] = ['required', new NoMultipleSpacesRule];
+        $rules['name'] = ['required', 'string', 'max:255', new NoMultipleSpacesRule];
 
         $rules['email'] = ['required',"email:dns", 'unique:users,email,NULL,id,deleted_at,NULL'];
 

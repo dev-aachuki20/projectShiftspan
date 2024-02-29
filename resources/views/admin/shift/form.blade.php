@@ -1,13 +1,13 @@
 @if(auth()->user()->is_super_admin)
     <div class="form-label select-label">
         <label>@lang('cruds.shift.fields.client_name'):</label>
-        <select name="sub_admin_id" id="client_name" class="select2" @required(true)>
+        <select name="sub_admin_id" id="sub_admin_id" class="select2" @required(true)>
             <option value="">@lang('global.select') @lang('cruds.shift.fields.client_name')</option>
             @foreach ($subAdmins as $key => $value)
                 <option value="{{$key}}" @selected(isset($shift) && $shift->client->uuid == $key ) >{{ $value}}</option>
             @endforeach
         </select>
-        <div class="client_name_error error_main" style="width: 100%"></div>
+        <div class="client_name_error error_select" style="width: 100%"></div>
     </div>
 @endif
 
@@ -21,50 +21,50 @@
             @endforeach
         @endif
     </select>
-    <div class="client_detail_name_error error_main" style="width: 100%"></div>
+    <div class="client_detail_name_error error_select" style="width: 100%"></div>
 </div>
 
 <div class="form-label">
     <label>@lang('cruds.shift.fields.start_date'):</label>
-    <input type="text" name="start_date" class="datepicker" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
+    <input type="text" name="start_date" id="start_date" class="datepicker" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
 </div>
 <div class="form-label">
     <label>@lang('cruds.shift.fields.end_date'):</label>
-    <input type="text" name="end_date" class="datepicker" value="{{ isset($shift) ? dateFormat($shift->end_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true) />
+    <input type="text" name="end_date" id="end_date"  class="datepicker" value="{{ isset($shift) ? dateFormat($shift->end_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true) />
 </div>
 <div class="form-label">
     <label>@lang('cruds.shift.fields.start_time'):</label>
-    <input type="text" name="start_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
+    <input type="text" name="start_time" id="start_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
 </div>
 <div class="form-label">
     <label>@lang('cruds.shift.fields.end_time'):</label>
-    <input type="text" name="end_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
+    <input type="text" name="end_time" id="end_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
 </div>
 
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.occupation_id'):</label>
-    <select name="occupation_id" id="occupation" class="select2" @required(true)>
+    <select name="occupation_id" id="occupation_id" class="select2" @required(true)>
         <option value="">@lang('global.select') @lang('cruds.shift.fields.occupation_id')</option>
         @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)
-            @foreach ($subAdmins as $occupationKey => $occupation)
-                <option value="{{$occupationKey}}" {{ isset($shift) && $shift->occupation->uuid == $occupationKey ? 'selected' : ''  }}>{{ $value}}</option>
+            @foreach ($occupations as $occupationKey => $occupation)
+                <option value="{{$occupationKey}}" @selected(isset($shift) && $shift->occupation->uuid == $occupationKey )>{{ $occupation  }}</option>
             @endforeach
         @endif
     </select>
-    <div class="client_detail_name_error error_main" style="width: 100%"></div>
+    <div class="client_detail_name_error error_select" style="width: 100%"></div>
 </div>
 
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.location_id'):</label>
-    <select name="location_id" id="location" class="select2" @required(true)>
+    <select name="location_id" id="location_id" class="select2" @required(true)>
         <option value="">@lang('global.select') @lang('cruds.shift.fields.location_id')</option>
         @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)
-            @foreach ($subAdmins as $locationKey => $location)
-                <option value="{{$locationKey}}" {{ isset($shift) && $shift->location->uuid == $locationKey ? 'selected' : ''  }}>{{ $location}}</option>
+            @foreach ($locations as $locationKey => $location)
+                <option value="{{$locationKey}}" @selected(isset($shift) && $shift->location->uuid == $locationKey ) >{{ $location}}</option>
             @endforeach
         @endif
     </select>
-    <div class="client_detail_name_error error_main" style="width: 100%"></div>
+    <div class="client_detail_name_error error_select" style="width: 100%"></div>
 </div>
 
 @if(!isset($shift))
@@ -75,7 +75,7 @@
                 <option value="{{$i}}">{{ $i}}</option>
             @endfor
         </select>
-        <div class="quantity_error error_main" style="width: 100%"></div>
+        <div class="quantity_error error_select" style="width: 100%"></div>
     </div>
 @endif
 <div class="form-label select-label">
@@ -88,7 +88,7 @@
             @endforeach
         @endif
     </select>
-    <div class="staff_error error_main" style="width: 100%"></div>
+    <div class="staff_error error_select" style="width: 100%"></div>
 </div>
 
 <div class="form-label justify-content-center">

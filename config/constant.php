@@ -53,7 +53,13 @@ return [
     'search_date_format' => [ //$whereFormat = '%m/%d/%Y %h:%i %p';
         'date' => '%d-%m-%Y',
         'time' => '%H:%i',
-        'date_time' => '%d-%m-%Y %H:%i:%p'
+        'date_time' => '%d-%m-%Y %H:%i:%s'
+    ],
+
+    'js_date_format' => [ //$whereFormat = '%m/%d/%Y %h:%i %p';
+        'date' => 'dd-mm-yy',
+        'time' => 'H:i',
+        // 'date_time' => 'dd-mm-%Y %H:%i:%p'
     ],
 
     'shift_status' => [
@@ -62,6 +68,18 @@ return [
         'cancel' => 'Cancel', 
         'complete' => 'Complete'
     ],
+
+    'ratings' =>[
+        1 => '1 Starts',
+        2 => '2 Starts',
+        3 => '3 Starts',
+        4 => '4 Starts',
+        5 => '5 Starts',
+    ],
+
+    'timepicker_step' => 15,
+    'timepicker_min_time' => '00:00',
+    'timepicker_max_time' => '24:00',
 ]
 
 

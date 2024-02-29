@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\DataTables\ShiftDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Shift\StoreRequest;
 use App\Models\ClientDetail;
 use App\Models\Location;
 use App\Models\Occupation;
@@ -60,7 +61,7 @@ class ShiftController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreRequest $request)
     {
         abort_if(Gate::denies('shift_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) 
@@ -71,13 +72,11 @@ class ShiftController extends Controller
                 if($request->has('quantity')){
                     for($i=1;$i<=$request->quantity; $i++){
                         $shift = Shift::create($input);
-
                         if($i == 1 && $shift && $request->has('assign_staff') && !empty($request->assign_staff)){
                             $shift->update([
                                 'picked_at' => date('Y-m-d H:i:s'),
                                 'status' => 'picked',
-                            ]);
-                            
+                            ]);                            
                             $staffId = User::where('uuid', $request->assign_staff)->first()->id;
                             $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
                         }
@@ -90,7 +89,7 @@ class ShiftController extends Controller
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
-                dd($e);
+                // dd($e);
                 DB::rollBack();                
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
@@ -114,10 +113,10 @@ class ShiftController extends Controller
         abort_if(Gate::denies('shift_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
             try{
-                $shift = Shift::where('uuid', $id)->first();
+                $shift = Shift::with(['client', 'clientDetail', 'location', 'occupation', 'staffs'])->where('uuid', $id)->first();
+                $selectedStaffs = $shift->staffs()->pluck('uuid')->toArray();
                 if(auth()->user()->is_super_admin){
                     $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'uuid');
-                    $selectedStaffs = $shift->staffs()->pluck('uuid')->toArray();
                     $compactData = array_merge(compact('subAdmins', 'shift', 'selectedStaffs'), $this->getShiftViewData($shift->client->uuid));
 
                     $viewHTML = view('admin.shift.edit', $compactData)->render();
@@ -125,12 +124,12 @@ class ShiftController extends Controller
                 }
 
                 // for sub admin login
-                $compactData = array_merge(compact('shift'), $this->getShiftViewData(auth()->user()->uuid));
+                $compactData = array_merge(compact('shift', 'selectedStaffs'), $this->getShiftViewData(auth()->user()->uuid));
                 $viewHTML = view('admin.shift.edit', $compactData)->render();
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } 
             catch (\Exception $e) {
-                dd($e);
+                // dd($e);
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -142,7 +141,37 @@ class ShiftController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        abort_if(Gate::denies('shift_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        if ($request->ajax()) 
+        {
+            DB::beginTransaction();
+            try{
+                $shift = Shift::where('uuid', $id)->first();
+                $input = $this->modifyRequestInput($request);
+                
+                $shift->update($input);
+
+                if($request->has('assign_staff') && !empty($request->assign_staff)){
+                    $shift->update([
+                        'picked_at' => date('Y-m-d H:i:s'),
+                        'status' => 'picked',
+                    ]);                            
+                    $staffId = User::where('uuid', $request->assign_staff)->first()->id;
+                    $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
+                }
+                DB::commit();
+
+                $response = [
+                    'success' => true,
+                    'message' => trans('cruds.location.title_singular').' '.trans('messages.crud.update_record'),
+                ];
+                return response()->json($response);
+            } catch (\Exception $e) {
+                DB::rollBack();                
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
     /**
@@ -153,7 +182,7 @@ class ShiftController extends Controller
         abort_if(Gate::denies('shift_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
 
         if ($request->ajax()) {
-            $shift = Shift::where('uuid', $id)->first();
+            $shift = Shift::with('staffs')->where('uuid', $id)->first();
             DB::beginTransaction();
             try {
                 if ($shift->staffs) {
@@ -189,7 +218,7 @@ class ShiftController extends Controller
                 DB::beginTransaction();
                 try {
                     $ids = $request->input('ids');
-                    $shfits = Shift::whereIn('uuid', $ids)->get();
+                    $shfits = Shift::with('staffs')->whereIn('uuid', $ids)->get();
                     foreach($shfits as $shift){
                         if ($shift->staffs) {
                             $shift->staffs()->sync([]);
@@ -302,12 +331,11 @@ class ShiftController extends Controller
     }
 
     public function CancelShift(Request $request, $id){
-
+        // abort_if(Gate::denies('shift_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) {
             $shift = Shift::where('uuid', $id)->first();
             DB::beginTransaction();
-            try {
-                
+            try {                
                 $shift->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
 
                 DB::commit();
@@ -324,7 +352,28 @@ class ShiftController extends Controller
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 
-    public function RateShift(){
-        
+    public function RateShift(Request $request, $id){
+        // abort_if(Gate::denies('shift_delete'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        $request->validate([
+            'rating' => ['required', 'in:'.implode(',', array_keys(config('constant.ratings')))]
+        ]);
+        if ($request->ajax()) {
+            $shift = Shift::where('uuid', $id)->first();
+            DB::beginTransaction();
+            try {                
+                $shift->update(['rating' => $request->rating]);
+
+                DB::commit();
+                $response = [
+                    'success'    => true,
+                    'message'    => trans('messages.crud.status_update'),
+                ];
+                return response()->json($response);
+            } catch (\Exception $e) {
+                DB::rollBack();                
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 }
