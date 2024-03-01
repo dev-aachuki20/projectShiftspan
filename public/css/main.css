@@ -133,6 +133,9 @@ select:disabled,
 textarea:disabled{
     color: #4c4c4c !important;
 }
+p,span{
+    word-break: break-word;
+}
 /*==============================
     Global Elements
 ==============================*/
@@ -1706,6 +1709,7 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
 	-webkit-line-clamp: 3;
 	-webkit-box-orient: vertical;  
 	overflow: hidden;
+    word-break: break-word;
 }
 #client-detail-table .staff-img{
     width: 90px;
@@ -1802,19 +1806,22 @@ input.timepicker{
     opacity: 0.55;
 }
 .ui-widget-content .ui-datepicker-calendar .ui-state-active{
-    background-color: var(--black);
+    background-color: var(--primary);
     color: var(--white);
 }
 .ui-datepicker-calendar .ui-state-highlight, 
 .ui-widget-content .ui-datepicker-calendar .ui-state-highlight{
-    background-color: var(--primary);
+    background-color: var(--black);
     color: var(--white);
     border: none;
 }
 li.ui-timepicker-selected, 
-.ui-timepicker-list li:hover, 
 .ui-timepicker-list .ui-timepicker-selected:hover{
     background-color: var(--primary) !important;
+    color: var(--white) !important;
+}
+.ui-timepicker-list li:hover {
+    background-color: var(--black) !important;
     color: var(--white) !important;
 }
 .ui-timepicker-wrapper{

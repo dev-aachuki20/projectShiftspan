@@ -3,10 +3,8 @@
 use App\Http\Controllers\Api\HomeController;
 use App\Http\Controllers\Api\Auth\LoginController;
 use App\Http\Controllers\Api\Auth\RegisterController;
-use App\Http\Controllers\Api\Auth\LogoutController;
-use App\Http\Controllers\Api\SettingController;
+use App\Http\Controllers\Api\ShiftController;
 use App\Http\Controllers\Api\UserController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -189,4 +187,18 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     |
     */
     Route::get('settings', [HomeController::class,'setting']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Available Shifts API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/available-shifts
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET    |
+    |
+    */
+    Route::get('available-shifts', [ShiftController::class,'availableShifts']);
 });

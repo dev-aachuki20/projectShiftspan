@@ -9,7 +9,7 @@
                 <form class="msg-form">
                     <div class="user-image text-center">
                         <div class="staff-img">
-                            <img src="{{ isset($users) && $users->profile_image_url ? $users->profile_image_url : asset('images/staff-img.png')}}" alt="staff-image">
+                            <img src="{{ isset($users) && $users->profile_image_url ? $users->profile_image_url : asset(config('constant.default.staff-image')) }}" alt="staff-image">
                         </div>
                         @if(isset($users->name))
                             <p>{{$users->name}}</p>

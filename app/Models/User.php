@@ -221,9 +221,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(ClockInOut::class, 'user_id');
     }
 
-    public function shifts()
+    public function assignShifts()
     {
-        return $this->belongsToMany(Shift::class, 'staff_shift', 'user_id', 'shift_id');
+        return $this->belongsToMany(Shift::class, 'staff_shift', 'staff_id', 'shift_id');
     }
     public function locations(){
         return $this->belongsToMany(Location::class,'location_user', 'user_id', 'location_id');
@@ -243,4 +243,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Occupation::class, 'occupation_user', 'user_id', 'occupation_id');
     }
 
+    public function companyShifts()
+    {
+        return $this->hasMany(Shift::class, 'sub_admin_id', 'id');
+    }
 }
