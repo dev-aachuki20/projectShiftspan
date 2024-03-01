@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\OccupationController;
 use App\Http\Controllers\Backend\SettingController;
 use App\Http\Controllers\Backend\ShiftController;
@@ -79,6 +80,7 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::resource('/staffs',StaffController::class);
         Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
         Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
+        Route::post('/notifications-store', [StaffController::class, 'notificationStore'])->name('staffs.notificationStore');
         
         Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
         Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');

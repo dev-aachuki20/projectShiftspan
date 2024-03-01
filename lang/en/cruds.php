@@ -197,6 +197,20 @@ return [
         ]
     ],
 
+    'notification' => [
+        'title' => 'Notifications',
+        'title_singular' => 'Notification',
+        'fields' => [
+            'id'                            => 'ID',
+            'notification_settings'         => 'Notification Settings',
+            'staff'                         => 'Staff',
+            'all_staff'                     => 'ALL STAFF',
+            'section'                       => 'Section',
+            'subject'                       => 'Subject',
+            'message'                       => 'Message',
+        ]
+    ],
+
     'shift' => [
         'title' => 'Shifts',
         'title_singular' => 'Shift',

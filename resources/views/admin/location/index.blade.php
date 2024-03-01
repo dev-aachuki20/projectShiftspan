@@ -75,6 +75,7 @@
         // Add Location Modal
         $(document).on('click', '#addLocationBtn', function(e){
             e.preventDefault();
+            $('.loader-div').show();
             // $('#pageloader').css('display', 'block');
             $.ajax({
                 type: 'get',
@@ -85,6 +86,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#addLocationModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -98,6 +100,8 @@
         // Submit Add Location Form
         $(document).on('submit', '#addLocationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -138,12 +142,15 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
 
         $(document).on('submit', '#addNewLocationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -184,6 +191,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
@@ -191,8 +199,10 @@
 
     @can('location_edit')
         // Edit Location Modal
-        $(document).on("click",".editLocationBtn", function() {
-            // $('#pageloader').css('display', 'flex');
+        $(document).on("click",".editLocationBtn", function (e) {
+            e.preventDefault();
+            $('.loader-div').show();
+
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
@@ -200,10 +210,10 @@
                 dataType: 'json',
                 //data: formData,
                 success: function (response) {
-                    // $('#pageloader').css('display', 'none');
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#editLocationModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -217,6 +227,8 @@
         // Submit Edit Location Form
         $(document).on('submit', '#editLocationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
             var formData = new FormData(this);
@@ -255,6 +267,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });
         });
@@ -274,6 +287,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {  
+                    $('.loader-div').show();
                     $.ajax({
                         type: 'DELETE',
                         url: url,
@@ -283,9 +297,11 @@
                             if(response.success) {
                                 $('#location-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
+                                $('.loader-div').hide();
                             }
                         },
                         error: function(res){
@@ -318,6 +334,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {
+                    $('.loader-div').show();
                     $.ajax({
                         url: "{{route('locations.massDestroy')}}",
                         type: "POST",
@@ -330,9 +347,11 @@
                             if(response.success) {
                                 $('#location-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
+                                $('.loader-div').hide();
                             }
                         },
                         error: function(res){

@@ -41,6 +41,7 @@
         // Add Client Details Modal
         $(document).on('click', '#addSubAdminDetailBtn', function(e){
             e.preventDefault();
+            $('.loader-div').show();
             $.ajax({
                 type: 'get',
                 url: "{{ route('client-details.create') }}",
@@ -49,6 +50,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#addSubAdminDetailModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -62,6 +64,8 @@
         // Submit Add Client Details Form
         $(document).on('submit', '#addSubAdminDetailForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+            
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -103,6 +107,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
@@ -110,7 +115,9 @@
 
     @can('sub_admin_detail_edit')
         // Edit Client Detail Modal
-        $(document).on("click",".editSubAdminDetailBtn", function() {
+        $(document).on("click",".editSubAdminDetailBtn", function(e) {
+            e.preventDefault();
+            $('.loader-div').show();
             // $('#pageloader').css('display', 'flex');
             $('#viewSubAdminDetailModal').modal('hide');
             var url = $(this).data('href');
@@ -125,6 +132,7 @@
                         $('.popup_render_div').html(response.htmlView);
                         
                         $('#editSubAdminDetailModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -138,12 +146,14 @@
         // Submit Edit Client Detail Form
         $(document).on('submit', '#editSubAdminDetailForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
             var formData = new FormData(this);
 
             var url = $(this).data('action');
-
+            
             $.ajax({
                 type: 'post',
                 url: url,
@@ -176,6 +186,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });
         });
@@ -183,6 +194,8 @@
     
     @can('sub_admin_detail_view')
         $(document).on("click",".viewSubAdminDetailBtn", function() {
+            $('.loader-div').show();
+
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
@@ -192,6 +205,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#viewSubAdminDetailModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -217,6 +231,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {  
+                    $('.loader-div').show();
                     $.ajax({
                         type: 'DELETE',
                         url: url,
@@ -226,9 +241,11 @@
                             if(response.success) {
                                 $('#client-detail-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
+                                $('.loader-div').hide();
                             }
                         },
                         error: function(res){
@@ -261,6 +278,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {
+                    $('.loader-div').show();
                     $.ajax({
                         url: "{{route('client-details.massDestroy')}}",
                         type: "POST",
@@ -273,9 +291,11 @@
                             if(response.success) {
                                 $('#client-detail-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
+                                $('.loader-div').hide();
                             }
                         },
                         error: function(res){

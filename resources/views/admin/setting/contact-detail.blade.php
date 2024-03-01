@@ -33,6 +33,8 @@
 <script>
     $(document).on('submit', '#profile-form', function(e){
         e.preventDefault();
+        $('.loader-div').show();
+
         $(".submitBtn").attr('disabled', true);
 
         $('.validation-error-block').remove();
@@ -65,6 +67,7 @@
             },
             complete: function(res){
                 $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
             }
         });
     });

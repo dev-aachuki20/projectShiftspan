@@ -73,7 +73,8 @@
     @can('occupation_create')
         $(document).on('click', '#addOccupationBtn', function(e){
             e.preventDefault();
-            // $('#pageloader').css('display', 'block');
+            $('.loader-div').show();
+
             $.ajax({
                 type: 'get',
                 url: "{{ route('occupations.create') }}",
@@ -83,6 +84,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#addOccupationModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -96,6 +98,8 @@
         // Submit Add Occupation Form
         $(document).on('submit', '#addOccupationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -129,12 +133,15 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
 
         $(document).on('submit', '#addNewOccupationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -175,6 +182,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
@@ -182,8 +190,9 @@
 
     @can('occupation_edit')
         /* Edit Occupation Modal */
-        $(document).on("click",".editOccupationBtn", function() {
-            // $('#pageloader').css('display', 'flex');
+        $(document).on("click",".editOccupationBtn", function (e) {
+            e.preventDefault();
+            $('.loader-div').show();
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
@@ -195,6 +204,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#editOccupationModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -208,6 +218,7 @@
         // Submit Edit Occupation Form
         $(document).on('submit', '#editOccupationForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
             var formData = new FormData(this);
@@ -243,6 +254,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });
         });
@@ -261,6 +273,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {  
+                    $('.loader-div').show();
                     $.ajax({
                         type: 'DELETE',
                         url: url,
@@ -268,11 +281,13 @@
                         data: { _token: "{{ csrf_token() }}" },
                         success: function (response) {
                             if(response.success) {
-                                toasterAlert('success',response.message);
                                 $('#occupation-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.message);
+                                $('.loader-div').hide();
                             }
                         },
                         error: function(res){
@@ -304,8 +319,8 @@
                 denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
             })
             .then(function(result) {
-                if (result.isConfirmed) {       
-                    console.log(selectedIds);   
+                if (result.isConfirmed) {      
+                    $('.loader-div').show(); 
                     $.ajax({
                         url: "{{route('occupations.massDestroy')}}",
                         type: "POST",
@@ -316,12 +331,13 @@
                         dataType: 'json',
                         success: function (response) {
                             if(response.success) {
-                                toasterAlert('success',response.message);
                                 $('#occupation-table').DataTable().ajax.reload(null, false);
+                                toasterAlert('success',response.message);
                             }
                             else {
                                 toasterAlert('error',response.message);
                             }
+                            $('.loader-div').hide();
                         },
                         error: function(res){
                             toasterAlert('error',res.responseJSON.error);

@@ -32,13 +32,16 @@ $(document).ready(function($){
         var $checkboxes = $('.options input[type="checkbox"]');
         var allChecked = $checkboxes.filter(':checked').length === $checkboxes.length;
         $checkboxes.prop('checked', !allChecked);
+        
         updateSelectedOptions();
+        // $('.right-sidebox-small.modal-dropdown').close();
+        $('.select-options,.options').slideUp();
 
     });
     function updateSelectedOptions() {
         var selected = [];
         $('.options input[type="checkbox"]:checked').each(function() {
-        selected.push($(this).val());
+        selected.push($(this).closest(".select-option").find('span').text());
     });
         $('.selected-options').text(selected.length > 0 ? selected.join(', ') : 'Select...');
     }

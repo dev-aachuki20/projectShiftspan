@@ -17,9 +17,9 @@
             @can('staff_delete')
                 <button class="del_btn dash-btn red-bg w-115 me-md-1" id="deleteAllStaff">@lang('global.delete')</button>
             @endcan
-            @can('staff_access')
+            {{-- @can('notification_access') --}}
                 <button class="dash-btn blue-bg w-115 ms-sm-2 mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#NnotificationSettings">Send Notification</button>
-            @endcan
+            {{-- @endcan --}}
         </div>
         <div class="c-admin position-relative">
             <div class="table-responsive">
@@ -27,6 +27,9 @@
             </div>
         </div>
     </div>
+
+    {{-- Notification model --}}
+    @include('admin.staff.notification.create')
 @endsection
 
 @section('customJS')
@@ -54,16 +57,32 @@
                 changeMonth: true,
                 changeYear: true,
                 yearRange: "-100:+0",
-                showButtonPanel: true,
+                // showButtonPanel: true,
             });
         });
     });
+
+    $(document).ready(function(){
+        $('#searchInput').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.custom-check li').each(function() {
+                var text = $(this).text().toLowerCase();
+                if (text.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    });
+
     
     @can('staff_create')
         // Add Staff Modal
         $(document).on('click', '#addStaffBtn', function(e){
             e.preventDefault();
             // $('#pageloader').css('display', 'block');
+            $('.loader-div').show();
             $.ajax({
                 type: 'get',
                 url: "{{ route('staffs.create') }}",
@@ -73,6 +92,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#addStaffModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -86,6 +106,8 @@
         // Submit Add Staff Form
         $(document).on('submit', '#addStaffForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -112,15 +134,7 @@
                     } else {                    
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
-                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                           /*  if (key.indexOf('sub_admin') !== -1) {
-                                $(".sub_admin_error").html(errorLabelTitle);
-                            } else if (key.indexOf('staff_name') !== -1) {
-                                $(".staff_name_error").html(errorLabelTitle);
-                            }
-                            else{
-                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            }  */   
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>'; 
                             if (key.indexOf('sub_admin') !== -1) {
                                 $(".sub_admin_error").html(errorLabelTitle);
                             } else{
@@ -131,12 +145,15 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });                    
         });
 
         $(document).on('submit', '#addNewStaffForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
@@ -161,6 +178,7 @@
                         $('.popup_render_div').html('');
 
                         toasterAlert('success',response.message);
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -186,6 +204,9 @@
         // Edit Staff Modal
         $(document).on("click",".editStaffBtn", function() {
             $('#staffDetails').modal('hide');
+
+            $('.loader-div').show();
+            
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
@@ -195,6 +216,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#editStaffModal').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -208,6 +230,8 @@
         // Submit Edit Staff Form
         $(document).on('submit', '#editStaffForm', function (e) {
             e.preventDefault();
+            $('.loader-div').show();
+
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
             var formData = new FormData(this);
@@ -251,6 +275,7 @@
                 },
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
+                    $('.loader-div').hide();
                 }
             });
         });
@@ -270,6 +295,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {  
+                    $('.loader-div').show();
                     $.ajax({
                         type: 'DELETE',
                         url: url,
@@ -279,6 +305,7 @@
                             if(response.success) {
                                 $('#staff-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
@@ -314,6 +341,7 @@
             })
             .then(function(result) {
                 if (result.isConfirmed) {
+                    $('.loader-div').show();
                     $.ajax({
                         url: "{{route('staffs.massDestroy')}}",
                         type: "POST",
@@ -326,6 +354,7 @@
                             if(response.success) {
                                 $('#staff-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
+                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
@@ -342,6 +371,8 @@
 
     @can('staff_view')
         $(document).on("click",".viewStaffBtn", function() {
+            $('.loader-div').show();
+
             var url = $(this).data('href');
             $.ajax({
                 type: 'get',
@@ -351,6 +382,7 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#staffDetails').modal('show');
+                        $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
@@ -387,6 +419,7 @@
         })
         .then(function(result) {
             if (result.isConfirmed) {  
+                $('.loader-div').show();
                 $.ajax({
                     type: 'post',
                     url: "{{route('staffs.update.status')}}",
@@ -399,6 +432,8 @@
 
                             $('#staff-table').DataTable().ajax.reload(null, false);
                             toasterAlert('success',response.message);
+
+                            $('.loader-div').hide();
                         }
                         else {
                             t.val(old_val)
@@ -412,6 +447,77 @@
             }
         });
     });
+
+    /* $(document).ready(function(){
+        var checkboxes = $('.checkboxes');
+        checkboxes.change(function(){
+            if($('.checkboxes:checked').length > 0) {
+                checkboxes.removeAttr('required');
+            } else {
+                checkboxes.attr('required', 'required');
+            }
+        });
+    }); */
+
+
+    $(document).on('submit', '#addNotificationForm', function (e) {
+        e.preventDefault();
+        $('.validation-error-block').remove();
+        $(".submitBtn").attr('disabled', true);
+
+        var formData = new FormData(this);
+
+        $.ajax({
+            type: 'post',
+            url: "{{route('staffs.notificationStore')}}",
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: formData,
+            success: function (response) {                
+                if(response.success) {
+                    console.log(response.message);
+                    $('#addNotificationForm')[0].reset();
+                    $('#NnotificationSettings').modal('hide');
+                    
+                    var selected = [];
+                    selected.push($(this).closest(".select-option").find('span').text());
+                    $('.selected-options').text(selected.length > 0 ? 'Select...' : 'Select...');
+
+                    $('.popup_render_div').html('');
+                    toasterAlert('success',response.message);
+                }
+            },
+            error: function (response) {
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                } else {                    
+                    var errorLabelTitle = '';
+                    $.each(response.responseJSON.errors, function (key, item) {
+                        errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>'; 
+                        if (key.indexOf('staffs') !== -1) {
+                            $(".staffs_error").html(errorLabelTitle);
+                        } else if(key== 'section') {
+                            $(".section_error").html(errorLabelTitle);
+                        } else{
+                            $(document).find('[name='+key+']').after(errorLabelTitle);
+                        }
+                    });
+                }
+            },
+            complete: function(res){
+                $(".submitBtn").attr('disabled', false);
+            }
+        });                    
+    });
+
+    /* $('.submitBtn').click(function() {
+        $('#addNotificationForm')[0].reset();
+        var qualificationErrorSpan = document.getElementById('qualificationError');
+        if (qualificationErrorSpan) {
+            qualificationErrorSpan.style.display = 'none';
+        }
+    }); */
 </script>
 
 @endsection

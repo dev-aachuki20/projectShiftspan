@@ -22,6 +22,7 @@ $(document).ready(function(){
 
     $(document).on('submit', '#settingform', function(e){
         e.preventDefault();
+        $('.loader-div').show();
         $(".submitBtn").attr('disabled', true);
 
         $('.validation-error-block').remove();
@@ -60,6 +61,7 @@ $(document).ready(function(){
             },
             complete: function(res){
                 $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
             }
         });
     });

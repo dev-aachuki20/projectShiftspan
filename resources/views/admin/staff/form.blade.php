@@ -47,7 +47,7 @@
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.dob'):</label>
-        <input type="text" name="dob" id="birthday" class="datepicker" value="{{ (isset($staff) && !empty($staff->profile)) ? dateFormat($staff->profile->dob, 'Y-m-d') : '' }}"/>
+        <input type="text" name="dob" id="birthday" class="datepicker" value="{{ (isset($staff) && !empty($staff->profile)) ? dateFormat($staff->profile->dob, 'Y-m-d') : '' }}" readonly/>
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.previous_name'):</label>
@@ -83,7 +83,7 @@
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.date_sign'):</label>
-        <input type="text" name="date_sign" id="date_sign" class="datepicker" value="{{ (isset($staff) && !empty($staff->profile)) ? dateFormat($staff->profile->date_sign, 'Y-m-d') : '' }}"/>
+        <input type="text" name="date_sign" id="date_sign" class="datepicker" value="{{ (isset($staff) && !empty($staff->profile)) ? dateFormat($staff->profile->date_sign, 'Y-m-d') : '' }}" readonly/>
     </div>
 
     <div class="form-label select-label">

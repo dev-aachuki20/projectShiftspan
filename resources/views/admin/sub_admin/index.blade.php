@@ -33,6 +33,7 @@
     // Add SubAdmin Modal
     $(document).on('click', '#addSubAdminBtn', function(e){
         e.preventDefault();
+        $('.loader-div').show();
         $.ajax({
             type: 'get',
             url: "{{ route('client-admins.create') }}",
@@ -41,6 +42,7 @@
                 if(response.success) {
                     $('.popup_render_div').html(response.htmlView);
                     $('#addSubAdminModal').modal('show');
+                    $('.loader-div').hide();
                 }
             },
             error: function (response) {
@@ -54,6 +56,8 @@
     // Submit Add SubAdmin Form
     $(document).on('submit', '#addSubAdminForm', function (e) {
         e.preventDefault();
+        $('.loader-div').show();
+
         $('.validation-error-block').remove();
         $(".submitBtn").attr('disabled', true);
 
@@ -92,6 +96,7 @@
             },
             complete: function(res){
                 $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
             }
         });                    
     });
@@ -99,7 +104,9 @@
 
 @can('sub_admin_edit')
     // Edit SubAdmin Modal
-    $(document).on("click",".editSubAdminBtn", function() {
+    $(document).on("click",".editSubAdminBtn", function (e) {
+        e.preventDefault();
+        $('.loader-div').show();
         // $('#pageloader').css('display', 'flex');
         var url = $(this).data('href');
         $.ajax({
@@ -112,6 +119,7 @@
                 if(response.success) {
                     $('.popup_render_div').html(response.htmlView);
                     $('#editSubAdminModal').modal('show');
+                    $('.loader-div').hide();
                 }
             },
             error: function (response) {
@@ -125,6 +133,8 @@
     // Submit Edit SubAdmin Form
     $(document).on('submit', '#editSubAdminForm', function (e) {
         e.preventDefault();
+        $('.loader-div').show();
+
         $('.validation-error-block').remove();
         $(".submitBtn").attr('disabled', true);
         var formData = new FormData(this);
@@ -163,6 +173,7 @@
             },
             complete: function(res){
                 $(".submitBtn").attr('disabled', false);
+                $('.loader-div').hide();
             }
         });
     });
@@ -182,6 +193,7 @@
         })
         .then(function(result) {
             if (result.isConfirmed) {  
+                $('.loader-div').show();
                 $.ajax({
                     type: 'DELETE',
                     url: url,
@@ -191,9 +203,11 @@
                         if(response.success) {
                             $('#client-admin-table').DataTable().ajax.reload(null, false);
                             toasterAlert('success',response.message);
+                            $('.loader-div').hide();
                         }
                         else {
                             toasterAlert('error',response.error);
+                            $('.loader-div').hide();
                         }
                     },
                     error: function(res){
@@ -226,6 +240,7 @@
         })
         .then(function(result) {
             if (result.isConfirmed) {
+                $('.loader-div').show();
                 $.ajax({
                     url: "{{route('client-admins.massDestroy')}}",
                     type: "POST",
@@ -238,9 +253,11 @@
                         if(response.success) {
                             $('#client-admin-table').DataTable().ajax.reload(null, false);
                             toasterAlert('success',response.message);
+                            $('.loader-div').hide();
                         }
                         else {
                             toasterAlert('error',response.error);
+                            $('.loader-div').hide();
                         }
                     },
                     error: function(res){

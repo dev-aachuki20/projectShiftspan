@@ -80,8 +80,9 @@ return [
     'timepicker_step' => 15,
     'timepicker_min_time' => '00:00',
     'timepicker_max_time' => '24:00',
-]
 
-
-
-?>
+    'notification_subject' => [
+        'help_chat'     => 'Help Chat', 
+        'announcements' => 'Announcements',
+    ],
+];

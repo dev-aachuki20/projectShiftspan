@@ -4,14 +4,17 @@ namespace App\Http\Controllers\Backend;
 
 use App\DataTables\StaffDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Staff\NotificationRequest;
 use App\Http\Requests\Staff\StaffRequest;
 use App\Models\User;
 use App\Models\Profile;
+use App\Notifications\SendNotification;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Notification;
 use Hash;
 
 class StaffController extends Controller
@@ -23,7 +26,8 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            return $dataTable->render('admin.staff.index');
+            $staffsNotifify = User::whereNotIN('id',[1,2,3])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            return $dataTable->render('admin.staff.index', compact('staffsNotifify'));
         } catch (\Exception $e) {
             return abort(500);
         }
@@ -183,7 +187,7 @@ class StaffController extends Controller
             if ($request->ajax()){
                 $user = User::where('uuid', $id)->first();
                 DB::beginTransaction();
-                $input = $request->all();
+                $input = $request->validated();
 
                 if(!(auth()->user()->is_super_admin)){
                     $input['company_id'] = auth()->user()->id;
@@ -342,5 +346,34 @@ class StaffController extends Controller
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
+    }
+
+    /* Notification Store */
+    public function notificationStore(NotificationRequest $request)
+    {
+        // abort_if(Gate::denies('notification_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        try {
+            $input = $request->validated();            
+            $input['notification_type'] = 'send_notification';
+
+            DB::beginTransaction();
+            $users = User::whereIn('uuid', $input['staffs'])->get();
+            Notification::send($users, new SendNotification($input));
+
+            DB::commit();
+            return response()->json([
+                'success'    => true,
+                'message'    => trans('messages.crud.add_record'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            return response()->json([
+                'success' => false, 
+                'error_type' => 'something_error', 
+                'error' => trans('messages.error_message')
+            ], 400 );
+        }
+        
     }
 }

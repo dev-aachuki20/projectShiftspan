@@ -42,7 +42,7 @@ class StaffRequest extends FormRequest
                 $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')]; */
 
                 $rules['title']                 = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:10', new NoMultipleSpacesRule];
-                $rules['name']                  = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
+                $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
                 $rules['email']                 = ['required', 'email', 'regex:/(.+)@(.+)\.(.+)/i', Rule::unique('users', 'email')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/', Rule::unique('users', 'phone')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')];
                 $rules['password']              = ['required', 'string', 'min:8', 'max:15', /* 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/' */];
