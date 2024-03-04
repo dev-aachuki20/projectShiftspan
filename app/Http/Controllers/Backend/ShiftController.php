@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\DataTables\ShiftDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shift\StoreRequest;
+use App\Http\Requests\Shift\UpdateRequest;
 use App\Models\ClientDetail;
 use App\Models\Location;
 use App\Models\Occupation;
@@ -139,7 +140,7 @@ class ShiftController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
         abort_if(Gate::denies('shift_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) 

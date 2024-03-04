@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests\SubAdminDetail;
+namespace App\Http\Requests\Shift;
 
 use App\Rules\NoMultipleSpacesRule;
 use App\Rules\UserHasRole;
@@ -36,7 +36,7 @@ class UpdateRequest extends FormRequest
         $rules['start_date'] = ['required', 'date', function ($attribute, $value, $fail) {
             $today = Carbon::today();
             if (Carbon::parse($value)->lt($today)) {
-                $fail('The ' . $attribute . ' must be greater than or equal to today.');
+                $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to today.');
             }
         }];
         $rules['end_date'] = ['required', 'date', 'after_or_equal:start_date'];
@@ -45,16 +45,12 @@ class UpdateRequest extends FormRequest
             $today = Carbon::today();
             $currentTime = Carbon::now()->format('H:i');
             if ($this->start_date === $today->format('d-m-Y') && $value < $currentTime) {
-                $fail('The ' . $attribute . ' must be greater than or equal to the current time.');
+                $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to the current time.');
             }
         }];
         $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time'), function ($attribute, $value, $fail) {
-            $startDate = Carbon::parse($this->start_date);
-            $endDate = Carbon::parse($this->end_date);
-
-            // If start date and end date are the same, check if end time is greater than start time
-            if ($startDate->equalTo($endDate) && $value < $this->start_time) {
-                $fail('The ' . $attribute . ' must be greater than the start time.');
+            if ($value < $this->start_time) {
+                $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than the start time.');
             }
         }];
         

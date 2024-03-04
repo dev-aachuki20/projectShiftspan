@@ -111,7 +111,7 @@
 			dateFormat: "{{config('constant.js_date_format.date')}}", 
 			minDate: 0,
 			firstDay: 1,
-            onSelect: function(date) {
+            /* onSelect: function(date) {
                 var parts = date.split('-'); 
                 var endDate = new Date(parts[2], parts[1] - 1, parts[0]); 
                 
@@ -130,7 +130,7 @@
                 } else {
                     $("#end_time").timepicker('option', 'minTime', null);
                 }
-            }
+            } */
 		});
 
         $( "#start_time" ).timepicker({ 
@@ -538,11 +538,14 @@
         var nextMinute = parseInt(minutes) + step;
 
         $('#end_time').val('');
-        if(startDate && endDate && startDate < endDate){
+
+        $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
+        
+        /* if(startDate && endDate && startDate < endDate){
             $("#end_time").timepicker('option', 'minTime', null);
         } else {
             $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
-        }
+        } */
     });
 
     function setOnEditTime(){
@@ -574,11 +577,11 @@
         var minutes = parts[1];
         var nextMinute = parseInt(minutes) + step;
 
-        if(startDate && endDate && startDate < endDate){
+        /* if(startDate && endDate && startDate < endDate){
             $("#end_time").timepicker('option', 'minTime', null);
         } else {
             $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
-        }
+        } */
     }
     
 </script>

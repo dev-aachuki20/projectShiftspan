@@ -33,7 +33,6 @@ class ShiftController extends APIController
                 $startDateTimes[] = [ 'date' => $date->format('Y-m-d'), 'start_time' => $assignShift->start_time, 'end_time' => $assignShift->end_time, 'start_date' => $assignShift->start_date, 'end_date' => $assignShift->end_date]; 
             }
         }
-        // dd($startDateTimes);
 
         $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
         ->select('id', 'sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
@@ -71,26 +70,26 @@ class ShiftController extends APIController
         ->get();
 
         $shiftsData = [];
-        $shiftsData['count'] = $companyShifts->count();
-        foreach($companyShifts as $key => $shift){
-            $shiftsData[] = [
-                'shift_id'          => $shift->id,
-                'sub_admin_name'    => $shift->client->name,
-                'company_name'      => $shift->clientDetail->name,
-                'occupation_name'   => $shift->occupation->name,
-                'start_date'        => $shift->start_date,
-                'end_date'          => $shift->end_date,
-                'start_time'        => $shift->start_time,
-                'end_time'          => $shift->end_time,
-                'build_image'       => $shift->clientDetail->building_image_url ? $shift->clientDetail->building_image_url : asset(config('constant.default.building-image')),
+        
+        $shiftsData = $companyShifts->map(function ($shift) {
+            return [
+                'shift_id' => $shift->id,
+                'sub_admin_name' => $shift->client->name,
+                'company_name' => $shift->clientDetail->name,
+                'occupation_name' => $shift->occupation->name,
+                'start_date' => $shift->start_date,
+                'end_date' => $shift->end_date,
+                'start_time' => $shift->start_time,
+                'end_time' => $shift->end_time,
+                'build_image' => $shift->clientDetail->building_image_url ? $shift->clientDetail->building_image_url : asset(config('constant.default.building-image')),
             ];
-        }
+        });
+        $shiftsData['count'] = $shiftsData->count();
 
         return $this->respondOk([
             'status'   => true,
             'message'   => trans('messages.record_retrieved_successfully'),
             'data'      => $shiftsData,
         ])->setStatusCode(Response::HTTP_OK);
-    }
-    
+    }    
 }
