@@ -198,7 +198,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     | Header        : Content-Type:application/json
     |               : Authorization : Token
     | Method        : GET    |
-    |
+    | 
+    | Parameters    : Query parater meter for filter: location, occupation
     */
     Route::get('available-shifts', [ShiftController::class,'availableShifts']);
 });
