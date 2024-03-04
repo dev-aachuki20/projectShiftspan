@@ -317,6 +317,48 @@ class PermissionsTableSeeder extends Seeder
                 'created_at' => $createDate,
                 'updated_at' => $updateDate,
             ],
+            [
+                'name'      => 'notification_create',
+                'title'      => 'Add',
+                'route_name'=> 'staffs.notificationStore',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'       => 'message_access',
+                'title'      => 'Message Access',
+                'route_name' => 'messages',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'       => 'message_create',
+                'title'      => 'Add',
+                'route_name' => 'messages',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'       => 'message_edit',
+                'title'      => 'Edit',
+                'route_name' => 'messages',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'       => 'message_view',
+                'title'      => 'View',
+                'route_name' => 'messages',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'       => 'message_delete',
+                'title'      => 'Delete',
+                'route_name' => 'messages',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
         ];
         Permission::insert($permissions);
     }

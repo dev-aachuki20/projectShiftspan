@@ -16,6 +16,16 @@ return [
         'processing'   => 'Processing...',
     ],
 
+    'dashboard' =>  [
+        'title'          => 'Dashboard',
+        'title_singular' => 'Dashboard',
+        'fields'         => [
+            'register_staff'        =>  'Registered Staff',
+            'total_shifts'          =>  'Total Shifts',
+            'business_location'     =>  'Business Locations',
+        ],
+    ],
+
     'userManagement' => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',
@@ -205,6 +215,23 @@ return [
             'notification_settings'         => 'Notification Settings',
             'staff'                         => 'Staff',
             'all_staff'                     => 'ALL STAFF',
+            'section'                       => 'Section',
+            'subject'                       => 'Subject',
+            'message'                       => 'Message',
+            'type'                          => 'Type',
+            'type_message'                  => 'Type Message',
+            'new_message'                   => 'New Message',
+        ]
+    ],
+
+    'message' => [
+        'title' => 'messages',
+        'title_singular' => 'Message',
+        'fields' => [
+            'id'                            => 'ID',
+            'message_center'                => 'Message Centre',
+            'new_message'                   => 'New Message',
+            'delete_message'                => 'Delete Message',
             'section'                       => 'Section',
             'subject'                       => 'Subject',
             'message'                       => 'Message',

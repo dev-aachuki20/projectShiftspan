@@ -34,7 +34,7 @@ class UserController extends Controller
     public function updateprofile(Request $request){        
         $user = auth()->user();
         $request->validate([
-            'name'  => ['required', new NoMultipleSpacesRule],
+            'name'  => ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule],
             'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
             'phone' => [
                 'nullable',

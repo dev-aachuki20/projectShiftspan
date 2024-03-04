@@ -1,8 +1,14 @@
 <div class="modal fade common-modal modal-size-l" id="NnotificationSettings" tabindex="-1" aria-labelledby="NnotificationSettingsLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-820">
         <div class="modal-content">
-            <div class="modal-header justify-content-center blue-bg">
-                <h5 class="modal-title text-center" id="NnotificationSettingsLabel">@lang('cruds.notification.fields.notification_settings')</h5>
+            <div class="modal-header justify-content-center {{ request()->is('admin/staffs*') ? 'blue-bg' : 'green-bg' }}">
+                <h5 class="modal-title text-center" id="NnotificationSettingsLabel">
+                    @if(request()->is('admin/staffs*'))
+                        @lang('cruds.notification.fields.notification_settings')
+                    @else
+                        @lang('cruds.notification.fields.new_message')
+                    @endif
+                </h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body inner-size-l">
@@ -33,7 +39,7 @@
                     </div>
                     <div class="form-label select-label">
                         <label for="notification_subject">@lang('cruds.notification.fields.section'):</label>
-                        <select class="select2" name="section" id="section">
+                        <select class="select2" name="section" id="section" required>
                             <option value="">@lang('global.select')  ...</option>
                             @foreach (config('constant.notification_subject') as $key=>$val)
                                 <option value="{{$key}}">{{ $val }}</option>
@@ -43,12 +49,19 @@
                     </div>
                     <div class="form-label">
                         <label class="text-end px-2">@lang('cruds.notification.fields.subject'): </label>
-                        <input type="text" name="subject" value="" placeholder="Type.......">
+                        <input type="text" name="subject" value="" placeholder="@lang('cruds.notification.fields.type')......." required>
                     </div>
-                    <div class="form-label with-textarea">
-                        <label>@lang('cruds.notification.fields.message'):</label>
-                        <textarea placeholder="Type......." name="message"></textarea>
-                    </div>
+                    
+                    @if(request()->is('admin/staffs*'))
+                        <div class="form-label with-textarea">
+                            <label>@lang('cruds.notification.fields.message'):</label>
+                            <textarea placeholder="@lang('cruds.notification.fields.type')......." name="message" required></textarea>
+                        </div>
+                    @else
+                        <div class="form-label bottom-textarea">
+                            <textarea placeholder="@lang('cruds.notification.fields.type_message').........." name="message" required></textarea>
+                        </div>
+                    @endif
                     <div class="form-label justify-content-center">
                         <input type="submit" value="@lang('global.send')" id="" class="cbtn submitBtn">
                     </div>

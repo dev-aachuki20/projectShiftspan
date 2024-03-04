@@ -26,7 +26,7 @@ class UpdateRequest extends FormRequest
     public function rules(): array
     {
         $rules = [];
-        $rules['name'] = ['required', 'string', 'max:255', new NoMultipleSpacesRule];
+        $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule];
         
         return $rules;
     }

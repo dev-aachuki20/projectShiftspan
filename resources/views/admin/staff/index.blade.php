@@ -17,9 +17,9 @@
             @can('staff_delete')
                 <button class="del_btn dash-btn red-bg w-115 me-md-1" id="deleteAllStaff">@lang('global.delete')</button>
             @endcan
-            {{-- @can('notification_access') --}}
+            @can('notification_create')
                 <button class="dash-btn blue-bg w-115 ms-sm-2 mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#NnotificationSettings">Send Notification</button>
-            {{-- @endcan --}}
+            @endcan
         </div>
         <div class="c-admin position-relative">
             <div class="table-responsive">
@@ -305,14 +305,15 @@
                             if(response.success) {
                                 $('#staff-table').DataTable().ajax.reload(null, false);
                                 toasterAlert('success',response.message);
-                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
                             }
+                            $('.loader-div').hide();
                         },
                         error: function(res){
                             toasterAlert('error',res.responseJSON.error);
+                            $('.loader-div').hide();
                         }
                     });
                 }
@@ -353,15 +354,19 @@
                         success: function (response) {
                             if(response.success) {
                                 $('#staff-table').DataTable().ajax.reload(null, false);
+                                setTimeout(() => {
+                                    $('#dt_cb_all').prop('checked', false);
+                                }, 500);
                                 toasterAlert('success',response.message);
-                                $('.loader-div').hide();
                             }
                             else {
                                 toasterAlert('error',response.error);
                             }
+                            $('.loader-div').hide();
                         },
                         error: function(res){
                             toasterAlert('error',res.responseJSON.error);
+                            $('.loader-div').hide();
                         }
                     })
                 }
@@ -448,18 +453,6 @@
         });
     });
 
-    /* $(document).ready(function(){
-        var checkboxes = $('.checkboxes');
-        checkboxes.change(function(){
-            if($('.checkboxes:checked').length > 0) {
-                checkboxes.removeAttr('required');
-            } else {
-                checkboxes.attr('required', 'required');
-            }
-        });
-    }); */
-
-
     $(document).on('submit', '#addNotificationForm', function (e) {
         e.preventDefault();
         $('.validation-error-block').remove();
@@ -511,13 +504,9 @@
         });                    
     });
 
-    /* $('.submitBtn').click(function() {
-        $('#addNotificationForm')[0].reset();
-        var qualificationErrorSpan = document.getElementById('qualificationError');
-        if (qualificationErrorSpan) {
-            qualificationErrorSpan.style.display = 'none';
-        }
-    }); */
+    $('.btn-close').click(function() {
+        $('.validation-error-block').remove();
+    });
 </script>
 
 @endsection

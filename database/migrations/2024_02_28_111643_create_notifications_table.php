@@ -23,14 +23,6 @@ return new class extends Migration
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamp('read_at')->nullable();
             
-            /* 
-            $table->uuid('id')->primary();
-            $table->string('type');
-            $table->morphs('notifiable');
-            $table->text('data');
-            $table->timestamp('read_at')->nullable();
-            $table->timestamps();
-            */
             $table->timestamps();
             $table->softDeletes();
             

@@ -16,10 +16,14 @@ class Notification extends Model
     protected $primarykey = "id";
 
     protected $fillable = [
+        'id',
         'type',
         'notifiable',
+        'data',
         'subject',
         'message',
+        'section',
+        'notification_type',
         'created_by',
         'read_at',        
     ];
@@ -29,7 +33,12 @@ class Notification extends Model
         'created_at',
     ];
 
-    protected static function boot ()
+    protected $casts = [
+        'data' => 'array',
+        'id' => 'string'
+    ];
+
+    /* protected static function boot ()
     {
         parent::boot();
         static::creating(function(Notification $model) {
@@ -37,10 +46,10 @@ class Notification extends Model
             $model->type = 'user';
             $model->created_by = auth()->user()->id;
         });
-    }
+    } */
 
-    public function notifiable()
+    /* public function notifiable()
     {
         return $this->morphTo();
-    }
+    } */
 }

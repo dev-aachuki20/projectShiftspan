@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Backend\DashboardController;
 use App\Http\Controllers\Backend\LocationController;
+use App\Http\Controllers\Backend\MessageController;
 use App\Http\Controllers\Backend\NotificationController;
 use App\Http\Controllers\Backend\OccupationController;
 use App\Http\Controllers\Backend\SettingController;
@@ -90,6 +91,9 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('/shifts/cancel/{id}', [ShiftController::class, 'CancelShift'])->name('shifts.cancel');
         Route::post('/shifts/rating/{id}', [ShiftController::class, 'RateShift'])->name('shifts.rating');
         Route::get('/shifts-get-sub-admin-details', [ShiftController::class, 'getSubAdminData'])->name('shifts.get-sub-admin-details');
+        
+        Route::resource('/messages',MessageController::class);
+        Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy');
     });
 });
 

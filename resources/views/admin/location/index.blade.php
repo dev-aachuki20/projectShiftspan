@@ -346,6 +346,9 @@
                         success: function (response) {
                             if(response.success) {
                                 $('#location-table').DataTable().ajax.reload(null, false);
+                                setTimeout(() => {
+                                    $('#dt_cb_all').prop('checked', false);
+                                }, 500);
                                 toasterAlert('success',response.message);
                                 $('.loader-div').hide();
                             }
@@ -356,6 +359,7 @@
                         },
                         error: function(res){
                             toasterAlert('error',res.responseJSON.error);
+                            $('.loader-div').hide();
                         }
                     })
                 }

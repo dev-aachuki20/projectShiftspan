@@ -30,7 +30,7 @@ class StoreRequest extends FormRequest
             $rules['sub_admin_id'] = ['required', 'exists:users,uuid,deleted_at,NULL'];
         }
 
-        $rules['name'] = ['required', new NoMultipleSpacesRule, 'max:255', 'unique:client_details,name,NULL,id,deleted_at,NULL'];
+        $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', 'max:255', 'unique:client_details,name,NULL,id,deleted_at,NULL', new NoMultipleSpacesRule];
 
         $rules['address'] = ['required', new NoMultipleSpacesRule];
 

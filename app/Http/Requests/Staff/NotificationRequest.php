@@ -25,13 +25,19 @@ class NotificationRequest extends FormRequest
     public function rules(): array
     {
         $rules = [];
-        $staffs = $this->input('staffs');
-        
-        $rules['staffs']    = ['required', 'array'];
-        $rules['staffs.*']  = ['exists:users,uuid'];
-        $rules['section']   = ['required'];
-        $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
-        $rules['message']   = ['required','string'];
+        /* $staffs = $this->input('staffs'); */
+        $ids = $this->input('ids');
+        if (!empty($ids)) {
+            /* For Delete Multiple Data */
+            $rules['ids'] = ['required', 'array'];
+            $rules['ids.*'] = ['exists:notifications,id'];
+        }else{
+            $rules['staffs']    = ['required', 'array'];
+            $rules['staffs.*']  = ['exists:users,uuid'];
+            $rules['section']   = ['required'];
+            $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
+            $rules['message']   = ['required','string'];
+        }
         
         return $rules;
     }
