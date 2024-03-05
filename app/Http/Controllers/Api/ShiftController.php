@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\Shift;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -20,7 +22,7 @@ class ShiftController extends APIController
 
             $currentDateTime = Carbon::now();
 
-            $staffAssignedShifts = $user->assignShifts()->where(function ($query) use ($currentDateTime) {
+            /* $staffAssignedShifts = $user->assignShifts()->where(function ($query) use ($currentDateTime) {
                 $query->whereDate('start_date', '>', $currentDateTime->toDateString())
                 ->orWhere(function ($query) use ($currentDateTime) {
                     $query->whereDate('start_date', '=', $currentDateTime->toDateString())
@@ -38,7 +40,7 @@ class ShiftController extends APIController
                 for ($date = $start; $date->lte($end); $date->addDay()) {
                     $startDateTimes[] = [ 'date' => $date->format('Y-m-d'), 'start_time' => $assignShift->start_time, 'end_time' => $assignShift->end_time, 'start_date' => $assignShift->start_date, 'end_date' => $assignShift->end_date]; 
                 }
-            }
+            } */
 
             $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
             ->select('id', 'sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
@@ -53,7 +55,7 @@ class ShiftController extends APIController
                 });
             })
 
-            ->where(function($query) use($startDateTimes, $request){
+            /* ->where(function($query) use($startDateTimes, $request){
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
                     $query->whereHas('location', function($q) use($locationId){
@@ -82,27 +84,26 @@ class ShiftController extends APIController
                         ->orWhere('end_date', '>', $dateData['end_date']);
                     });
                 }
-            })        
+            }) */        
             ->orderBy('start_date', 'asc')
             ->orderBy('start_time', 'asc')            
             ->get();
 
             $shiftsData = [];
-            
-            $shiftsData = $companyShifts->map(function ($shift) {
-                return [
-                    'shift_id' => $shift->id,
-                    'sub_admin_name' => $shift->client->name,
-                    'company_name' => $shift->clientDetail->name,
-                    'occupation_name' => $shift->occupation->name,
-                    'start_date' => $shift->start_date,
-                    'end_date' => $shift->end_date,
-                    'start_time' => $shift->start_time,
-                    'end_time' => $shift->end_time,
-                    'build_image' => $shift->clientDetail->building_image_url ? $shift->clientDetail->building_image_url : asset(config('constant.default.building-image')),
+            // $shiftsData['count'] = $companyShifts->count();
+            foreach($companyShifts as $key => $shift){
+                $shiftsData[] = [
+                    'shift_id'          => $shift->id,
+                    'sub_admin_name'    => $shift->client->name,
+                    'company_name'      => $shift->clientDetail->name,
+                    'occupation_name'   => $shift->occupation->name,
+                    'start_date'        => $shift->start_date,
+                    'end_date'          => $shift->end_date,
+                    'start_time'        => $shift->start_time,
+                    'end_time'          => $shift->end_time,
+                    'build_image'       => $shift->clientDetail->building_image_url ? $shift->clientDetail->building_image_url : asset(config('constant.default.building-image')),
                 ];
-            });
-            $shiftsData['count'] = $shiftsData->count();
+            }
 
             return $this->respondOk([
                 'status'   => true,
@@ -113,5 +114,168 @@ class ShiftController extends APIController
         catch(\Exception $e){
             return $this->throwValidation([trans('messages.error_message')]);
         }
-    }    
+    }
+
+    public function completedShifts(){
+        try{
+            $user = auth()->user();
+
+            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail'])
+            ->select('id', 'sub_admin_id', 'client_detail_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('complete')
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+            $shiftsData = [];
+            $totalWorkingHour = 0;
+            $shiftsData['count'] = $completedShifts->count();
+            foreach($completedShifts as $shift){
+                $startDate = Carbon::parse($shift->start_date);
+                $endDate = Carbon::parse($shift->end_date);
+                $startTime = Carbon::parse($shift->start_time);
+                $endTime = Carbon::parse($shift->end_time);
+
+                $daysDiff = $endDate->diffInDays($startDate) + 1;
+
+                $workingHoursPerDay = $startTime->diffInHours($endTime);
+                $totalWorkingHour += $workingHoursPerDay * $daysDiff;
+                
+                $shiftsData['records'][] = [
+                    'shift_id'          => $shift->id,
+                    'sub_admin_name'    => $shift->client->name,
+                    'company_name'      => $shift->clientDetail->name,
+                    'start_date'        => $shift->start_date,
+                    'end_date'          => $shift->end_date,
+                    'start_time'        => $shift->start_time,
+                    'end_time'          => $shift->end_time,
+                ];
+            }
+            $shiftsData['total_hours'] = $totalWorkingHour;
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.record_retrieved_successfully'),
+                'data'      => $shiftsData,
+            ])->setStatusCode(Response::HTTP_OK);
+        } 
+        catch(\Exception $e){
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
+    
+    public function upcomingShifts(){
+        try{
+            $currentDateTime = Carbon::now();
+            
+            $user = auth()->user();
+
+            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail'])
+            ->select('id', 'sub_admin_id', 'client_detail_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
+            ->where(function ($query) use ($currentDateTime) {
+                $query->whereDate('start_date', '>', $currentDateTime->toDateString())
+                ->orWhere(function ($query) use ($currentDateTime) {
+                    $query->whereDate('start_date', '=', $currentDateTime->toDateString())
+                        ->whereTime('start_time', '>', $currentDateTime->toTimeString());
+                });
+            })
+            ->orderBy('start_date', 'desc')
+            ->get();
+
+            $shiftsData = [];
+            $totalWorkingHour = 0;
+            $shiftsData['count'] = $completedShifts->count();
+            foreach($completedShifts as $shift){
+                $startDate = Carbon::parse($shift->start_date);
+                $endDate = Carbon::parse($shift->end_date);
+                $startTime = Carbon::parse($shift->start_time);
+                $endTime = Carbon::parse($shift->end_time);
+
+                $daysDiff = $endDate->diffInDays($startDate) + 1;
+
+                $workingHoursPerDay = $startTime->diffInHours($endTime);
+                $totalWorkingHour += $workingHoursPerDay * $daysDiff;
+                
+                $shiftsData['records'][] = [
+                    'shift_id'          => $shift->id,
+                    'sub_admin_name'    => $shift->client->name,
+                    'company_name'      => $shift->clientDetail->name,
+                    'start_date'        => $shift->start_date,
+                    'end_date'          => $shift->end_date,
+                    'start_time'        => $shift->start_time,
+                    'end_time'          => $shift->end_time,
+                ];
+            }
+            $shiftsData['total_hours'] = $totalWorkingHour;
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.record_retrieved_successfully'),
+                'data'      => $shiftsData,
+            ])->setStatusCode(Response::HTTP_OK);
+        } 
+        catch(\Exception $e){
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
+
+    public function pickShift(Request $request){
+        $user = auth()->user();
+        $currentDateTime = Carbon::now();
+        $request->validate([
+            'id' => ['required', 'exists:shifts,id,deleted_at,NULL', function ($attribute, $value, $fail) use($user, $currentDateTime) {
+                $selectedShift = Shift::find($value);
+                if($selectedShift->status != 'open'){
+                    $fail('The shift already picked');
+                }
+
+                /* $isShiftWithinAssignedShifts = $user->assignShifts()
+                ->where(function ($query) use ($selectedShift) {
+                    $query->where(function ($subquery) use ($selectedShift) {
+                        $subquery->where('start_date', '<=', $selectedShift->start_date)
+                            ->where('end_date', '>=', $selectedShift->start_date)
+                            ->where(function ($q) use ($selectedShift) {
+                                $q->where('end_time', '>=', $selectedShift->start_time)
+                                    ->orWhere('start_time', '<=', $selectedShift->start_time);
+                            });
+                    })
+                    ->orWhere(function ($subquery) use ($selectedShift) {
+                        $subquery->where('start_date', '<=', $selectedShift->end_date)
+                            ->where('end_date', '>=', $selectedShift->end_date)
+                            ->where(function ($q) use ($selectedShift) {
+                                $q->where('end_time', '>=', $selectedShift->end_time)
+                                    ->orWhere('start_time', '<=', $selectedShift->end_time);
+                            });
+                    });
+                })
+                ->exists();
+
+                if($isShiftWithinAssignedShifts){
+                    $fail("The shift's time slot overlaps with your assigned shifts.");
+                } */
+            }]
+        ]);
+
+        DB::beginTransaction();
+        try {
+            
+
+            $shift = Shift::find($request->id);
+
+            $shift->update([
+                'picked_at' => date('Y-m-d H:i:s'),
+                'status' => 'picked',
+            ]);
+            $shift->staffs()->sync([$user->id => ['created_at' => date('Y-m-d H:i:s')]]);
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.shift_picked_success')
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
 }

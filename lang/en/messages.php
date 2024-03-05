@@ -54,7 +54,7 @@ return [
     'password_updated_successfully' => 'Password updated successfully',
 
     'profile_updated_successfully'   => 'Profile updated successfully',
-
+    'shift_picked_success'           => 'Shift picked successfully',
 ];
 
 ?>

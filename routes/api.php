@@ -197,9 +197,50 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     | Route         : http://localhost:8000/api/available-shifts
     | Header        : Content-Type:application/json
     |               : Authorization : Token
-    | Method        : GET    |
+    | Method        : GET
     | 
     | Parameters    : Query parater meter for filter: location, occupation
     */
     Route::get('available-shifts', [ShiftController::class,'availableShifts']);
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Completed Shifts API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/completed-shifts
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET
+    | 
+    */
+    Route::get('completed-shifts', [ShiftController::class,'completedShifts']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Upcoming Shifts API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/upcoming-shifts
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET
+    | 
+    */
+    Route::get('upcoming-shifts', [ShiftController::class,'upcomingShifts']);
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Pick Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/pick-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id
+    */
+    Route::post('pick-shift', [ShiftController::class,'pickShift']);
 });
