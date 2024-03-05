@@ -174,7 +174,6 @@ return [
     'name'                                  => 'Name',
     'new_calendar_source'                   => 'Create new calendar source',
     'new_message'                           => 'New message',
-    'new_password'                          => 'New Password',
     'no_calendar_sources'                   => 'No calendar sources yet.',
     'no_entries_in_table'                   => 'No entries in table',
     'no_reports_yet'                        => 'No reports yet.',
@@ -283,5 +282,6 @@ return [
     'old_password'                          => 'Old Password',
     'new_password'                          => 'New Password',
     'upload'                                => 'Upload',
-    'want_to_cancel_shift'                  => 'Do you want to cancel this shift ?'
+    'want_to_cancel_shift'                  => 'Do you want to cancel this shift ?',
+    'welcome_to'                            => 'Welcome to',
 ];
