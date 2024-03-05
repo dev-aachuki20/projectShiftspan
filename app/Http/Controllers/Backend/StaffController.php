@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Notification;
 use Hash;
+use Auth;
 
 class StaffController extends Controller
 {
@@ -26,7 +27,14 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            $staffsNotifify = User::whereNotIN('id',[1,2,3])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            $user = Auth::user();
+            $staffsNotifify = '';
+            if($user->roles->first()->name == 'Super Admin'){
+                $staffsNotifify = User::whereNotIN('id',[1])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            }else{
+                $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            }
+            
             return $dataTable->render('admin.staff.index', compact('staffsNotifify'));
         } catch (\Exception $e) {
             return abort(500);

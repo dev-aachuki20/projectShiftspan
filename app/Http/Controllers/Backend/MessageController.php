@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendNotification;
 use App\Models\Notification as Notifications;
 use Illuminate\Support\Facades\Validator;
-
+use Auth;
 class MessageController extends Controller
 {
     /**
@@ -24,7 +24,13 @@ class MessageController extends Controller
     {  
         abort_if(Gate::denies('message_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            $staffsNotifify = User::whereNotIN('id',[1,2,3])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            $user = Auth::user();
+            $staffsNotifify = '';
+            if($user->roles->first()->name == 'Super Admin'){
+                $staffsNotifify = User::whereNotIN('id',[1])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            }else{
+                $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+            }
             return $dataTable->render('admin.message.index', compact('staffsNotifify'));
         } catch (\Exception $e) {
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
