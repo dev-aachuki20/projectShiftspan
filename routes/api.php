@@ -286,4 +286,19 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     | Parameters    : id, latitude, longitude
     */
     Route::post('cancel-shift', [ShiftController::class,'cancelShift']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Authorized Sign Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/authrized-sign-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id, full_name, signature
+    */
+    Route::post('authrized-sign-shift', [ShiftController::class,'authorizedSign']);
 });

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\AuthorizedShift;
 use App\Models\Shift;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\ClockInOut;
+use App\Rules\NoMultipleSpacesRule;
 
 class ShiftController extends APIController
 {
@@ -373,4 +375,38 @@ class ShiftController extends APIController
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
+
+    public function authorizedSign(Request $request){
+        $user = auth()->user();
+        $request->validate([
+            'id'        => ['required', 'exists:shifts,id,deleted_at,NULL'],
+            'full_name'  => ['required', 'string', new NoMultipleSpacesRule],
+            'signature' => ['required'],
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $authSign = AuthorizedShift::create([
+                'user_id'           => $user->id,
+                'shift_id'          => $request->id,
+                'manager_name'      => $request->full_name,
+                'authorize_at'      => date('Y-m-d H:i:s')
+            ]);
+
+            if($authSign && $request->has('signature')){
+                uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
+            }
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.clock_in_success')
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }   
 }

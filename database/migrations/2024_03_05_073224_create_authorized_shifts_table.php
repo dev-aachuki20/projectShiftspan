@@ -11,19 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('clock_in_out', function (Blueprint $table) {
+        Schema::create('authorized_shifts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id')->nullable();    // staff_id
             $table->unsignedBigInteger('shift_id')->nullable();
-            $table->datetime('clockin_date')->nullable();
-            $table->datetime('clockout_date')->nullable();
-            $table->string('clockin_latitude')->nullable();
-            $table->string('clockin_longitude')->nullable();
-            $table->string('clockin_address')->nullable();
-            $table->string('clockout_latitude')->nullable();
-            $table->string('clockout_longitude')->nullable();
-            $table->string('clockout_address')->nullable();
-            $table->tinyInteger('is_active')->default(0)->comment('1=> active, 0=>deactive');
+
+            $table->string('manager_name')->nullable();
+            $table->datetime('authorize_at')->nullable();
+            
             $table->timestamps();
             $table->softDeletes();
             $table->foreign('user_id')->references('id')->on('users');
@@ -36,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('clock_in_out');
+        Schema::dropIfExists('authorized_shifts');
     }
 };
