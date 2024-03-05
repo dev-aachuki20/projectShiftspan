@@ -342,7 +342,7 @@ class ShiftController extends Controller
                 DB::commit();
                 $response = [
                     'success'    => true,
-                    'message'    => trans('messages.crud.status_update'),
+                    'message'    => trans('messages.shift_cancelled'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
@@ -367,7 +367,7 @@ class ShiftController extends Controller
                 DB::commit();
                 $response = [
                     'success'    => true,
-                    'message'    => trans('messages.crud.status_update'),
+                    'message'    => trans('messages.rating_shift'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {

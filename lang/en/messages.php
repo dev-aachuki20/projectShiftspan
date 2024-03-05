@@ -53,8 +53,12 @@ return [
     'record_deleted_successfully'   => 'Record deleted successfully',
     'password_updated_successfully' => 'Password updated successfully',
 
-    'profile_updated_successfully'   => 'Profile updated successfully',
-    'shift_picked_success'           => 'Shift picked successfully',
+    'rating_shift'                  => 'Shift rated successfully',
+    'profile_updated_successfully'  => 'Profile updated successfully',
+    'shift_picked_success'          => 'Shift picked successfully',
+    'clock_in_success'              => 'Clocked in successfully',
+    'clock_out_success'             => 'Clocked out successfully',
+    'shift_cancelled'               => 'Shift cancelled successfully',
 ];
 
 ?>

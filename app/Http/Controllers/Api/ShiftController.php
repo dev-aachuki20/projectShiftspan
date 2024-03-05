@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use App\Models\ClockInOut;
 
 class ShiftController extends APIController
 {
@@ -55,7 +56,7 @@ class ShiftController extends APIController
                 });
             })
 
-            /* ->where(function($query) use($startDateTimes, $request){
+            ->where(function($query) use($request){
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
                     $query->whereHas('location', function($q) use($locationId){
@@ -68,7 +69,7 @@ class ShiftController extends APIController
                         $q->where('id', $occupationId);
                     });
                 }
-                foreach($startDateTimes as $dateData){
+                /* foreach($startDateTimes as $dateData){
                     $query->where(function($subquery) use($dateData){
 
                         $subquery->whereDate('start_date', '<=', $dateData['date'])                    
@@ -83,8 +84,8 @@ class ShiftController extends APIController
                         $q->where('start_date', '<', $dateData['start_date'])
                         ->orWhere('end_date', '>', $dateData['end_date']);
                     });
-                }
-            }) */        
+                } */
+            })        
             ->orderBy('start_date', 'asc')
             ->orderBy('start_time', 'asc')            
             ->get();
@@ -95,7 +96,7 @@ class ShiftController extends APIController
                 $shiftsData[] = [
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
-                    'company_name'      => $shift->clientDetail->name,
+                    'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
@@ -142,7 +143,7 @@ class ShiftController extends APIController
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
-                    'company_name'      => $shift->clientDetail->name,
+                    'company_address'   => $shift->clientDetail->address,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -197,7 +198,7 @@ class ShiftController extends APIController
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
-                    'company_name'      => $shift->clientDetail->name,
+                    'company_address'   => $shift->clientDetail->address,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -271,6 +272,100 @@ class ShiftController extends APIController
             return $this->respondOk([
                 'status'   => true,
                 'message'   => trans('messages.shift_picked_success')
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
+
+    public function clockInShift(Request $request){
+        $user = auth()->user();
+        $request->validate([
+            'id'        => ['required', 'exists:shifts,id,deleted_at,NULL'],
+            'latitude'  => ['required', 'regex:/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)/'],
+            'longitude' => ['required', 'regex:/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)/'],
+            // 'clockin_address'   => ['required', 'string'],
+        ], [], [
+            'latitude.regex' => 'The latitude is not correct',
+            'longitude.regex' => 'The longitude is not correct',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            ClockInOut::create([
+                'user_id'           => $user->id,
+                'shift_id'          => $request->id,
+                'clockin_date'      => date('Y-m-d H:i:s'),
+                'clockin_latitude'  => $request->latitude,
+                'clockin_longitude' => $request->longitude
+            ]);
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.clock_in_success')
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
+
+    public function clockOutShift(Request $request){
+        $user = auth()->user();
+        $request->validate([
+            'id'        => ['required', 'exists:shifts,id,deleted_at,NULL'],
+            'latitude'  => ['required', 'regex:/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)/'],
+            'longitude' => ['required', 'regex:/^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)/'],
+            // 'clockin_address'   => ['required', 'string'],
+        ], [], [
+            'latitude.regex' => 'The latitude is not correct',
+            'longitude.regex' => 'The longitude is not correct',
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $clockOut = ClockInOut::where('user_id', $user->id)->where('shift_id', $request->id)->latest()->first();
+            $clockOut->update([
+                'clockout_date'      => date('Y-m-d H:i:s'),
+                'clockout_latitude'  => $request->latitude,
+                'clockout_longitude' => $request->longitude
+            ]);
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.clock_out_success')
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            DB::rollBack();
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
+
+    public function cancelShift(Request $request) {
+        // $user = auth()->user();
+        $request->validate([
+            'id' => ['required', 'exists:shifts,id,deleted_at,NULL']
+        ]);
+
+        DB::beginTransaction();
+        try {
+            $shift = Shift::where('id', $request->id)->first();
+            
+            $shift->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.shift_cancelled')
             ])->setStatusCode(Response::HTTP_OK);
         }
         catch(\Exception $e){

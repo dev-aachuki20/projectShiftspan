@@ -243,4 +243,47 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (
     | Parameters    : id
     */
     Route::post('pick-shift', [ShiftController::class,'pickShift']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Clock In Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/clock-in-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id, latitude, longitude
+    */
+    Route::post('clock-in-shift', [ShiftController::class,'clockInShift']);
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Clock Out Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/clock-out-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id, latitude, longitude
+    */
+    Route::post('clock-out-shift', [ShiftController::class,'clockOutShift']);
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Cancel Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/cancel-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id, latitude, longitude
+    */
+    Route::post('cancel-shift', [ShiftController::class,'cancelShift']);
 });
