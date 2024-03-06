@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Illuminate\Support\Facades\Gate;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
-
+use Illuminate\Support\Str;
 class SubAdminDataTable extends DataTable
 {
     /**
@@ -26,6 +26,23 @@ class SubAdminDataTable extends DataTable
             })
             ->editColumn('name', function($record){
                 return $record->name ?? '';
+            })
+
+            ->editColumn('is_active', function($record){
+                $currentStatus = config('constant.user_status')[$record->is_active];
+                $statusHtml = '<div class="custom-select position-relative">
+                    <div class="select-styled main-select-box">'.$currentStatus.'</div>
+                    <div class="select-options">
+                        <ul class="">';
+                            $statusOptions = [];
+                            foreach(config('constant.user_status') as $key => $value){
+                                $statusOptions[] = '<li class="select-option changeSubAdminStatus" data-selected_value="'.$record->is_active.'" data-val="'.$key.'" data-id="'.$record->uuid.'">'.$value.'</li>';
+                            }
+                            $statusHtml .= implode('', $statusOptions);
+                        $statusHtml .= '</ul>
+                    </div>
+                </div>';
+                return $statusHtml;
             })
             
             ->addColumn('action', function($record){
@@ -47,7 +64,16 @@ class SubAdminDataTable extends DataTable
                 return $actionHtml;
             })
             ->setRowId('id')
-            ->rawColumns(['action', 'checkbox']);
+            ->filterColumn('is_active', function ($query, $keyword) {
+                $statusSearch  = null;
+                if (Str::contains('active', strtolower($keyword))) {
+                        $statusSearch = 1;
+                } else if (Str::contains('deactive', strtolower($keyword))) {
+                        $statusSearch = 0;
+                }
+                $query->where('is_active', $statusSearch); 
+            })
+            ->rawColumns(['action', 'checkbox','is_active']);
     }
 
     /**
@@ -90,6 +116,8 @@ class SubAdminDataTable extends DataTable
         $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_admin.fields.name').'</span>')->titleAttr(trans('cruds.client_admin.fields.name'));
         $columns[] = Column::make('email')->title('<span>'.trans('cruds.client_admin.fields.email').'</span>')->titleAttr(trans('cruds.client_admin.fields.email'));
         $columns[] = Column::make('created_at')->title(trans('cruds.client_admin.fields.created_at'))->searchable(false)->visible(false);
+        $columns[] = Column::make('is_active')->title('<span>'.trans('cruds.client_admin.fields.status').'</span>')->titleAttr(trans('cruds.client_admin.fields.status'));
+
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
         return $columns;

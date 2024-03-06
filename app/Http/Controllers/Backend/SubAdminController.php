@@ -214,4 +214,37 @@ class SubAdminController extends Controller
         }
         $subAdmin->delete();
     }
+
+    public function statusUpdate(Request $request){
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'exists:users,uuid',
+            ]);
+    
+            if (!$validator->passes()) {
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }else{
+                DB::beginTransaction();
+                $user = User::where('uuid', $request->id)->first();
+                $updateStatus = $user->is_active == 1 ? 0 : 1;
+
+                if($user->update(['is_active' => $updateStatus])){
+                    DB::commit();
+                    return response()->json([
+                        'success'    => true,
+                        'message'    => trans('messages.crud.status_update'),
+                    ], 200);
+                }
+
+                return response()->json([
+                    'success' => false, 
+                    'error_type' => 'something_error', 
+                    'error' => trans('messages.error_message')
+                ], 400 );
+            }
+        } catch (\Exception $e) {
+            DB::rollBack();                
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }
+    }
 }

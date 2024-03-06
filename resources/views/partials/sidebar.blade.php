@@ -12,45 +12,45 @@
 
             @can('message_access')
                 <li>
-                    <a href="{{route('messages.index')}}" class="{{ request()->is('admin/messages') ? 'active' : '' }}" title="Messages">Messages</a>
+                    <a href="{{route('messages.index')}}" class="{{ request()->is('admin/messages') ? 'active' : '' }}" title="Messages">@lang('cruds.message.title_singular')</a>
                 </li>
             @endcan
             
             @can('sub_admin_access')
             <li>
-                <a href="{{ route('client-admins.index') }}" class="{{ request()->is('admin/client-admins*') ? 'active' : '' }}" title="{{ trans('cruds.client_admin.title') }}">@lang('cruds.client_admin.title')</a>
+                <a href="{{ route('client-admins.index') }}" class="{{ request()->is('admin/client-admins*') ? 'active' : '' }}" title="{{ trans('cruds.client_admin.title') }}">@lang('cruds.client_admin.title_singular')</a>
             </li>
             @endcan
 
             @can('sub_admin_detail_access')
                 <li>
-                    <a href="{{ route('client-details.index') }}" class="{{ request()->is('admin/client-details') || request()->is('admin/client-details/*') ? 'active' : '' }}" title="@lang('cruds.client_detail.title')">@lang('cruds.client_detail.title')</a>
+                    <a href="{{ route('client-details.index') }}" class="{{ request()->is('admin/client-details') || request()->is('admin/client-details/*') ? 'active' : '' }}" title="@lang('cruds.client_detail.title_singular')">@lang('cruds.client_detail.title_singular')</a>
                 </li>
             @endcan
 
             <li>
-                <a href="{{ route('shifts.index')}}" class="{{ request()->is('admin/shifts') || request()->is('admin/shifts/*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('quickadmin.shift.title')</a>
+                <a href="{{ route('shifts.index')}}" class="{{ request()->is('admin/shifts') || request()->is('admin/shifts/*') ? 'active' : '' }}" title="@lang('quickadmin.shift.title')">@lang('cruds.shift.title_singular')</a>
             </li>
 
             @can('staff_access')
             <li>
-                <a href="{{ route('staffs.index')}}" class="{{ request()->is('admin/staffs') || request()->is('admin/staffs/*') ? 'active' : '' }}" title="@lang('cruds.staff.title')">@lang('cruds.staff.title')</a>
+                <a href="{{ route('staffs.index')}}" class="{{ request()->is('admin/staffs') || request()->is('admin/staffs/*') ? 'active' : '' }}" title="@lang('cruds.staff.title')">@lang('cruds.staff.title_singular')</a>
             </li>
             @endcan
             @can('location_access')
                 <li>
-                    <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title')</a>
+                    <a href="{{ route('locations.index')}}" class="{{ request()->is('admin/locations') || request()->is('admin/locations/*') ? 'active' : '' }}" title="@lang('cruds.location.title')">@lang('cruds.location.title_singular')</a>
                 </li>
             @endcan
             @can('occupation_access')
                 <li>
-                    <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('cruds.occupation.title')">@lang('cruds.occupation.title')</a>
+                    <a href="{{ route('occupations.index')}}" class="{{ request()->is('admin/occupations') || request()->is('admin/occupations/*') ? 'active' : '' }}" title="@lang('cruds.occupation.title')">@lang('cruds.occupation.title_singular')</a>
                 </li>
             @endcan
             @can('setting_access')
                 @if(auth()->user()->is_super_admin)
                     <li>
-                        <a href="{{route('show.setting')}}" class="{{ request()->is('admin/settings') ? 'active' : '' }}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title')</a>
+                        <a href="{{route('show.setting')}}" class="{{ request()->is('admin/settings') ? 'active' : '' }}" title="@lang('cruds.setting.title')">@lang('cruds.setting.title_singular')</a>
                     </li>
                 @endif
             @endcan

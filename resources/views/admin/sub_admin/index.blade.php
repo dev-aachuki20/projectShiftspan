@@ -269,6 +269,69 @@
     })
 @endcan
 
+@can('sub_admin_edit')
+    $(document).ready(function() {
+        $(document).on('click', '.custom-select', function() {
+            $(this).toggleClass('custom-dropdown');
+        });
+    });
+
+    $(document).on("click",".changeSubAdminStatus", function(e) {
+        e.preventDefault();
+
+        var t =$(this);
+
+        var old_val     = t.data('selected_value');
+        var staff_id    = t.data('id');
+        var status_val  = t.data('val');
+        var selectedText  = t.text();
+
+        if(old_val == status_val){
+            return false;
+        }
+
+        Swal.fire({
+            title: "{{ trans('global.areYouSure') }}",
+            text: "{{ trans('global.want_to_change_status') }}",
+            icon: "warning",
+            showDenyButton: true,   
+            confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+            denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
+        })
+        .then(function(result) {
+            if (result.isConfirmed) {  
+                $('.loader-div').show();
+                $.ajax({
+                    type: 'post',
+                    url: "{{route('client-admins.statusUpdate')}}",
+                    dataType: 'json',
+                    data: { _token: "{{ csrf_token() }}", 'id' : staff_id },
+                    success: function (response) {
+                        if(response.success) {
+                            t.closest(".custom-select").find('.main-select-box').text(selectedText);
+                            t.closest(".select-options").slideUp();
+
+                            $('#client-admin-table').DataTable().ajax.reload(null, false);
+                            toasterAlert('success',response.message);
+                            // t.closest(".custom-select").removeClass('custom-dropdown');
+                        }
+                        else {
+                            t.val(old_val)
+                            toasterAlert('error',response.error);
+                        }
+                        $('.loader-div').hide();
+                        t.closest(".custom-select").removeClass('custom-dropdown');
+                    },
+                    error: function(res){
+                        toasterAlert('error',res.responseJSON.error);
+                        $('.loader-div').hide();
+                    }
+                });
+            }
+        });
+    });
+@endcan
+
 </script>
 
 @endsection

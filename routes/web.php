@@ -59,8 +59,9 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::get('change-password', [UserController::class, 'showChangePassword'])->name('show.change.password');
         Route::post('change-password', [UserController::class, 'updateChangePassword'])->name('update.change.password');
 
-        Route::resource('/client-admins',SubAdminController::class);
+        Route::resource('/client-admins',SubAdminController::class);        
         Route::post('/client-admins/mass-destroy', [SubAdminController::class, 'massDestroy'])->name('client-admins.massDestroy');
+        Route::post('/update-client-admin-status', [SubAdminController::class, 'statusUpdate'])->name('client-admins.statusUpdate');
 
         Route::get('settings', [SettingController::class, 'index'])->name('show.setting');
         Route::post('update-settings', [SettingController::class, 'update'])->name('update.setting');

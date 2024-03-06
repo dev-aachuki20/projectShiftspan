@@ -57,11 +57,9 @@
                 <li class="d-none d-lg-inline-block"><a href="javascript:void(0)" title="@lang('global.help')" data-bs-toggle="modal" data-bs-target="#HelpPdf">@lang('global.help')</a></li>
                 
                 @can('setting_access')
-                    @if(auth()->user()->is_super_admin)                    
-                        <li class="d-none d-lg-inline-block">
-                            <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
-                        </li>
-                    @endif
+                    <li class="d-none d-lg-inline-block">
+                        <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
+                    </li>
                 @endcan
                 <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
             </ul>

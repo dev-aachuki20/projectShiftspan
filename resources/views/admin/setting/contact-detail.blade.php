@@ -11,19 +11,30 @@
         <h2 class="mb-0">@lang('cruds.setting.contact_details.title')</h2>
     </div>
     <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
-        <form class="msg-form" id="profile-form" enctype="multipart/form-data">
-            @csrf
+        <form class="msg-form" id="{{auth()->user()->is_super_admin ? 'profile-form' : ''}}">
+            @if(auth()->user()->is_super_admin) @csrf @endif
             @foreach($settings as $key => $setting)
                 @if($setting->type == 'text')
                     <div class="form-label">
                         <label>{{$setting->display_name}}:</label>
-                        <input type="text" value="{{$setting->value}}" name="{{$setting->key}}" />
+                        @if(auth()->user()->is_super_admin)
+                            <input type="text" value="{{$setting->value}}" name="{{$setting->key}}" />
+                        @else
+                            <div class="right-sidebox">
+                                <span class="d-inline-block position-relative">
+                                    {{$setting->value}}
+                                </span>
+                            </div>
+                        @endif
                     </div>
                 @endif
             @endforeach
-            <div class="form-label justify-content-center">
-                <button type="submit" class="cbtn submitBtn">@lang('cruds.setting.contact_details.fields.contact_details')</button>
-            </div>
+
+            @if(auth()->user()->is_super_admin)
+                <div class="form-label justify-content-center">
+                    <button type="submit" class="cbtn submitBtn">@lang('cruds.setting.contact_details.fields.contact_details')</button>
+                </div>
+            @endif
         </form>
     </div>
 </div>
