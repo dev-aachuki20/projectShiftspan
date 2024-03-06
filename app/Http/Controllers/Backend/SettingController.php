@@ -70,7 +70,7 @@ class SettingController extends Controller
 
     public function showContactDetails()
     {
-        abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        // abort_if(Gate::denies('setting_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         $settings = Setting::whereStatus(1)->whereGroup('support')->orderBy('position', 'asc')->get();
         return view('admin.setting.contact-detail',compact('settings'));
     }
