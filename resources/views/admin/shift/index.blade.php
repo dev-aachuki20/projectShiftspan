@@ -54,6 +54,9 @@
 			</div>
 		</div>
 	</div>
+
+    {{-- Show Modal --}}
+    {{-- @include('admin.shift.clock-in-out') --}}
 @endsection
 
 @section('customJS')
@@ -64,7 +67,28 @@
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="{{asset('plugins/timepicker/jquery.timepicker.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYFfEw982t8v0TAI81TsfWG8fEPb-mRCc&callback=initMap" async></script>
 <script>
+
+    function initMap() {
+        document.querySelectorAll('.map-container').forEach(function(element) {
+            var lat = parseFloat(element.dataset.lat);
+            var lng = parseFloat(element.dataset.lng);
+            var map = new google.maps.Map(element, {
+                center: { 
+                    lat: lat, 
+                    lng: lng 
+                },
+                zoom: 8
+            });
+            var marker = new google.maps.Marker({
+                position: { lat: lat, lng: lng },
+                map: map
+            });
+        });
+    }
+
+    
     var step = parseInt("{{config('constant.timepicker_step')}}");
     $(document).on('shown.bs.modal', function() {
         $('.select2').each(function() {
@@ -149,6 +173,97 @@
             maxTime: "{{config('constant.timepicker_max_time')}}"
 		});
     });
+
+    @can('shift_access')
+        $(document).on('click', '.clockIn', function(e){
+            e.preventDefault();
+            // $('.loader-div').show();
+            var shift = $(this).data("shift_id");
+            var type = 'ClockIn';
+            $.ajax({
+                type: 'get',
+                url: "{{ route('shifts.clockInAndClockOut') }}",
+                data: { 
+                    shift_id: shift,
+                    type:   type,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if(response.success) {
+                        $('.popup_render_div').html(response.htmlView);
+                        $('#clockIn').modal('show');
+
+                        setTimeout(function() {
+                            initMap();
+                        }, 100);
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    }
+                },
+            })
+        });
+
+        $(document).on('click', '.clockOut', function(e){
+            e.preventDefault();
+            // $('.loader-div').show();
+            var shift = $(this).data("shift_id");
+            var type = 'ClockOut';
+            $.ajax({
+                type: 'get',
+                url: "{{ route('shifts.clockInAndClockOut') }}",
+                data: { 
+                    shift_id: shift,
+                    type:   type,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if(response.success) {
+                        $('.popup_render_div').html(response.htmlView);
+                        $('#clockOut').modal('show');
+
+                        setTimeout(function() {
+                            initMap();
+                        }, 100);
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    }
+                },
+            })
+        });
+
+        $(document).on('click', '.timeSheet', function(e){
+            e.preventDefault();
+            var shift = $(this).data("shift_id");
+            var type = 'TimeSheet';
+            $.ajax({
+                type: 'get',
+                url: "{{ route('shifts.clockInAndClockOut') }}",
+                data: { 
+                    shift_id: shift,
+                    type:   type,
+                },
+                dataType: 'json',
+                success: function (response) {
+                    if(response.success) {
+                        $('.popup_render_div').html(response.htmlView);
+                        $('#timeSheet').modal('show');
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    }
+                },
+            })
+        });
+        
+    @endcan
     @can('shift_create')
         // Add Shift Modal
         $(document).on('click', '#addShiftBtn', function(e){

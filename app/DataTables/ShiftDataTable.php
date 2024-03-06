@@ -35,7 +35,27 @@ class ShiftDataTable extends DataTable
             })
 
             ->editColumn('client.name', function($record){
-                return $record->client ? $record->client->name : '';
+                $clientName = $record->client ? $record->client->name : '';
+                $imagePath = asset('images/check-mark.png');
+                $removeImagePath = asset('images/remove.png');
+                return $clientName . '<br>
+                    <div class="shift-btns">
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns clockIn" data-shift_id="'.$record->id.'">
+                            <span>
+                                <img src="' . $imagePath . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
+                            </span>
+                        </a>
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns clockOut" data-shift_id="'.$record->id.'">
+                            <span>
+                                <img src="' . $removeImagePath . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
+                            </span>
+                        </a>
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns timeSheet" data-shift_id="'.$record->id.'">
+                            <span>
+                                <img src="' . $imagePath . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
+                            </span>
+                        </a>
+                </div>';
             })
 
             ->editColumn('clientDetail.name', function($record){
@@ -147,7 +167,7 @@ class ShiftDataTable extends DataTable
             ->filterColumn('cancel_at', function ($query, $keyword) {
                 $query->whereRaw("DATE_FORMAT(cancel_at, '".config('constant.search_date_format.date_time')."') like ?", ["%$keyword%"]); //date_format when searching using date
             })
-            ->rawColumns(['action', 'checkbox', 'rating']);
+            ->rawColumns(['action', 'checkbox', 'rating', 'client.name']);
     }
 
     /**

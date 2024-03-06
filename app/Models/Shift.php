@@ -81,4 +81,10 @@ class Shift extends Model
         return $this->belongsToMany(User::class, 'staff_shift', 'shift_id', 'staff_id');
     }
 
+    /* public function clockInOuts()
+    {
+        return $this->hasManyThrough(ClockInOut::class, User::class, 'id', 'shift_id', 'id');
+    } */
+
+
 }

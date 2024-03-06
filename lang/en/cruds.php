@@ -258,10 +258,19 @@ return [
             'assign_staff'      => 'Assign Staff',
             'quantity'          => 'Quantity',
             'status'            => 'Status',
+            'clock_in'          => 'Clock In',
+            'clock_out'         => 'Clock Out',
+            'timesheet'         => 'Timesheet',
             'created_by'        => 'Created By',
             'created_at'        => 'Created at',
             'updated_at'        => 'Updated at',
             'deleted_at'        => 'Deleted at',
+
+            'manager_name'      => 'Manager Name',
+            'clock_in_time'     => 'Clock In Time',
+            'clock_out_time'    => 'Clock Out Time',
+            'geoloaction'       => 'Geoloaction',
+            'manager_signature' => 'Manager Signature'
         ]
     ],
 ];

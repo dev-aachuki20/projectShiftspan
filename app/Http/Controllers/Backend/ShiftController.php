@@ -6,7 +6,9 @@ use App\DataTables\ShiftDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Shift\StoreRequest;
 use App\Http\Requests\Shift\UpdateRequest;
+use App\Models\AuthorizedShift;
 use App\Models\ClientDetail;
+use App\Models\ClockInOut;
 use App\Models\Location;
 use App\Models\Occupation;
 use App\Models\Shift;
@@ -376,5 +378,41 @@ class ShiftController extends Controller
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+    }
+
+    public function clockInAndClockOut(Request $request)
+    {
+        abort_if(Gate::denies('shift_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        try {
+            if($request->ajax()){
+                $shiftData = '';
+                $type = '';
+                if($request->type === 'ClockIn' || $request->type === 'ClockOut'){
+                    $shiftData = ClockInOut::select(
+                        'clockin_date',
+                        'clockout_date', 
+                        'clockin_latitude', 
+                        'clockin_longitude', 
+                        'clockout_latitude', 
+                        'clockout_longitude')->where('shift_id', $request->shift_id)
+                        ->orderBy('id', 'desc')
+                        ->get();
+                    $type = $request->type;
+                } else {
+                    $shiftData = AuthorizedShift::where('shift_id', $request->shift_id)->first();
+                    $type = $request->type;
+                }
+                
+                $viewHTML = view('admin.shift.clock-in-out', compact('shiftData', 'type'))->render();
+                return response()->json([
+                    'success' => true, 
+                    'htmlView'=>$viewHTML
+                ]);
+            }
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }catch(\Exception $e){
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }
     }
 }

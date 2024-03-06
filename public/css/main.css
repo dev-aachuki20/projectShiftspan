@@ -1447,7 +1447,7 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     position: relative;
 }
 #shift-table tbody td:not(:first-child){
-    padding-bottom: 75px;
+    padding-bottom: 75px !important;
 } 
 .shift-btns{
     position: absolute;

@@ -91,6 +91,7 @@ Route::middleware(['auth','PreventBackHistory'])->group(function () {
         Route::post('/shifts/cancel/{id}', [ShiftController::class, 'CancelShift'])->name('shifts.cancel');
         Route::post('/shifts/rating/{id}', [ShiftController::class, 'RateShift'])->name('shifts.rating');
         Route::get('/shifts-get-sub-admin-details', [ShiftController::class, 'getSubAdminData'])->name('shifts.get-sub-admin-details');
+        Route::get('/shifts-clockin-clockout', [ShiftController::class, 'clockInAndClockOut'])->name('shifts.clockInAndClockOut');
         
         Route::resource('/messages',MessageController::class);
         Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy');
