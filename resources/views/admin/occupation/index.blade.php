@@ -70,6 +70,23 @@
             }
         });
     });
+
+    function Checkselect2() {
+        $('#occupation_name').off('select2:open').on('select2:open', function (e) {
+            let a = $(this).data('select2');
+            if (!$('.select2-group_add').length) {
+                let buttonText = "+ @lang('global.add') @lang('cruds.occupation.title_singular')";
+                let buttonHtml = '<li class="select2-results__option">';
+                    buttonHtml += '<button id="" class="newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewOccupationModal">' + buttonText + '</button></li>';
+                a.$results.parents('.select2-results').append(buttonHtml);
+                
+                $('.newAddLocation').click(function(event){
+                    event.preventDefault();
+                });
+            }
+        });
+    }
+
     @can('occupation_create')
         $(document).on('click', '#addOccupationBtn', function(e){
             e.preventDefault();
@@ -84,12 +101,14 @@
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
                         $('#addOccupationModal').modal('show');
+                        Checkselect2();
                         $('.loader-div').hide();
                     }
                 },
                 error: function (response) {
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
+                        $('.loader-div').hide();
                     } 
                 }
             })

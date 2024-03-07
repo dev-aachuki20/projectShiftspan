@@ -1924,6 +1924,29 @@ th.datatable_desription{
     min-width: 180px;
     width: 180px;
 }
+.newAddLocation{
+    font-size: var(--body-font-size);
+    color: #1b1b1b;
+    font-weight: var(--fw-500);
+    padding: 12px 16px;
+    display: block;
+    background: transparent;
+    border: none;
+    width: 100%;
+    text-align: left;
+    border-radius: 0 0 28px 28px;
+}
+.select2radius-none .select2-container--default .select2-results > .select2-results__options{
+    border-radius: 0;
+}
+.newAddLocation:hover,
+.select2radius-none .select2-container--default .select2-results > .select2-results__options .select2-results__option:hover{
+    background-color: #b0b0b0;
+    color: #1b1b1b;
+}
+.select2radius-none .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
+    background-color: transparent;
+}
 /* Responsive css */
 @media screen and (min-width: 1300px) and (max-width: 1599px){
     .header-inner ul>li>a{

@@ -60,6 +60,7 @@ return [
     'clock_out_success'             => 'Clocked out successfully',
     'shift_cancelled'               => 'Shift cancelled successfully',
     'authorized_shift_success'      => 'Shift authorized successfully',
-];
 
-?>
+    'account_deactivate'            => 'Your account has been deactivated. Please contact the admin.',
+    'staff_account_deactivate'      => 'Your account has been deactivated.',
+];

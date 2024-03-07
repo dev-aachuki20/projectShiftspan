@@ -71,6 +71,26 @@
             }
         });
     });
+
+    function Checkselect2() {
+        $('#location_name').off('select2:open').on('select2:open', function (e) {
+            let a = $(this).data('select2');
+            if (!$('.select2-group_add').length) {
+                let buttonText = "+ @lang('global.add') @lang('cruds.location.title_singular')";
+                let buttonHtml = '<li class="select2-results__option">';
+                    buttonHtml += '<button id="" class=" newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewLocationModal">' + buttonText + '</button></li>';
+                a.$results.parents('.select2-results').append(buttonHtml);
+                
+                $('.newAddLocation').click(function(event){
+                    event.preventDefault();
+                });
+            }
+        });
+    }
+
+
+
+
     @can('location_create')
         // Add Location Modal
         $(document).on('click', '#addLocationBtn', function(e){
@@ -85,7 +105,9 @@
                     // $('#pageloader').css('display', 'none');
                     if(response.success) {
                         $('.popup_render_div').html(response.htmlView);
+
                         $('#addLocationModal').modal('show');
+                        Checkselect2();
                         $('.loader-div').hide();
                     }
                 },

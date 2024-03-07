@@ -2,14 +2,14 @@
     <div class="modal-dialog modal-dialog-centered mw-820">
         <div class="modal-content">
             <div class="modal-header justify-content-center yellow-bg">
-                <h5 class="modal-title text-center" id="viewSubAdminDetailLabel">@lang('global.view') @lang('cruds.client_admin.title_singular')</h5>
+                <h5 class="modal-title text-center" id="viewSubAdminDetailLabel">@lang('global.view') @lang('cruds.client_detail.title_singular')</h5>
                 <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body inner-size-l">
                 <form class="msg-form">
                     @if(auth()->user()->is_super_admin)
                         <div class="form-label">
-                            <label>@lang('cruds.client_detail.fields.client_name'):</label>
+                            <label>@lang('cruds.client_detail.fields.client_admin_name'):</label>
                             <div class="right-sidebox d-flex align-items-center justify-content-start">
                                 <span class="fw-600">{{$subAdminDetail->client->name}}</span>
                             </div>

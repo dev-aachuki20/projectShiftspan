@@ -1,6 +1,6 @@
 @if(auth()->user()->is_super_admin)
     <div class="form-label select-label">
-        <label>@lang('cruds.client_detail.fields.client_name'):</label>
+        <label>@lang('cruds.client_detail.fields.client_admin_name'):</label>
         <select name="sub_admin_id" id="client_name" class="select2" required>
             <option value="">@lang('global.select') @lang('cruds.client_detail.fields.client_admin')</option>
             @foreach ($subAdmins as $key => $value)

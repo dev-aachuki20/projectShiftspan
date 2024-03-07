@@ -51,7 +51,7 @@ Route::group(['middleware' => 'guest'], function () {
     // });
 });
 
-Route::middleware(['auth','PreventBackHistory'])->group(function () {
+Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function () {
     Route::prefix('admin')->group(function (){
         Route::get('profile', [UserController::class, 'showProfile'])->name('show.profile');
         Route::post('profile', [UserController::class, 'updateProfile'])->name('update.profile');

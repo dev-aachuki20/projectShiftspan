@@ -101,7 +101,7 @@ Route::group(['namespace' => 'Api'], function () {
 |--------------------------------------------------------------------------
 |
 */
-Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum']],function (){
+Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserStatus']],function (){
     /*
     |--------------------------------------------------------------------------
     |  Logout API Routes

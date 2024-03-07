@@ -36,39 +36,49 @@ class LoginController extends APIController
             'email.exists' => trans('validation.invalid'),
         ]);
 
-        if(Auth::attempt($credentials)){
-            $user = auth()->user();
-            $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
-            
-            return $this->respond([
-                'status'        => true,
-                'message'       => trans('messages.login_success'),
-                'token_type'    => $this->token_type,
-                'access_token'  => $accessToken,
-                'data'          => [
-                    'id'        => $user->id,
-                    'uuid'      => $user->uuid,
-                    'name'      => $user->name,
-                    'phone'     => $user->phone,
-                    'email'     => $user->email,
-                    'address'   => $user->profile->address,
-                    'occupation_name'       => $user->profile->occupation->name ?? null,
-                    'occupation_id'         => $user->profile->occupation->id ?? null,
-                    'company_id'            => $user->company->id ?? null,
-                    'company_name'          => $user->company->name ?? null,
-                    'profile_image'         => $user->profile_image_url ? $user->profile_image_url : asset(config('constant.default.staff-image')),
-                    'user_dbs_certificate'  => $user->dbs_certificate_url ? $user->dbs_certificate_url : "",
-                    'user_training_doc'     => $user->training_document_url ? $user->training_document_url : "",
-                    'user_cv'               => $user->cv_url ? $user->cv_url : "",
-                    'user_staff_budge'      => $user->staff_budge_url ? $user->staff_budge_url : "",
-                    'user_dbs_check'        => $user->dbs_check_url ? $user->dbs_check_url : "",
-                    'user_training_check'   => $user->training_check_url ? $user->training_check_url : "",
-                ]
-            ]);
-            
-        }else{ 
-            return $this->throwValidation(trans('messages.wrong_credentials'));
-        } 
+        $clientAdmin = User::whereEmail($credentials['email'])
+            ->whereHas('company', function ($query) {
+                $query->where('is_active', true);
+        })->first('email');
+        if($clientAdmin){
+            if(Auth::attempt($credentials)){
+                $user = auth()->user();
+                
+                $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
+                
+                return $this->respond([
+                    'status'        => true,
+                    'message'       => trans('messages.login_success'),
+                    'token_type'    => $this->token_type,
+                    'access_token'  => $accessToken,
+                    'data'          => [
+                        'id'                    => $user->id,
+                        'uuid'                  => $user->uuid,
+                        'name'                  => $user->name,
+                        'phone'                 => $user->phone,
+                        'email'                 => $user->email,
+                        'address'               => $user->profile->address,
+                        'occupation_name'       => $user->profile->occupation->name ?? null,
+                        'occupation_id'         => $user->profile->occupation->id ?? null,
+                        'company_id'            => $user->company->id ?? null,
+                        'company_name'          => $user->company->name ?? null,
+                        'profile_image'         => $user->profile_image_url ? $user->profile_image_url : asset(config('constant.default.staff-image')),
+                        'user_dbs_certificate'  => $user->dbs_certificate_url ? $user->dbs_certificate_url : "",
+                        'user_training_doc'     => $user->training_document_url ? $user->training_document_url : "",
+                        'user_cv'               => $user->cv_url ? $user->cv_url : "",
+                        'user_staff_budge'      => $user->staff_budge_url ? $user->staff_budge_url : "",
+                        'user_dbs_check'        => $user->dbs_check_url ? $user->dbs_check_url : "",
+                        'user_training_check'   => $user->training_check_url ? $user->training_check_url : "",
+                    ]
+                ]);
+                
+            }else{ 
+                return $this->throwValidation(trans('messages.wrong_credentials'));
+            }
+        }else{
+            return $this->setStatusCode(401)->respondWithError(trans('messages.staff_account_deactivate'));
+        }
+        
     }
 
 
