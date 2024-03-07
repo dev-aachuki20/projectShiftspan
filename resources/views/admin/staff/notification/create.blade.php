@@ -39,7 +39,7 @@
                     </div>
                     <div class="form-label select-label">
                         <label for="notification_subject">@lang('cruds.notification.fields.section'):</label>
-                        <select class="select2" name="section" id="section" required>
+                        <select class="select2" name="section" id="section">
                             <option value="">@lang('global.select')  ...</option>
                             @foreach (config('constant.notification_subject') as $key=>$val)
                                 <option value="{{$key}}">{{ $val }}</option>

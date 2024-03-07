@@ -1,7 +1,7 @@
 @if(auth()->user()->is_super_admin)
     <div class="form-label select-label">
         <label>@lang('cruds.shift.fields.client_name'):</label>
-        <select name="sub_admin_id" id="sub_admin_id" class="select2" @required(true)>
+        <select name="sub_admin_id" id="sub_admin_id" class="select2">
             <option value="">@lang('global.select') @lang('cruds.shift.fields.client_name')</option>
             @foreach ($subAdmins as $key => $value)
                 <option value="{{$key}}" @selected(isset($shift) && $shift->client->uuid == $key ) >{{ $value}}</option>
@@ -13,7 +13,7 @@
 
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.client_detail_name'):</label>
-    <select name="client_detail_id" id="client_detail_id" class="select2" @required(true)>
+    <select name="client_detail_id" id="client_detail_id" class="select2">
         <option value="">@lang('global.select') @lang('cruds.shift.fields.client_detail_name')</option>
         @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)        
             @foreach($clientDetails as $clientDetailKey => $clientDetail)
@@ -43,7 +43,7 @@
 
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.occupation_id'):</label>
-    <select name="occupation_id" id="occupation_id" class="select2" @required(true)>
+    <select name="occupation_id" id="occupation_id" class="select2">
         <option value="">@lang('global.select') @lang('cruds.shift.fields.occupation_id')</option>
         @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)
             @foreach ($occupations as $occupationKey => $occupation)
@@ -56,7 +56,7 @@
 
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.location_id'):</label>
-    <select name="location_id" id="location_id" class="select2" @required(true)>
+    <select name="location_id" id="location_id" class="select2">
         <option value="">@lang('global.select') @lang('cruds.shift.fields.location_id')</option>
         @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)
             @foreach ($locations as $locationKey => $location)
@@ -70,7 +70,7 @@
 @if(!isset($shift))
     <div class="form-label select-label">
         <label>@lang('cruds.shift.fields.quantity'):</label>
-        <select name="quantity" id="quantity" class="select2" @required(true)>
+        <select name="quantity" id="quantity" class="select2">
             @for ($i=1; $i<=10;$i++)
                 <option value="{{$i}}">{{ $i}}</option>
             @endfor

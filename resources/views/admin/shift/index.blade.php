@@ -67,7 +67,7 @@
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="{{asset('plugins/timepicker/jquery.timepicker.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAYFfEw982t8v0TAI81TsfWG8fEPb-mRCc&callback=initMap" async></script>
+<script defer src="https://maps.googleapis.com/maps/api/js?key={{ env('GOOGLE_MAPS_API_KEY') }}&callback=initMap" async></script>
 <script>
 
     function initMap() {

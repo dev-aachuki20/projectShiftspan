@@ -16,7 +16,7 @@
 @else
     <div class="form-label select-label select2radius-none">
         <label>@lang('cruds.location.title_singular') @lang('cruds.location.fields.name'):</label>
-        <select name="location_name" id="location_name" class="select2" required>
+        <select name="location_name" id="location_name" class="select2">
             <option value="">@lang('global.select') @lang('cruds.location.title_singular')</option>
             {{-- <option value="new"> + @lang('global.add') @lang('cruds.location.title_singular')</option> --}}
             @foreach ($locations as $key => $value)

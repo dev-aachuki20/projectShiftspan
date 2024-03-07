@@ -33,21 +33,21 @@ class UpdateRequest extends FormRequest
         }
         $rules['client_detail_id'] = ['required', 'exists:client_details,uuid,deleted_at,NULL'];
 
-        $rules['start_date'] = ['required', 'date', function ($attribute, $value, $fail) {
+        $rules['start_date'] = ['required', 'date', /* function ($attribute, $value, $fail) {
             $today = Carbon::today();
             if (Carbon::parse($value)->lt($today)) {
                 $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to today.');
             }
-        }];
+        } */];
         $rules['end_date'] = ['required', 'date', 'after_or_equal:start_date'];
         
-        $rules['start_time'] = ['required', 'date_format:'.config('constant.date_format.time'), function ($attribute, $value, $fail) {
+        $rules['start_time'] = ['required', 'date_format:'.config('constant.date_format.time'), /* function ($attribute, $value, $fail) {
             $today = Carbon::today();
             $currentTime = Carbon::now()->format('H:i');
             if ($this->start_date === $today->format('d-m-Y') && $value < $currentTime) {
                 $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to the current time.');
             }
-        }];
+        } */];
         $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time'), function ($attribute, $value, $fail) {
             if ($value < $this->start_time) {
                 $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than the start time.');

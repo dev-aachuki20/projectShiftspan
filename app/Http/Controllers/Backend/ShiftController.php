@@ -161,6 +161,12 @@ class ShiftController extends Controller
                     ]);                            
                     $staffId = User::where('uuid', $request->assign_staff)->first()->id;
                     $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
+                }else{
+                    $shift->update([
+                        'picked_at' => null,
+                        'status' => 'open',
+                    ]);                            
+                    $shift->staffs()->sync([]);
                 }
                 DB::commit();
 
