@@ -8,7 +8,7 @@
             </div>
             <ul>
                 @if(auth()->user()->is_sub_admin)
-                    <li class="d-none d-lg-inline-block"><a title="Company ID">Company ID:<span>{{auth()->user()->company_number}}</span></a></li>
+                    <li class="d-none d-lg-inline-block"><a title="Company ID">Company ID: <span>{{auth()->user()->company_number}}</span></a></li>
                 @endif
                 <li class="dropdown">
                     <a href="javascript:void(0)" title="Notifications/Alerts" class="has_noti dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">

@@ -59,6 +59,7 @@ return [
     'clock_in_success'              => 'Clocked in successfully',
     'clock_out_success'             => 'Clocked out successfully',
     'shift_cancelled'               => 'Shift cancelled successfully',
+    'authorized_shift_success'      => 'Shift authorized successfully',
 ];
 
 ?>

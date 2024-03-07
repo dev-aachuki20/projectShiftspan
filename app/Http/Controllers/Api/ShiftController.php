@@ -401,7 +401,7 @@ class ShiftController extends APIController
 
             return $this->respondOk([
                 'status'   => true,
-                'message'   => trans('messages.clock_in_success')
+                'message'   => trans('messages.authorized_shift_success')
             ])->setStatusCode(Response::HTTP_OK);
         }
         catch(\Exception $e){
