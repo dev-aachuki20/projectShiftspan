@@ -100,6 +100,7 @@ class ShiftController extends APIController
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
+                    'location_name'     => $shift->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -123,8 +124,8 @@ class ShiftController extends APIController
         try{
             $user = auth()->user();
 
-            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail'])
-            ->select('id', 'sub_admin_id', 'client_detail_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('complete')
+            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
+            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('complete')
             ->orderBy('start_date', 'desc')
             ->get();
 
@@ -146,6 +147,8 @@ class ShiftController extends APIController
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
+                    'occupation_name'   => $shift->occupation->name,
+                    'location_name'     => $shift->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -161,6 +164,7 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
+
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -171,8 +175,8 @@ class ShiftController extends APIController
             
             $user = auth()->user();
 
-            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail'])
-            ->select('id', 'sub_admin_id', 'client_detail_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
+            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
+            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
             ->where(function ($query) use ($currentDateTime) {
                 $query->whereDate('start_date', '>', $currentDateTime->toDateString())
                 ->orWhere(function ($query) use ($currentDateTime) {
@@ -196,15 +200,19 @@ class ShiftController extends APIController
 
                 $workingHoursPerDay = $startTime->diffInHours($endTime);
                 $totalWorkingHour += $workingHoursPerDay * $daysDiff;
-                
+
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
+                    'occupation_name'   => $shift->occupation->name,
+                    'location_name'     => $shift->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
                     'end_time'          => $shift->end_time,
+                    'check_in_status'   => $shift->clockInOuts()->where('clockin_date','<',Carbon::now())->exists(),
+                    'check_out_status'  => $shift->clockInOuts()->where('clockout_date','<',Carbon::now())->exists(),
                 ];
             }
             $shiftsData['total_hours'] = $totalWorkingHour;
@@ -216,6 +224,7 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -331,12 +340,24 @@ class ShiftController extends APIController
 
         DB::beginTransaction();
         try {
-            $clockOut = ClockInOut::where('user_id', $user->id)->where('shift_id', $request->id)->latest()->first();
+            $shift =  Shift::find($request->id);
+
+            $clockOut = ClockInOut::where('user_id', $user->id)->where('shift_id', $shift->id)->latest()->first();
             $clockOut->update([
                 'clockout_date'      => date('Y-m-d H:i:s'),
                 'clockout_latitude'  => $request->latitude,
                 'clockout_longitude' => $request->longitude
             ]);
+
+            $endDate = Carbon::parse($shift->end_date)->format('Y-m-d');
+            $currentDate = Carbon::now()->format('Y-m-d');
+
+            if ($endDate == $currentDate) {
+
+                $shift->status = 'complete';
+                $shift->save();
+
+            }
 
             DB::commit();
 
