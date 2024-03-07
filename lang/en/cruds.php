@@ -169,7 +169,7 @@ return [
         'title_singular' => 'Staff',
         'fields' => [
             'id'                            => 'ID',
-            'staff_admin'                   => 'Staff Admin',
+            'staff_admin'                   => 'Client Admin',
             'title'                         => 'Title',
             'name'                          => 'Staff Name',
             'username'                      => 'Username',
@@ -244,7 +244,7 @@ return [
         'title_singular' => 'Shift',
         'fields' => [
             'id'                => 'ID',
-            'client_name'      => 'Client Name',
+            'client_name'      => 'Client Admin',
             'client_detail_name'=> 'Client Detail Name',
             'staff_name'        => 'Staff Name',
             'start_date'        => 'Start Date',
