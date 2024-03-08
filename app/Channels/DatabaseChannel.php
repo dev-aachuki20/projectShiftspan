@@ -10,7 +10,16 @@ class DatabaseChannel
     public function send($notifiable, Notification $notification)
     {
         $data = $notification->data;
-    
+        
+        /* Send the immidate notification */
+        $user_id = $notifiable->id;
+        if(auth()->user()->is_super_admin){
+            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+        }elseif(auth()->user()->is_sub_admin){
+            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+        }
+
+        /* From this Save the value from database */
         return $notifiable->routeNotificationFor('database')->create([
             'id'                => $notification->id,
             'type'              => get_class($notification),

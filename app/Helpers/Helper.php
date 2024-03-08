@@ -152,4 +152,57 @@ if (!function_exists('dateFormat')) {
 		return $formattedDate;
 	}
 }
-?>
+
+/* Send Notification to Users */
+if (!function_exists('sendNotification')) {
+    function sendNotification($user_id, $subject, $message, $section, $notification_type = null, $data = null)
+    {
+        try {
+			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
+			
+			$response = null;
+			if($firebaseToken){
+				$SERVER_API_KEY = env('FIREBASE_KEY');
+
+				$notification = [
+					"title" => $subject,
+					"body" 	=> $message,
+					"sound" => "default",
+					"alert" => "New"
+				];
+
+				$bodydata = [
+					"title"=> $subject,
+					"body" => $message,
+					"data" => $data,
+					"type" => $section,
+				];
+
+				$data = [
+					"registration_ids"	=> $firebaseToken,
+					"notification" 		=> $notification,
+					"priority"			=> "high",
+					"contentAvailable" 	=> true,
+					"data" 				=> $bodydata
+				];
+				$encodedData = json_encode($data);
+				$headers = [
+					'Authorization: key=' . $SERVER_API_KEY,
+					'Content-Type: application/json',
+				];
+				$ch = curl_init();
+				curl_setopt($ch, CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send');
+				curl_setopt($ch, CURLOPT_POST, true);
+				curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+				curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+				curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+				curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
+				$response = curl_exec($ch);
+			}
+			// \Log::info($response);
+			return $response;
+		} catch (\Exception $e) {
+			\Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+		}
+    }
+}

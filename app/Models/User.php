@@ -247,4 +247,9 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Shift::class, 'sub_admin_id', 'id');
     }
+
+    public function notification()
+    {
+        return $this->hasMany(Notification::class, 'notifiable_id');
+    }
 }
