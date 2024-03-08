@@ -73,19 +73,24 @@
     });
 
     function Checkselect2() {
-        $('#location_name').off('select2:open').on('select2:open', function (e) {
+        $('#location_name').on('select2:open', function (e) {
             let a = $(this).data('select2');
             if (!$('.select2-group_add').length) {
                 let buttonText = "+ @lang('global.add') @lang('cruds.location.title_singular')";
-                let buttonHtml = '<li class="select2-results__option">';
-                    buttonHtml += '<button id="" class=" newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewLocationModal">' + buttonText + '</button></li>';
-                a.$results.parents('.select2-results').append(buttonHtml);
-                
-                $('.newAddLocation').click(function(event){
+                let buttonHtml = '<button class="select2-group_add newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewLocationModal">' + buttonText + '</button>';
+                a.$results.parents('.select2-results').prepend(buttonHtml);
+
+                $('.select2-group_add').click(function(event){
                     event.preventDefault();
                 });
             }
         });
+
+        $('#location_name').on('select2:close', function (e) {
+            $('.select2-group_add').remove();
+        });
+
+
     }
 
 

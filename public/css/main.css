@@ -1934,11 +1934,12 @@ th.datatable_desription{
     border: none;
     width: 100%;
     text-align: left;
-    border-radius: 0 0 28px 28px;
+    border-bottom: 1px solid #c5c5c5;
+    /* border-radius: 0 0 28px 28px; */
 }
-.select2radius-none .select2-container--default .select2-results > .select2-results__options{
+/* .select2radius-none .select2-container--default .select2-results > .select2-results__options{
     border-radius: 0;
-}
+} */
 .newAddLocation:hover,
 .select2radius-none .select2-container--default .select2-results > .select2-results__options .select2-results__option:hover{
     background-color: #b0b0b0;
