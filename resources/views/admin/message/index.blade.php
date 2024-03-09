@@ -19,7 +19,7 @@
             @endcan
         </div>
         <div class="c-admin position-relative">
-            <div class="table-responsive">
+            <div>
                 {{$dataTable->table(['class' => 'table common-table', 'style' => 'width:100%;'])}}
             </div>
         </div>
