@@ -27,7 +27,7 @@ class MessageController extends Controller
             $user = Auth::user();
             $staffsNotifify = '';
             if($user->roles->first()->name == 'Super Admin'){
-                $staffsNotifify = User::whereNotIN('id',[1])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                $staffsNotifify = User::whereNotNull('company_id')->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
             }else{
                 $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
             }
@@ -62,7 +62,7 @@ class MessageController extends Controller
             DB::commit();
             return response()->json([
                 'success'    => true,
-                'message'    => trans('messages.crud.add_record'),
+                'message'    => trans('messages.crud.message_sent'),
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

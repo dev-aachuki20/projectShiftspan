@@ -27,15 +27,7 @@ class StaffController extends Controller
     {
         abort_if(Gate::denies('staff_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            $user = Auth::user();
-            $staffsNotifify = '';
-            if($user->roles->first()->name == 'Super Admin'){
-                $staffsNotifify = User::whereNotIN('id',[1])->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
-            }else{
-                $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
-            }
-            
-            return $dataTable->render('admin.staff.index', compact('staffsNotifify'));
+            return $dataTable->render('admin.staff.index');
         } catch (\Exception $e) {
             return abort(500);
         }
@@ -356,6 +348,29 @@ class StaffController extends Controller
         }
     }
 
+    public function createNotification(Request $request)
+    {
+        // abort_if(Gate::denies('staff_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
+        try{
+            if($request->ajax()) {
+                $user = Auth::user();
+                $staffsNotifify = '';
+                if($user->roles->first()->name == 'Super Admin'){
+                    $staffsNotifify = User::whereNotNull('company_id')->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                }else{
+                    $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                }
+
+                $viewHTML = view('admin.staff.notification.create', compact('staffsNotifify'))->render();
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            }
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }catch (\Exception $e) {
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());          
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }
+    }
+
     /* Notification Store */
     public function notificationStore(NotificationRequest $request)
     {
@@ -371,7 +386,7 @@ class StaffController extends Controller
             DB::commit();
             return response()->json([
                 'success'    => true,
-                'message'    => trans('messages.crud.add_record'),
+                'message'    => trans('messages.crud.notification_sent'),
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

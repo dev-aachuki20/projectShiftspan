@@ -18,7 +18,7 @@
                 <button class="del_btn dash-btn red-bg w-115 me-md-1" id="deleteAllStaff">@lang('global.delete')</button>
             @endcan
             @can('notification_create')
-                <button class="dash-btn blue-bg w-115 ms-sm-2 mt-2 mt-sm-0" data-bs-toggle="modal" data-bs-target="#NnotificationSettings">Send Notification</button>
+                <button class="dash-btn blue-bg w-115 ms-sm-2 mt-2 mt-sm-0" id="notificationSettings" {{-- onclick="NnotificationSettings()" --}}>Send Notification</button>
             @endcan
         </div>
         <div class="c-admin position-relative">
@@ -29,7 +29,7 @@
     </div>
 
     {{-- Notification model --}}
-    @include('admin.staff.notification.create')
+    {{-- @include('admin.staff.notification.create') --}}
 @endsection
 
 @section('customJS')
@@ -62,7 +62,7 @@
         });
     });
 
-    $(document).ready(function(){
+    /* $(document).ready(function(){
         $('#searchInput').on('input', function() {
             var searchText = $(this).val().toLowerCase();
             $('.custom-check li').each(function() {
@@ -74,7 +74,21 @@
                 }
             });
         });
-    });
+    }); */
+
+    function searchInput(){
+        $('#searchInput').on('input', function() {
+            var searchText = $(this).val().toLowerCase();
+            $('.custom-check li').each(function() {
+                var text = $(this).text().toLowerCase();
+                if (text.includes(searchText)) {
+                    $(this).show();
+                } else {
+                    $(this).hide();
+                }
+            });
+        });
+    }
 
     
     @can('staff_create')
@@ -135,7 +149,7 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>'; 
-                            if (key.indexOf('sub_admin') !== -1) {
+                            if (key.indexOf('company_id') !== -1) {
                                 $(".sub_admin_error").html(errorLabelTitle);
                             } else{
                                 $(document).find('[name='+key+']').after(errorLabelTitle);
@@ -188,8 +202,15 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                            if (key.indexOf('sub_admin') !== -1) {
+                                $(".sub_admin_error").html(errorLabelTitle);
+                            }
+                            else{
+                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            }  
+                            /* errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                             
-                            $(errorLabelTitle).insertAfter("input[name='"+key+"']");
+                            $(errorLabelTitle).insertAfter("input[name='"+key+"']"); */
                         });
                     }
                 },
@@ -260,12 +281,7 @@
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
                             errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
-                            /* if (key.indexOf('sub_admin') !== -1) {
-                                $(".sub_admin_error").html(errorLabelTitle);
-                            } else {
-                                $(errorLabelTitle).insertAfter("input[name='"+key+"']");
-                            } */
-                            if (key.indexOf('sub_admin') !== -1) {
+                            if (key.indexOf('company_id') !== -1) {
                                 $(".sub_admin_error").html(errorLabelTitle);
                             } else{
                                 $(document).find('[name='+key+']').after(errorLabelTitle);
@@ -453,6 +469,31 @@
         });
     });
 
+    /* Notification */
+    $(document).on("click","#notificationSettings", function() {
+        $('.loader-div').show();
+
+        $.ajax({
+            type: 'get',
+            url: "{{route('staffs.createNotification')}}",
+            dataType: 'json',
+            success: function (response) {
+                if(response.success) {
+                    $('.popup_render_div').html(response.htmlView);
+                    $('#NnotificationSettings').modal('show');
+                    searchInput();
+                    $('.loader-div').hide();
+                }
+            },
+            error: function (response) {
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                    $('.loader-div').hide();
+                } 
+            }
+        });
+    });
+    
     $(document).on('submit', '#addNotificationForm', function (e) {
         e.preventDefault();
         $('.validation-error-block').remove();

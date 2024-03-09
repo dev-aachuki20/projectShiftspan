@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('locations', function (Blueprint $table) {
             $table->id();
             $table->uuid('uuid')->unique();
-            $table->string('name')->unique();
+            $table->string('name')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->tinyInteger('status')->default(1)->comment('1=> active, 0=>deactive');
             $table->timestamps();

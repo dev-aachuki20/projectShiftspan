@@ -37,7 +37,6 @@ class StaffRequest extends FormRequest
                 $rules['phone']                 = ['required', 'numeric', 'regex:/^[0-9]{7,15}$/','unique:users,phone,'. $this->staff.',uuid,deleted_at,NULL'];
                 $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
             }else{
-                $rules['company_id']            = ['nullable'];
                 /* $rules['name']                  = ['required', 'regex:/^[a-zA-Z\s]+$/','string', 'max:255', new NoMultipleSpacesRule];
                 $rules['username']              = ['required', 'alpha_num', 'string', 'regex:/^\S*$/', Rule::unique('users')->ignore($this->input('id'), 'uuid')->whereNull('deleted_at')]; */
 
@@ -48,7 +47,7 @@ class StaffRequest extends FormRequest
                 $rules['password']              = ['required', 'string', 'min:8', 'max:15', /* 'regex:/^(?!.*\s)(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/' */];
                 $rules['dob']                   = ['required', 'date', 'before_or_equal:' . now()->format('Y-m-d')];
             }
-    
+            $rules['company_id']                = auth()->user()->is_super_admin ? ['required'] : ['nullable'];
             $rules['previous_name']             = ['nullable', 'string'];
             $rules['national_insurance_number'] = ['nullable', 'string'];
             $rules['address']                   = ['nullable', 'string'];
@@ -114,6 +113,13 @@ class StaffRequest extends FormRequest
 
             'is_statement.required' => __('validation.required', ['attribute' => strtolower(__('cruds.staff.fields.statement'))]),
             'is_statement.boolean' => __('validation.boolean', ['attribute' => strtolower(__('cruds.staff.fields.statement'))]),
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'company_id' => 'Client Admin Name',
         ];
     }
 }

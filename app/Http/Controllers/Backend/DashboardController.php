@@ -18,7 +18,7 @@ class DashboardController extends Controller
             'userCount' => 0, 'shiftCount' => 0, 'locationCount' => 0
         ];
         if($user->roles->first()->name == 'Super Admin'){
-            $data['userCount'] = User::count();
+            $data['userCount'] = User::whereNotNull('company_id')->count();
             $data['shiftCount'] = Shift::Count();
             $data['locationCount'] = Location::count();
         }else/* if($user->roles->first()->name == 'Sub Admin') */{

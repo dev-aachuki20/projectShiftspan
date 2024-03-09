@@ -1,9 +1,9 @@
 <div class="modal fade common-modal modal-size-l" id="NnotificationSettings" tabindex="-1" aria-labelledby="NnotificationSettingsLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-820">
         <div class="modal-content">
-            <div class="modal-header justify-content-center {{ request()->is('admin/staffs*') ? 'blue-bg' : 'green-bg' }}">
+            <div class="modal-header justify-content-center {{ request()->route()->getName() == 'staffs.createNotification' ? 'blue-bg' : 'green-bg' }}">
                 <h5 class="modal-title text-center" id="NnotificationSettingsLabel">
-                    @if(request()->is('admin/staffs*'))
+                    @if(request()->route()->getName() == 'staffs.createNotification')
                         @lang('cruds.notification.fields.notification_settings')
                     @else
                         @lang('cruds.notification.fields.new_message')
@@ -20,7 +20,7 @@
                             <div class="select-box">
                                 <span class="selected-options">@lang('global.select') ...</span>
                             </div>
-                            <div class="options">
+                            <div class="options" style="display: none;">
                                 <p class="selectAll">@lang('cruds.notification.fields.all_staff')</p>
                                 <input type="text" id="searchInput" placeholder="Search...">
                                 <ul class="custom-check">
@@ -52,7 +52,7 @@
                         <input type="text" name="subject" value="" placeholder="@lang('cruds.notification.fields.type')......." required>
                     </div>
                     
-                    @if(request()->is('admin/staffs*'))
+                    @if(request()->route()->getName() == 'staffs.createNotification')
                         <div class="form-label with-textarea">
                             <label>@lang('cruds.notification.fields.message'):</label>
                             <textarea placeholder="@lang('cruds.notification.fields.type')......." name="message" required></textarea>

@@ -82,6 +82,7 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::resource('/staffs',StaffController::class);
         Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
         Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
+        Route::get('/notifications-create', [StaffController::class, 'createNotification'])->name('staffs.createNotification');
         Route::post('/notifications-store', [StaffController::class, 'notificationStore'])->name('staffs.notificationStore');
         
         Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);

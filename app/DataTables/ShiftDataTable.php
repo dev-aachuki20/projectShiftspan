@@ -2,6 +2,7 @@
 
 namespace App\DataTables;
 
+use App\Models\AuthorizedShift;
 use App\Models\Shift;
 use Yajra\DataTables\Html\Column;
 use Yajra\DataTables\Services\DataTable;
@@ -38,21 +39,30 @@ class ShiftDataTable extends DataTable
                 $clientName = $record->client ? $record->client->name : '';
                 $imagePath = asset('images/check-mark.png');
                 $removeImagePath = asset('images/remove.png');
+                $authData = $record->authorize ? $imagePath : $removeImagePath;
+                $clockimage = '';
+                if(!empty($record->clockInOuts) && $record->clockInOuts != '[]'){
+                    $clockimage = $imagePath;
+                }else{
+                    $clockimage = $removeImagePath;
+                }
+
+
                 return $clientName . '<br>
                     <div class="shift-btns">
                         <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns clockIn" data-shift_id="'.$record->id.'">
                             <span>
-                                <img src="' . $imagePath . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
+                                <img src="' . $clockimage . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
                             </span>
                         </a>
                         <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns clockOut" data-shift_id="'.$record->id.'">
                             <span>
-                                <img src="' . $removeImagePath . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
+                                <img src="' . $clockimage . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
                             </span>
                         </a>
                         <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns timeSheet" data-shift_id="'.$record->id.'">
                             <span>
-                                <img src="' . $imagePath . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
+                                <img src="' . $authData . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
                             </span>
                         </a>
                 </div>';
@@ -109,7 +119,7 @@ class ShiftDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
 
-                if ($record->status != 'complete') {
+                if ($record->status == 'open') {
                     $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn cancelShiftBtn" title="'.__('global.cancel').'" data-href="'.route('shifts.cancel', $record->uuid).'">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.cancel').'">
                             '.(getSvgIcon('cancel')).'
@@ -117,26 +127,28 @@ class ShiftDataTable extends DataTable
                     </button>';
                 }
                 if ($record->status == 'complete') {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn ratingShiftBtn"  data-href="'.route('shifts.rating', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn ratingShiftBtn"  data-rating="'.$record->rating.'" data-href="'.route('shifts.rating', $record->uuid).'">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.trans('cruds.shift.fields.rating').'">
                             '.(getSvgIcon('rating')).'
                         </span>
                     </button>';
                 }
-                if (Gate::check('shift_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editShiftBtn"  data-href="'.route('shifts.edit', $record->uuid).'">
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
-                            '.(getSvgIcon('edit')).'
-                        </span>
-                    </button>';
-                }
-                
-                if (Gate::check('shift_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteShiftBtn" data-href="'.route('shifts.destroy', $record->uuid).'">
-                        <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
-                            '.(getSvgIcon('delete')).'
-                        </span>
-                    </button>';
+                if($record->status != 'complete'){
+                    if (Gate::check('shift_edit')) {
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editShiftBtn" data-start_time="'.$record->start_time.'" data-href="'.route('shifts.edit', $record->uuid).'">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
+                                '.(getSvgIcon('edit')).'
+                            </span>
+                        </button>';
+                    }
+                    
+                    if (Gate::check('shift_delete')) {
+                        $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteShiftBtn" data-href="'.route('shifts.destroy', $record->uuid).'">
+                            <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
+                                '.(getSvgIcon('delete')).'
+                            </span>
+                        </button>';
+                    }
                 }
                 return $actionHtml;
             })

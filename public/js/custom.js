@@ -21,14 +21,16 @@ $(document).ready(function($){
 		}
 	});
     //multiple select and button click all select
-    $('.select-box').click(function(event) {
+    $(document).on('click','.select-box',function(event) {
         event.stopPropagation();
         $(this).next('.options').slideToggle();
     });
-    $('.options input[type="checkbox').change(function() {
+    $(document).on('change','.options input[type="checkbox"]',function(event) {
         updateSelectedOptions();
     });
-    $('.selectAll').click(function() {
+    
+    $(document).on('click','.selectAll',function(event) {
+        
         var $checkboxes = $('.options input[type="checkbox"]');
         var allChecked = $checkboxes.filter(':checked').length === $checkboxes.length;
         $checkboxes.prop('checked', !allChecked);

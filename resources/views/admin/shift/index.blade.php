@@ -584,6 +584,10 @@
         e.preventDefault();
 
         var formActionUrl = $(this).data('href');
+        var rating = $(this).data('rating');
+        if(rating){
+            $('select[name="rating"]').val(rating).trigger('change');
+        }
 
         $('#RatingForm').data('action', formActionUrl);
         $('#RatingForm').attr('data-action', formActionUrl);
@@ -652,10 +656,7 @@
         var minutes = parts[1];
         var nextMinute = parseInt(minutes) + step;
 
-        $('#end_time').val('');
-
-        $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
-        
+        $("#end_time").timepicker('option', 'minTime', hours + ':' + nextMinute);
         /* if(startDate && endDate && startDate < endDate){
             $("#end_time").timepicker('option', 'minTime', null);
         } else {
@@ -686,17 +687,13 @@
             $("#start_time").timepicker('option', 'minTime', null);
         }
 
-        // Set min time of End time
         var parts = start_time.split(':');
         var hours = parts[0];
         var minutes = parts[1];
         var nextMinute = parseInt(minutes) + step;
 
-        /* if(startDate && endDate && startDate < endDate){
-            $("#end_time").timepicker('option', 'minTime', null);
-        } else {
-            $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
-        } */
+        $("#end_time").timepicker('option', 'minTime', hours + ':' + nextMinute);
+
     }
     
 </script>

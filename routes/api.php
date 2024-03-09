@@ -302,6 +302,19 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     | Parameters    : id, full_name, signature
     */
     Route::post('authrized-sign-shift', [ShiftController::class,'authorizedSign']);
+    /*
+    |--------------------------------------------------------------------------
+    |  Authorized Sign Shift API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/authrized-sign-shift
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : POST
+    | 
+    | Parameters    : id, full_name, signature
+    */
+    Route::get('shift-date', [ShiftController::class,'shiftsForCurrentAndPreviousMonth']);
 
     /*
     |--------------------------------------------------------------------------
@@ -321,7 +334,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     |  Completed Notification API Routes
     |--------------------------------------------------------------------------
     | 
-    | Route         : http://localhost:8000/api/all-help-chats
+    | Route         : http://localhost:8000/api/help-chats
     | Header        : Content-Type:application/json
     |               : Authorization : Token
     | Method        : GET
@@ -337,7 +350,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     | Route         : http://localhost:8000/api/help-chat-store
     | Header        : Content-Type:application/json
     |               : Authorization : Token
-    | Method        : GET
+    | Method        : POST
     | 
     */
     Route::post('help-chat-store', [NotificationController::class,'helpChatNotification']);

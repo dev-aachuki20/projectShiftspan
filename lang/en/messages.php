@@ -10,6 +10,8 @@ return [
         'merge_record'  => 'This record has been succesfully Merged!',
         'approve_record'=> 'Record Successfully Approved !',
         'status_update' => 'Status successfully updated!',
+        'notification_sent' => 'Notification Successfully sent!',
+        'message_sent' => 'Message Successfully sent!',
     ],
 
     'areYouSure'=>'Are you sure you want to delete this record?',

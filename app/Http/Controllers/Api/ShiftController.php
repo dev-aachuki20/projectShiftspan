@@ -166,7 +166,6 @@ class ShiftController extends APIController
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
                     'end_time'          => $shift->end_time,
-                    'is_authorized'     => $shift->is_authorized ? true : false,
                 ];
             }
             $shiftsData['total_hours'] = $totalWorkingHour;
@@ -430,11 +429,7 @@ class ShiftController extends APIController
             ]);
 
             if($authSign && $request->has('signature')){
-                                
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
-
-                Shift::where('id',$request->id)->update(['is_authorized'=>1]);
-
             }
 
             DB::commit();
@@ -449,4 +444,61 @@ class ShiftController extends APIController
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }   
+
+    public function shiftsForCurrentAndPreviousMonth(Request $request){
+        try {          
+            $currentMonth = date('m');
+            $previousMonth = date('m', strtotime('-1 month'));
+        
+            $shifts = Shift::where(function ($query) use ($currentMonth, $previousMonth) {
+                $query->whereMonth('start_date', $currentMonth)
+                    ->orWhere(function ($query) use ($previousMonth) {
+                        $query->whereMonth('start_date', date('m', strtotime('-1 month')))
+                            ->whereYear('start_date', date('Y'));
+                    });
+            })->orderBy('id', 'desc')->get();
+
+            $shiftsData = [];
+            $totalWorkingHour = 0;
+            foreach ($shifts as $shift) {
+                $startDate = Carbon::parse($shift->start_date);
+                $endDate = Carbon::parse($shift->end_date);
+                $startTime = Carbon::parse($shift->start_time);
+                $endTime = Carbon::parse($shift->end_time);
+
+                $daysDiff = $endDate->diffInDays($startDate) + 1;
+
+                $workingHoursPerDay = $startTime->diffInHours($endTime);
+                $totalWorkingHour += $workingHoursPerDay * $daysDiff;
+
+                $shiftsData[] = [
+                    'shift_id'          => $shift->id,
+                    'sub_admin_name'    => $shift->client->name,
+                    'company_address'   => $shift->clientDetail->address,
+                    'occupation_name'   => $shift->occupation->name,
+                    'location_name'     => $shift->location->name,
+                    'start_date'        => $shift->start_date,
+                    'end_date'          => $shift->end_date,
+                    'start_time'        => $shift->start_time,
+                    'end_time'          => $shift->end_time,
+                    'type'              => $shift->status,
+                ];
+            }
+            $shiftsData['extracolumn'] = [
+                'total_hours' => $totalWorkingHour,
+                'total_count' => $shifts->count(),
+            ];
+            $shiftsData = array_values($shiftsData);
+            
+            return $this->respondOk([
+                'status'   => true,
+                'message'  => trans('cruds.shift.title').', '.trans('messages.record_retrieved_successfully'),
+                'data'     => $shiftsData, 
+            ])->setStatusCode(Response::HTTP_OK);
+        }
+        catch(\Exception $e){
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
 }

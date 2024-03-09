@@ -36,6 +36,7 @@ class HomeController extends APIController
      */
     public function setting(Request $request)
     {
+        
         $setting = Setting::where('group','api')->where('status',1)->get();
         // $setting = Setting::whereIn('key',['privacy_policy','gdpr_policy'])->where('status',1)->get();
         $settingData = $setting->map(function ($input) {
@@ -53,11 +54,18 @@ class HomeController extends APIController
 			];
 
 		});
+    
+        $documents = $this->documents();  
+        $settingDataArray = $settingData->toArray();
+        $settingDataArray = array_merge([
+            ['staff_documents' => $documents]], 
+            [['settings' => $settingDataArray]
+        ]);
 
         return $this->respondOk([
             'status'   => true,
             'message'   => trans('messages.record_retrieved_successfully'),
-            'data'      => $settingData,
+            'data'      => array_values($settingDataArray),
         ])->setStatusCode(Response::HTTP_OK);
     }
 
@@ -92,6 +100,51 @@ class HomeController extends APIController
             'message'   => trans('messages.record_retrieved_successfully'),
             'data'      => $occupationList,
         ])->setStatusCode(Response::HTTP_OK);
+    }
+
+    /* Return User Documents */
+    private function documents(){
+        $user = auth()->user();
+        $documents = [];
+        if($user){
+            $documents[] = [
+                'key'           => 'relevant_training_image',
+                'value'         => $user->training_document_url,
+                'display_name'  => trans('cruds.staff.fields.relevant_training_image'),
+            ];
+        
+            $documents[] = [
+                'key'           => 'dbs_certificate',
+                'value'         => $user->dbs_certificate_url,
+                'display_name'  => trans('cruds.staff.fields.dbs_certificate'),
+            ];
+        
+            $documents[] = [
+                'key'           => 'cv',
+                'value'         => $user->cv_url,
+                'display_name'  => trans('cruds.staff.fields.cv'),
+            ];
+
+            $documents[] = [
+                'key'           => 'staff_budge',
+                'value'         => $user->staff_budge_url,
+                'display_name'  => trans('cruds.staff.fields.staff_budge'),
+            ];
+
+            $documents[] = [
+                'key'           => 'dbs_check',
+                'value'         => $user->dbs_check_url,
+                'display_name'  => trans('cruds.staff.fields.dbs_check'),
+            ];
+
+            $documents[] = [
+                'key'           => 'training_check',
+                'value'         => $user->training_check_url,
+                'display_name'  => trans('cruds.staff.fields.training_check'),
+            ];
+        }
+
+        return $documents;
     }
 }
 

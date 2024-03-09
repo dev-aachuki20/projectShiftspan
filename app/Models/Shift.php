@@ -86,5 +86,9 @@ class Shift extends Model
         return $this->hasMany(ClockInOut::class);
     }
 
+    public function authorize(){
+        return $this->belongsTo(AuthorizedShift::class);
+    }
+
 
 }

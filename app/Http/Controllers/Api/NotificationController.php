@@ -17,7 +17,7 @@ class NotificationController extends APIController
         try {
             $input = $request->validated();
             $user = auth()->user();
-            $notifications = $user->notifications()->where('notifiable_id', $user->id)->whereSection('announcements')->whereNull('deleted_at')->get();
+            $notifications = $user->notifications()->where('notifiable_id', $user->id)->whereSection($input['section'])->whereNull('deleted_at')->get();
 
             return $this->respondOk([
                 'status'        => true,
@@ -30,11 +30,12 @@ class NotificationController extends APIController
         }
     }
 
-    public function helpChats(Request $request){
+    public function helpChats(NotificationRequest $request){
         try {
+            $input = $request->validated();
             $user = auth()->user();
             
-            $notification = $user->notifications()->where('notifiable_id', $user->id)->whereSection('help_chat')->whereNull('deleted_at')->get();
+            $notification = $user->notifications()->where('notifiable_id', $user->id)->whereSection($input['section'])->whereNull('deleted_at')->get();
             return $this->respondOk([
                 'status'        => true,
                 'message'       => trans('messages.record_retrieved_successfully'),
