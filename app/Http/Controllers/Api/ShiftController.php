@@ -116,18 +116,31 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
 
-    public function completedShifts(){
+    public function completedShifts(Request $request){
+
+        $request->validate([
+            'type'=>'required|in:shift,schedule',
+        ]);
+
         try{
             $user = auth()->user();
 
             $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')->whereStatus('complete')
-            ->orderBy('start_date', 'desc')
-            ->get();
+            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')
+            ->whereStatus('complete');
+
+            if($request->type == 'shift'){
+                $completedShifts =   $completedShifts->where('is_authorized',1);
+            }else if($request->type == 'schedule'){
+                $completedShifts =   $completedShifts->where('is_authorized',0);
+            }
+
+            $completedShifts =   $completedShifts->orderBy('start_date', 'desc')->get();
 
             $shiftsData = [];
             $totalWorkingHour = 0;
@@ -165,6 +178,7 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
+            // dd($e->getMessage().'->'.$e->getLine());
 
             return $this->throwValidation([trans('messages.error_message')]);
         }
