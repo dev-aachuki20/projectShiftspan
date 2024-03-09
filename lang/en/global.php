@@ -110,7 +110,7 @@ return [
     'companies'                             => 'Companies',
     'company'                               => 'Company',
     'company_name'                          => 'Company name',
-    'confirm_password'                      => 'Confirm password',
+    'confirm_password'                      => 'Confirm Password',
     'confirm_new_password'                  => 'Confirm New Password',
     'contact_management'                    => 'Contact management',
     'contacts'                              => 'Contacts',

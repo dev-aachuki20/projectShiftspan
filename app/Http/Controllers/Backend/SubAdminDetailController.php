@@ -80,7 +80,7 @@ class SubAdminDetailController extends Controller
 
                 $response = [
                     'success' => true,
-                    'message' => trans('cruds.location.title_singular').' '.trans('messages.crud.add_record'),
+                    'message' => trans('cruds.client_detail.title_singular').' '.trans('messages.crud.add_record'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
@@ -171,7 +171,7 @@ class SubAdminDetailController extends Controller
 
                 $response = [
                     'success' => true,
-                    'message' => trans('cruds.location.title_singular').' '.trans('messages.crud.update_record'),
+                    'message' => trans('cruds.client_detail.title_singular').' '.trans('messages.crud.update_record'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
@@ -233,6 +233,7 @@ class SubAdminDetailController extends Controller
                             $uploadImageId = $subAdminDetail->buildingImage->id;
                             deleteFile($uploadImageId);
                         }
+                        $subAdminDetail->delete();
                     }
                     DB::commit();
                     $response = [

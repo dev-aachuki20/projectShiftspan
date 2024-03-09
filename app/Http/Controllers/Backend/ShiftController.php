@@ -88,7 +88,7 @@ class ShiftController extends Controller
                 DB::commit();
                 $response = [
                     'success' => true,
-                    'message' => trans('cruds.location.title_singular').' '.trans('messages.crud.add_record'),
+                    'message' => trans('cruds.shift.title_singular').' '.trans('messages.crud.add_record'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
@@ -172,7 +172,7 @@ class ShiftController extends Controller
 
                 $response = [
                     'success' => true,
-                    'message' => trans('cruds.location.title_singular').' '.trans('messages.crud.update_record'),
+                    'message' => trans('cruds.shift.title_singular').' '.trans('messages.crud.update_record'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {

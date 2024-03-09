@@ -43,11 +43,11 @@ class SubAdminDetailDataTable extends DataTable
             })
 
             ->editColumn('name', function($record){
-                return $record->name ?? '';
+                return '<div>'.($record->name ?? '').'</div>';
             })
 
             ->editColumn('address', function($record){
-                return $record->address ?? '';
+                return '<div>'.($record->address ?? '').'</div>';
             })
 
             ->editColumn('shop_description', function($record){
@@ -84,7 +84,7 @@ class SubAdminDetailDataTable extends DataTable
                 return $actionHtml;
             })
             ->setRowId('id')
-            ->rawColumns(['action', 'checkbox', 'building_image', 'shop_description', 'travel_info']);
+            ->rawColumns(['action', 'checkbox', 'building_image', 'shop_description', 'travel_info', 'address', 'name']);
     }
 
     /**
@@ -105,16 +105,12 @@ class SubAdminDetailDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $orderByColumn = 1;
-        if (Gate::check('sub_admin_detail_delete')) {
-            $orderByColumn = 2;
-        }
         return $this->builder()
                     ->setTableId('client-detail-table')
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy($orderByColumn)                    
+                    ->orderBy(0)                    
                     ->selectStyleSingle();
     }
 
@@ -124,6 +120,7 @@ class SubAdminDetailDataTable extends DataTable
     public function getColumns(): array
     {
         $columns = [];
+        $columns[] = Column::make('created_at')->title('')->visible(false)->searchable(false);
         if (Gate::check('sub_admin_detail_delete')) {
             $columns[] = Column::make('checkbox')->titleAttr('')->title('<label class="custom-checkbox"><input type="checkbox" id="dt_cb_all" ><span></span></label>')->orderable(false)->searchable(false)->addClass('pe-0 position-relative');
         }
@@ -132,12 +129,11 @@ class SubAdminDetailDataTable extends DataTable
         if($this->authUser->is_super_admin){
             $columns[] = Column::make('client.name')->title('<span>'.trans('cruds.client_detail.fields.client_name').'</span>')->titleAttr(trans('cruds.client_detail.fields.client_name'));
         }
-        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_detail.fields.name').'</span>')->titleAttr(trans('cruds.client_detail.fields.name'));
-        $columns[] = Column::make('address')->title('<span>'.trans('cruds.client_detail.fields.address').'</span>')->titleAttr(trans('cruds.client_detail.fields.address'));
+        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_detail.fields.name').'</span>')->titleAttr(trans('cruds.client_detail.fields.name'))->addClass('datatable_desription');
+        $columns[] = Column::make('address')->title('<span>'.trans('cruds.client_detail.fields.address').'</span>')->titleAttr(trans('cruds.client_detail.fields.address'))->addClass('datatable_desription');
         $columns[] = Column::make('shop_description')->title('<span>'.trans('cruds.client_detail.fields.shop_description').'</span>')->titleAttr(trans('cruds.client_detail.fields.shop_description'))->addClass('datatable_desription');
-        $columns[] = Column::make('travel_info')->title('<span>'.trans('cruds.client_detail.fields.travel_info').'</span>')->titleAttr(trans('cruds.client_detail.fields.travel_info'))->addClass('datatable_desription');
+        $columns[] = Column::make('travel_info')->title('<span>'.trans('cruds.client_detail.fields.travel_info').'</span>')->titleAttr(trans('cruds.client_detail.fields.travel_info'))->addClass('datatable_desription');    
         
-        $columns[] = Column::make('created_at')->title(trans('cruds.client_detail.fields.created_at'))->visible(false)->searchable(false);
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
         return $columns;
