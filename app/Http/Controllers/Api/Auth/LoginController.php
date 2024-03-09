@@ -44,6 +44,10 @@ class LoginController extends APIController
             if(Auth::attempt($credentials)){
                 $user = auth()->user();
                 
+                $user->device_token = $request->device_token;
+                
+                $user->save();
+
                 $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;
                 
                 return $this->respond([
