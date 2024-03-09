@@ -86,8 +86,16 @@ class Shift extends Model
         return $this->hasMany(ClockInOut::class);
     }
 
+    public function clockIn(){
+        return $this->hasMany(ClockInOut::class)->whereNotNull('clockin_date');
+    }
+    
+    public function clockOut(){
+        return $this->hasMany(ClockInOut::class)->whereNotNull('clockout_date');
+    }
+
     public function authorize(){
-        return $this->belongsTo(AuthorizedShift::class);
+        return $this->hasOne(AuthorizedShift::class);
     }
 
 

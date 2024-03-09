@@ -50,17 +50,17 @@ class ShiftDataTable extends DataTable
 
                 return $clientName . '<br>
                     <div class="shift-btns">
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns clockIn" data-shift_id="'.$record->id.'">
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockIn' : '').'" data-shift_id="'.$record->id.'">
                             <span>
                                 <img src="' . $clockimage . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
                             </span>
                         </a>
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns clockOut" data-shift_id="'.$record->id.'">
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockOut' : '').'" data-shift_id="'.$record->id.'">
                             <span>
                                 <img src="' . $clockimage . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
                             </span>
                         </a>
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns timeSheet" data-shift_id="'.$record->id.'">
+                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns '.($record->authorize ? 'timeSheet' : '').'" data-shift_id="'.$record->id.'">
                             <span>
                                 <img src="' . $authData . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
                             </span>
