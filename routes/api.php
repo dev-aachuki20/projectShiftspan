@@ -308,13 +308,13 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     |  Completed Notification API Routes
     |--------------------------------------------------------------------------
     | 
-    | Route         : http://localhost:8000/api/notifications
+    | Route         : http://localhost:8000/api/announcements
     | Header        : Content-Type:application/json
     |               : Authorization : Token
     | Method        : GET
     | 
     */
-    Route::get('notifications', [NotificationController::class,'getNotification']);
+    Route::get('announcements', [NotificationController::class,'getAnnouncements']);
     
     /*
     |--------------------------------------------------------------------------
@@ -327,19 +327,8 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     | Method        : GET
     | 
     */
-    Route::get('all-help-chats', [NotificationController::class,'allHelpChats']);
-    /*
-    |--------------------------------------------------------------------------
-    |  Completed Notification API Routes
-    |--------------------------------------------------------------------------
-    | 
-    | Route         : http://localhost:8000/api/help-chats
-    | Header        : Content-Type:application/json
-    |               : Authorization : Token
-    | Method        : GET
-    | 
-    */
     Route::get('help-chats', [NotificationController::class,'helpChats']);
+    
     /*
     |--------------------------------------------------------------------------
     |  Completed Notification API Routes

@@ -125,7 +125,7 @@ class ShiftController extends APIController
             $user = auth()->user();
 
             $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('complete')
+            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')->whereStatus('complete')
             ->orderBy('start_date', 'desc')
             ->get();
 
@@ -153,6 +153,7 @@ class ShiftController extends APIController
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
                     'end_time'          => $shift->end_time,
+                    'is_authorized'     => $shift->is_authorized ? true : false,
                 ];
             }
             $shiftsData['total_hours'] = $totalWorkingHour;
@@ -415,7 +416,11 @@ class ShiftController extends APIController
             ]);
 
             if($authSign && $request->has('signature')){
+                                
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
+
+                Shift::where('id',$request->id)->update(['is_authorized'=>1]);
+
             }
 
             DB::commit();

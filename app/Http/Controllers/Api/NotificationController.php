@@ -13,11 +13,11 @@ use Illuminate\Http\Request;
 
 class NotificationController extends APIController
 {
-    public function getNotification(NotificationRequest $request){
+    public function getAnnouncements(NotificationRequest $request){
         try {
             $input = $request->validated();
             $user = auth()->user();
-            $notifications = $user->notifications()->where('notifiable_id', $user->id)->whereSection($input['section'])->get();
+            $notifications = $user->notifications()->where('notifiable_id', $user->id)->whereSection('announcements')->whereNull('deleted_at')->get();
 
             return $this->respondOk([
                 'status'        => true,
@@ -30,27 +30,11 @@ class NotificationController extends APIController
         }
     }
 
-    public function allHelpChats(Request $request){
-        try {
-            $user = auth()->user();
-            
-            $notification = $user->notifications()->where('notifiable_id', $user->id)->whereSection('help_chat')->get();
-            return $this->respondOk([
-                'status'        => true,
-                'message'       => trans('messages.record_retrieved_successfully'),
-                'data'          => NotificationResource::collection($notification),
-            ])->setStatusCode(Response::HTTP_OK);
-        } catch (\Exception $e) {
-            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
-            return $this->throwValidation([trans('messages.error_message')]);
-        }
-    }
-
     public function helpChats(Request $request){
         try {
             $user = auth()->user();
             
-            $notification = $user->notifications()->where('id', $request->notification_id)->where('notifiable_id', $user->id)->get();
+            $notification = $user->notifications()->where('notifiable_id', $user->id)->whereSection('help_chat')->whereNull('deleted_at')->get();
             return $this->respondOk([
                 'status'        => true,
                 'message'       => trans('messages.record_retrieved_successfully'),
@@ -66,6 +50,7 @@ class NotificationController extends APIController
         try {
             $input = $request->validated();
             $user = auth()->user();
+            $input['subject'] = 'Help Chat';
             $input['notification_type'] = 'send_message';
             DB::beginTransaction();
 

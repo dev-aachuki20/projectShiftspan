@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('company_number', 20)->nullable()->default(null)->after('email_verified_at');
+        Schema::table('shifts', function (Blueprint $table) {
+            $table->tinyInteger('is_authorized')->default(0)->comment('0=> false, 1=> true')->after('status');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('company_number');
+        Schema::table('shifts', function (Blueprint $table) {
+            $table->dropColumn('is_authorized');
         });
     }
 };

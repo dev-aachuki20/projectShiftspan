@@ -33,7 +33,7 @@ class NotificationRequest extends FormRequest
             if(isset($notification_id)){
                 $rules['notification_id'] = ['exists:notifications,id'];
             } */
-            $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
+            // $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
             $rules['message']   = ['required','string'];
             $rules ['section'] = ['required', 'max:20', Rule::in(['help_chat'])];
         }else{
