@@ -36,40 +36,75 @@ class ShiftDataTable extends DataTable
             })
 
             ->editColumn('client.name', function($record){
-                $clientName = $record->client ? $record->client->name : '';
-                $imagePath = asset('images/check-mark.png');
-                $removeImagePath = asset('images/remove.png');
-                $authData = $record->authorize ? $imagePath : $removeImagePath;
-                $clockimage = '';
-                if(!empty($record->clockInOuts) && $record->clockInOuts != '[]'){
-                    $clockimage = $imagePath;
-                }else{
-                    $clockimage = $removeImagePath;
+                if(auth()->user()->is_super_admin){
+                    $clientName = $record->client ? $record->client->name : '';
+                    $imagePath = asset('images/check-mark.png');
+                    $removeImagePath = asset('images/remove.png');
+                    $authData = $record->authorize ? $imagePath : $removeImagePath;
+                    $clockimage = '';
+                    if(!empty($record->clockInOuts) && $record->clockInOuts != '[]'){
+                        $clockimage = $imagePath;
+                    }else{
+                        $clockimage = $removeImagePath;
+                    }
+
+
+                    return $clientName . '<br>
+                        <div class="shift-btns">
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockIn' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $clockimage . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
+                                </span>
+                            </a>
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockOut' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $clockimage . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
+                                </span>
+                            </a>
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns '.($record->authorize ? 'timeSheet' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $authData . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
+                                </span>
+                            </a>
+                    </div>';
                 }
-
-
-                return $clientName . '<br>
-                    <div class="shift-btns">
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockIn' : '').'" data-shift_id="'.$record->id.'">
-                            <span>
-                                <img src="' . $clockimage . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
-                            </span>
-                        </a>
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockOut' : '').'" data-shift_id="'.$record->id.'">
-                            <span>
-                                <img src="' . $clockimage . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
-                            </span>
-                        </a>
-                        <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns '.($record->authorize ? 'timeSheet' : '').'" data-shift_id="'.$record->id.'">
-                            <span>
-                                <img src="' . $authData . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
-                            </span>
-                        </a>
-                </div>';
             })
 
             ->editColumn('clientDetail.name', function($record){
-                return $record->clientDetail ? $record->clientDetail->name : '';
+                if(auth()->user()->is_sub_admin){
+                    $clientDetailName = $record->clientDetail ? $record->clientDetail->name : '';
+                    $imagePath = asset('images/check-mark.png');
+                    $removeImagePath = asset('images/remove.png');
+                    $authData = $record->authorize ? $imagePath : $removeImagePath;
+                    $clockimage = '';
+                    if(!empty($record->clockInOuts) && $record->clockInOuts != '[]'){
+                        $clockimage = $imagePath;
+                    }else{
+                        $clockimage = $removeImagePath;
+                    }
+
+
+                    return $clientDetailName . '<br>
+                        <div class="shift-btns">
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockIn' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $clockimage . '" alt="clock-in"><br>'.__('cruds.shift.fields.clock_in').'
+                                </span>
+                            </a>
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_out').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockOut' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $clockimage . '" alt="clock-out"><br>'.__('cruds.shift.fields.clock_out').'
+                                </span>
+                            </a>
+                            <a href="javascript:void(0)" title="'.__('cruds.shift.fields.timesheet').'" class="clock-btns '.($record->authorize ? 'timeSheet' : '').'" data-shift_id="'.$record->id.'">
+                                <span>
+                                    <img src="' . $authData . '" alt="Timesheet"><br>'.__('cruds.shift.fields.timesheet').'
+                                </span>
+                            </a>
+                    </div>';
+                }else{
+                    return $record->clientDetail ? $record->clientDetail->name : '';
+                }
             })
 
             ->editColumn('staffs.name', function($record){
@@ -179,7 +214,13 @@ class ShiftDataTable extends DataTable
             ->filterColumn('cancel_at', function ($query, $keyword) {
                 $query->whereRaw("DATE_FORMAT(cancel_at, '".config('constant.search_date_format.date_time')."') like ?", ["%$keyword%"]); //date_format when searching using date
             })
-            ->rawColumns(['action', 'checkbox', 'rating', 'client.name']);
+            ->rawColumns([
+                'action', 
+                'checkbox',
+                'rating', 
+                auth()->user()->is_super_admin ? 'client.name' : '', 
+                auth()->user()->is_sub_admin ? 'clientDetail.name' : ''
+            ]);
     }
 
     /**
