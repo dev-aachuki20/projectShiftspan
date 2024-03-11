@@ -314,7 +314,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     | 
     | Parameters    : id, full_name, signature
     */
-    Route::get('shift-date', [ShiftController::class,'shiftsForCurrentAndPreviousMonth']);
+    Route::get('calendar', [ShiftController::class,'shiftsForCurrentAndPreviousMonth']);
 
     /*
     |--------------------------------------------------------------------------

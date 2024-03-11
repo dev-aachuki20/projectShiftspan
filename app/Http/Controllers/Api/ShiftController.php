@@ -429,6 +429,9 @@ class ShiftController extends APIController
             ]);
 
             if($authSign && $request->has('signature')){
+
+                Shift::where('id',$request->id)->update(['is_authorized'=>1]);
+
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
             }
 
@@ -447,13 +450,14 @@ class ShiftController extends APIController
 
     public function shiftsForCurrentAndPreviousMonth(Request $request){
         try {          
+            $user = auth()->user();
             $currentMonth = date('m');
             $previousMonth = date('m', strtotime('-1 month'));
         
-            $shifts = Shift::where(function ($query) use ($currentMonth, $previousMonth) {
+            $shifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])->whereIn('status', ['complete', 'picked'])->where(function ($query) use ($currentMonth, $previousMonth) {
                 $query->whereMonth('start_date', $currentMonth)
                     ->orWhere(function ($query) use ($previousMonth) {
-                        $query->whereMonth('start_date', date('m', strtotime('-1 month')))
+                        $query->whereMonth('start_date', $previousMonth)
                             ->whereYear('start_date', date('Y'));
                     });
             })->orderBy('id', 'desc')->get();
@@ -473,10 +477,10 @@ class ShiftController extends APIController
 
                 $shiftsData[] = [
                     'shift_id'          => $shift->id,
-                    'sub_admin_name'    => $shift->client->name,
-                    'company_address'   => $shift->clientDetail->address,
-                    'occupation_name'   => $shift->occupation->name,
-                    'location_name'     => $shift->location->name,
+                    'sub_admin_name'    => $shift->client ? $shift->client->name : null,
+                    'company_address'   => $shift->clientDetail ? $shift->clientDetail->address : null,
+                    'occupation_name'   => $shift->occupation ? $shift->occupation->name : null,
+                    'location_name'     => $shift->location ? $shift->location->name : null,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -484,10 +488,12 @@ class ShiftController extends APIController
                     'type'              => $shift->status,
                 ];
             }
+            /*
             $shiftsData['extracolumn'] = [
                 'total_hours' => $totalWorkingHour,
                 'total_count' => $shifts->count(),
             ];
+            */
             $shiftsData = array_values($shiftsData);
             
             return $this->respondOk([
@@ -498,7 +504,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
-            return $this->throwValidation([trans('messages.error_message')]);
+            return $this->throwValidation([trans('messages.error_message'),$e->getMessage().' '.$e->getFile().' '.$e->getCode()]);
         }
     }
 }
