@@ -70,11 +70,11 @@ return [
     ],
 
     'ratings' =>[
-        1 => '1 Start',
-        2 => '2 Start',
-        3 => '3 Start',
-        4 => '4 Start',
-        5 => '5 Start',
+        1 => '1 Star',
+        2 => '2 Star',
+        3 => '3 Star',
+        4 => '4 Star',
+        5 => '5 Star',
     ],
 
     'timepicker_step' => 15,
