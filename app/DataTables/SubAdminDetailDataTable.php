@@ -129,12 +129,12 @@ class SubAdminDetailDataTable extends DataTable
         if($this->authUser->is_super_admin){
             $columns[] = Column::make('client.name')->title('<span>'.trans('cruds.client_detail.fields.client_name').'</span>')->titleAttr(trans('cruds.client_detail.fields.client_name'));
         }
-        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_detail.fields.name').'</span>')->titleAttr(trans('cruds.client_detail.fields.name'))->addClass('datatable_desription');
-        $columns[] = Column::make('address')->title('<span>'.trans('cruds.client_detail.fields.address').'</span>')->titleAttr(trans('cruds.client_detail.fields.address'))->addClass('datatable_desription');
-        $columns[] = Column::make('shop_description')->title('<span>'.trans('cruds.client_detail.fields.shop_description').'</span>')->titleAttr(trans('cruds.client_detail.fields.shop_description'))->addClass('datatable_desription');
-        $columns[] = Column::make('travel_info')->title('<span>'.trans('cruds.client_detail.fields.travel_info').'</span>')->titleAttr(trans('cruds.client_detail.fields.travel_info'))->addClass('datatable_desription');    
+        $columns[] = Column::make('name')->title('<span>'.trans('cruds.client_detail.fields.name').'</span>')->titleAttr(trans('cruds.client_detail.fields.name'))->addClass('');
+        $columns[] = Column::make('address')->title('<span>'.trans('cruds.client_detail.fields.address').'</span>')->titleAttr(trans('cruds.client_detail.fields.address'))->addClass('mw-160 white-space-normal line-clamp-3');
+        $columns[] = Column::make('shop_description')->title('<span>'.trans('cruds.client_detail.fields.shop_description').'</span>')->titleAttr(trans('cruds.client_detail.fields.shop_description'))->addClass('mw-250 white-space-normal line-clamp-3');
+        $columns[] = Column::make('travel_info')->title('<span>'.trans('cruds.client_detail.fields.travel_info').'</span>')->titleAttr(trans('cruds.client_detail.fields.travel_info'))->addClass('mw-250 white-space-normal line-clamp-3');    
         
-        $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
+        $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('');
 
         return $columns;
     }

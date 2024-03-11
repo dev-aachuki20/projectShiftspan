@@ -247,7 +247,11 @@ class ShiftDataTable extends DataTable
                     ->columns($this->getColumns())
                     ->minifiedAjax()
                     //->dom('Bfrtip')
-                    ->orderBy(0)                    
+                    ->orderBy(0)
+                    ->lengthMenu([
+                        [10, 25, 50, 100, /*-1*/], // Page length values
+                        [10, 25, 50, 100, /*'All'*/]  // Display text for each value
+                    ])                    
                     ->selectStyleSingle();
     }
 
