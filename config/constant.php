@@ -85,4 +85,23 @@ return [
         'help_chat'     => 'Help Chat', 
         'announcements' => 'Announcements',
     ],
+
+    'subject_notification_type' => [
+        /* shifts */
+        'shift_pickings'        => 'Shift Pickings',
+        'shift_amendments'      => 'Shift Amendments',
+        'shift_cancellations'   => 'Shift Cancellations',
+        'shift_changes'         => 'Shift Changes',
+        'shift_uploads'         => 'Shift Uploads',
+        'completed_shifts'      => 'Completed Shifts',
+
+        /* for registrations */
+        'registration_completion'=> 'Registration is complete, account is activated',
+        
+        /* for staff */
+        'clock_in'              => 'Clock In',
+        'clock_out'             => 'Clock Out',
+        'authorised_sign'       => 'Authorised Sign Off Timesheet',
+    ],
+    
 ];
