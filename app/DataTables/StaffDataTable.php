@@ -120,9 +120,15 @@ class StaffDataTable extends DataTable
      */
     public function query(User $model): QueryBuilder
     {
-        return $model->whereHas('roles',function($query){
-            $query->where('id',config('constant.roles.staff'));
-        })->newQuery();
+        if(auth()->user()->is_super_admin){            
+            return $model->whereHas('roles',function($query){
+                $query->where('id',config('constant.roles.staff'));
+            })->newQuery();
+        }else{
+            return $model->where('company_id', auth()->user()->id)->whereHas('roles',function($query){
+                $query->where('id',config('constant.roles.staff'));
+            })->newQuery();
+        }
     }
 
     /**
