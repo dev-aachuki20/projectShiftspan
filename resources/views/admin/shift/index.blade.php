@@ -32,7 +32,7 @@
 			<div class="modal-content">
 				<div class="modal-header justify-content-center lyellow-bg">
 					<h5 class="modal-title text-center" id="addRatingsLabel">+ @lang('global.add') @lang('cruds.shift.fields.rating')</h5>
-					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					<button type="button" class="btn-close cancelButton" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
 					<form class="msg-form" id="RatingForm" data-action="">
@@ -172,6 +172,11 @@
             disableTextInput: true,
             maxTime: "{{config('constant.timepicker_max_time')}}"
 		});
+    });
+
+    $('.cancelButton').click(function() {
+        $('#shift-table').DataTable().ajax.reload(null, false);
+        $('#RatingForm')[0].reset();
     });
 
     @can('shift_access')
