@@ -88,6 +88,7 @@ return [
 
     'subject_notification_type' => [
         /* shifts */
+        'shift_assign'          => 'Shift Assign',
         'shift_pickings'        => 'Shift Pickings',
         'shift_amendments'      => 'Shift Amendments',
         'shift_cancellations'   => 'Shift Cancellations',

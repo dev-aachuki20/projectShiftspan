@@ -226,7 +226,7 @@ return [
     ],
 
     'message' => [
-        'title' => 'messages',
+        'title' => 'Messages',
         'title_singular' => 'Message',
         'fields' => [
             'id'                            => 'ID',

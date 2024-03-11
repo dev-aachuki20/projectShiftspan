@@ -7,7 +7,7 @@
 @section('main-content')
     <div class="animate__animated animate__fadeInUp">
         <div class="msg-content white-bg radius-50 space-30 d-flex align-items-center">
-            <h2 class="mb-0">@lang('global.update') @lang('cruds.setting.title_singular')</h2>
+            <h2 class="mb-0">@lang('global.update') @lang('cruds.setting.title')</h2>
         </div>
         <div class="profile-form mw-820 mx-auto pt-5 modal-size-l">
             @include('admin.setting.form')
