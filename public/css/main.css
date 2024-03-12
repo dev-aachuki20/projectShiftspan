@@ -476,17 +476,17 @@ th.mw-250{
     padding-left: 20px;
     padding-right: 20px;
 }
-.notifications_area>li{
+.notifications_area>li>a{
     background-color: var(--white);
-    border-radius: 28px;
+    border-radius: 28px !important;
     padding: 12px 10px 12px 30px !important;
     position: relative;
     margin-bottom: 12px;
 }
-.notifications_area>li:last-child{
+.notifications_area>li:last-child>a{
     margin-bottom: 0;
 }
-.notifications_area>li::before{
+.notifications_area>li>a::before{
     content: '';
     position: absolute;
     left: 10px;
@@ -504,12 +504,17 @@ th.mw-250{
     font-weight: var(--fw-600);
     margin-bottom: 3px;
     line-height: 16px;
+    word-break: break-all;
 }
 .notifications_area>li p{
     margin: 0;
     color: #858484;
     font-size: 12px;
     line-height: 14px;
+    font-weight: var(--fw-400);
+}
+.read{
+    opacity: 0.55;
 }
 .logo-area img{
     max-width: 100px;
@@ -2263,7 +2268,7 @@ th.datatable_desription{
     .menu-left>ul{
         padding-left: 20px;
     }
-    .notifications_area>li{
+    .notifications_area>li>a{
         margin-bottom: 10px;
     }
     .content-area{
@@ -2328,7 +2333,7 @@ th.datatable_desription{
         display: block;
     }
     .has_noti::before,
-    .notifications_area>li::before{
+    .notifications_area>li a::before{
         width: 6px;
         height: 6px;
     }

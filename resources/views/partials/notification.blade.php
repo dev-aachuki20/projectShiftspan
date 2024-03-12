@@ -1,6 +1,6 @@
 @forelse ($notification as $item)
     <li>
-        <a href="" style="padding: 0">
+        <a href="#" class="read {{-- un-read --}}">
             <h6>{{$item->subject}}</h6>
             <p>{{$item->message}}</p>
         </a>

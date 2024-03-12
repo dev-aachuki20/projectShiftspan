@@ -18,16 +18,22 @@
                     {{-- <ul class="dropdown-menu notifications_area">Notification Landing</ul> --}}
                     <ul class="dropdown-menu notifications_area">
                         <li>
-                            <h6>Shifts Picked</h6>
-                            <p>JASON DONNELLY picked 5 shifts. please refer to the shift list page for more information.</p>
+                            <a href="#" class="read">
+                                <h6>ShiftsPickeddsfdsfdsdsfsdfsdfsdf</h6>
+                                <p>JASON DONNELLY picked 5 shifts. please refer to the shift list page for more information.</p>
+                            </a>
                         </li>
                         <li>
-                            <h6>Message</h6>
-                            <p>JASON DONNELLY responded to payroll message. please refer to the message page for more info.</p>
+                            <a href="#" class="un-read">
+                                <h6>Message</h6>
+                                <p>JASON DONNELLY responded to payroll message. please refer to the message page for more info.</p>
+                            </a>
                         </li>
                         <li>
-                            <h6>Shifts Picked</h6>
-                            <p>VICKY MAYNARD picked a shift. please refer to the shift list page for more information. </p>
+                            <a href="#">
+                                <h6>Shifts Picked</h6>
+                                <p>VICKY MAYNARD picked a shift. please refer to the shift list page for more information. </p>
+                            </a>
                         </li>
                     </ul>
                 </li>
