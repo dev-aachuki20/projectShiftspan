@@ -9,7 +9,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\Api\APIController;
 use Symfony\Component\HttpFoundation\Response;
-
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendNotification;
 
 class RegisterController extends APIController
 {
@@ -60,6 +61,19 @@ class RegisterController extends APIController
             }
 
             DB::commit();
+            
+            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+            $messageData = [
+                'notification_type' => array_search(config('constant.subject_notification_type.registration_completion_deactive'), config('constant.subject_notification_type')),
+                'section'           => $key,
+                'subject'           => trans('messages.registration_completion_admin_subject'),
+                'message'           => trans('messages.registration_completion_admin_message', [
+                    'username'      => $request->name,
+                ]),
+            ];
+            
+            Notification::send($user, new SendNotification($messageData));
+
             return $this->respondOk([
                 'status'   => true,
                 'message'   => trans('messages.register_success')
@@ -67,6 +81,7 @@ class RegisterController extends APIController
             
         } catch (\Exception $e) {
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             // return $this->throwValidation([$e->getMessage()]);
             return $this->throwValidation([trans('messages.error_message')]);
         }

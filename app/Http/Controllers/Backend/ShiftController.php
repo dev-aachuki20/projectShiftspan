@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendNotification;
 
 class ShiftController extends Controller
 {
@@ -72,6 +74,7 @@ class ShiftController extends Controller
             DB::beginTransaction();
             try{
                 $input = $this->modifyRequestInput($request);
+
                 if($request->has('quantity')){
                     for($i=1;$i<=$request->quantity; $i++){
                         $shift = Shift::create($input);
@@ -86,6 +89,25 @@ class ShiftController extends Controller
                     }
                 }
                 DB::commit();
+
+                $user = User::where('uuid', $request->assign_staff)->first();
+                
+                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                $messageData = [
+                    'notification_type' => array_search(config('constant.subject_notification_type.shift_assign'), config('constant.subject_notification_type')),
+                    'section'           => $key,
+                    'subject'           => trans('messages.shift.shift_created_and_assign_subject'),
+                    'message'           => trans('messages.shift.shift_created_and_assign_message', [
+                        'username'      => $user->name,
+                        'start_date'    => $request['start_date'], 
+                        'end_date'      => $request['end_date'], 
+                        'start_time'    => $request['start_time'], 
+                        'end_time'      => $request['end_time']
+                    ]),       
+                ];
+                
+                Notification::send($user, new SendNotification($messageData));
+
                 $response = [
                     'success' => true,
                     'message' => trans('cruds.shift.title_singular').' '.trans('messages.crud.add_record'),
@@ -159,8 +181,23 @@ class ShiftController extends Controller
                         'picked_at' => date('Y-m-d H:i:s'),
                         'status' => 'picked',
                     ]);                            
-                    $staffId = User::where('uuid', $request->assign_staff)->first()->id;
-                    $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
+                    $staffId = User::where('uuid', $request->assign_staff)->first();
+                    $shift->staffs()->sync([$staffId->id => ['created_at' => date('Y-m-d H:i:s')]]);
+
+                     /* Send Notification */
+                    $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.shift_changes'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.shift.shift_picked_update_subject'),
+                        'message'           => trans('messages.shift.shift_picked_update_message', [
+                            'username'      => $staffId->name,
+                            // 'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                        ]),
+                    ];
+                    
+                    Notification::send($shift->staffs->first(), new SendNotification($messageData));
+                    
                 }else{
                     $shift->update([
                         'picked_at' => null,
@@ -198,6 +235,20 @@ class ShiftController extends Controller
                     $shift->staffs()->sync([]);
                 }
                 $shift->delete();
+                if(!empty($shift->staffs->first())){
+                    $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.shift_delete'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.shift.shift_delete_subject'),
+                        'message'           => trans('messages.shift.shift_delete_message', [
+                            'username'      => $shift->staffs->first()->name,
+                            // 'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                        ]),
+                    ];
+                    
+                    Notification::send($shift->staffs->first(), new SendNotification($messageData));
+                }
                 DB::commit();
                 $response = [
                     'success'    => true,
@@ -233,6 +284,21 @@ class ShiftController extends Controller
                             $shift->staffs()->sync([]);
                         }
                         $shift->delete();
+
+                        if(!empty($shift->staffs->first())){
+                            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                            $messageData = [
+                                'notification_type' => array_search(config('constant.subject_notification_type.shift_delete'), config('constant.subject_notification_type')),
+                                'section'           => $key,
+                                'subject'           => trans('messages.shift.shift_delete_subject'),
+                                'message'           => trans('messages.shift.shift_delete_message', [
+                                    'username'      => $shift->staffs->first()->name,
+                                    // 'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                                ]),
+                            ];
+                            
+                            Notification::send($shift->staffs->first(), new SendNotification($messageData));
+                        }
                     }
                     
                     DB::commit();
@@ -354,7 +420,7 @@ class ShiftController extends Controller
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
-                DB::rollBack();                
+                DB::rollBack(); 
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -372,6 +438,20 @@ class ShiftController extends Controller
             try {                
                 $shift->update(['rating' => $request->rating]);
 
+                /* Send Notification */
+                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                $messageData = [
+                    'notification_type' => array_search(config('constant.subject_notification_type.shift_ratings'), config('constant.subject_notification_type')),
+                    'section'           => $key,
+                    'subject'           => trans('messages.shift.shift_rating_subject'),
+                    'message'           => trans('messages.shift.shift_rating_message', [
+                        'username'      => $shift->staffs->first()->name,
+                        'rating'        => $request->rating,
+                        'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                    ]),
+                ];
+                
+                Notification::send($shift->staffs->first(), new SendNotification($messageData));
                 DB::commit();
                 $response = [
                     'success'    => true,
@@ -379,7 +459,7 @@ class ShiftController extends Controller
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
-                DB::rollBack();                
+                DB::rollBack();          
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

@@ -72,6 +72,9 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
 
+        /* For Header Notification */
+        Route::get('notifications', [DashboardController::class, 'notification'])->name('getNotification');
+
         Route::resource('/locations',LocationController::class);
         Route::post('/location/mass-destroy', [LocationController::class, 'massDestroy'])->name('locations.massDestroy');
 
@@ -95,8 +98,8 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::get('/shifts-get-sub-admin-details', [ShiftController::class, 'getSubAdminData'])->name('shifts.get-sub-admin-details');
         Route::get('/shifts-clockin-clockout', [ShiftController::class, 'clockInAndClockOut'])->name('shifts.clockInAndClockOut');
         
-        Route::resource('/messages',MessageController::class);
-        Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy');
+        /* Route::resource('/messages',MessageController::class);
+        Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy'); */
     });
 });
 

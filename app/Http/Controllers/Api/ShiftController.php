@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Models\ClockInOut;
 use App\Rules\NoMultipleSpacesRule;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\SendNotification;
 
 class ShiftController extends APIController
 {
@@ -292,6 +294,20 @@ class ShiftController extends APIController
             ]);
             $shift->staffs()->sync([$user->id => ['created_at' => date('Y-m-d H:i:s')]]);
 
+            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+            $messageData = [
+                'notification_type' => array_search(config('constant.subject_notification_type.shift_pickings'), config('constant.subject_notification_type')),
+                'section'           => $key,
+                'subject'           => trans('messages.shift.shift_picked_subject'),
+                'message'           => trans('messages.shift.shift_picked_admin_message', [
+                    'username'      => $user->name,
+                    'picked_at'     => date('Y-m-d'),
+                    'status'        => 'picked',
+                ]),
+            ];
+            
+            Notification::send($user, new SendNotification($messageData));
+            
             DB::commit();
 
             return $this->respondOk([
@@ -327,6 +343,19 @@ class ShiftController extends APIController
                 'clockin_longitude' => $request->longitude
             ]);
 
+            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+            $messageData = [
+                'notification_type' => array_search(config('constant.subject_notification_type.clock_in'), config('constant.subject_notification_type')),
+                'section'           => $key,
+                'subject'           => trans('messages.shift.shift_clock_in_subject'),
+                'message'           => trans('messages.shift.shift_clock_in_admin_message', [
+                    'username'      => $user->name,
+                    'shift_id'      => $request->id,
+                    'clockin_date'  => date('Y-m-d'),
+                ]),
+            ];
+            
+            Notification::send($user, new SendNotification($messageData));
             DB::commit();
 
             return $this->respondOk([
@@ -371,6 +400,19 @@ class ShiftController extends APIController
                 $shift->status = 'complete';
                 $shift->save();
 
+                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                $messageData = [
+                    'notification_type' => array_search(config('constant.subject_notification_type.clock_out'), config('constant.subject_notification_type')),
+                    'section'           => $key,
+                    'subject'           => trans('messages.shift.shift_clock_out_subject'),
+                    'message'           => trans('messages.shift.shift_clock_out_admin_message', [
+                        'username'      => $user->name,
+                        'shift_id'      => $request->id,
+                        'clockout_date' => date('Y-m-d'),
+                    ]),
+                ];
+                
+                Notification::send($user, new SendNotification($messageData));
             }
 
             DB::commit();
@@ -387,7 +429,7 @@ class ShiftController extends APIController
     }
 
     public function cancelShift(Request $request) {
-        // $user = auth()->user();
+        $user = auth()->user();
         $request->validate([
             'id' => ['required', 'exists:shifts,id,deleted_at,NULL']
         ]);
@@ -397,6 +439,20 @@ class ShiftController extends APIController
             $shift = Shift::where('id', $request->id)->first();
             
             $shift->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+
+            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+            $messageData = [
+                'notification_type' => array_search(config('constant.subject_notification_type.shifts_completed'), config('constant.subject_notification_type')),
+                'section'           => $key,
+                'subject'           => trans('messages.shift.shift_completed_subject'),
+                'message'           => trans('messages.shift.shift_completed_admin_message', [
+                    'username'      => $user->name,
+                    'picked_at'     => date('Y-m-d'),
+                    'status'        => 'cancel',
+                ]),
+            ];
+            
+            Notification::send($user, new SendNotification($messageData));
 
             DB::commit();
 
@@ -434,6 +490,21 @@ class ShiftController extends APIController
 
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
             }
+
+            $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+            $messageData = [
+                'notification_type' => array_search(config('constant.subject_notification_type.authorised_sign'), config('constant.subject_notification_type')),
+                'section'           => $key,
+                'subject'           => trans('messages.shift.shift_authorised_sign_subject'),
+                'message'           => trans('messages.shift.shift_authorised_sign_admin_message', [
+                    'username'      => $user->name,
+                    'shift_id'      => $request->id,
+                    'manager_name'  => $request->full_name,
+                    'authorize_at'  => date('Y-m-d')
+                ]),
+            ];
+            
+            Notification::send($user, new SendNotification($messageData));
 
             DB::commit();
 

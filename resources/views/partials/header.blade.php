@@ -8,13 +8,14 @@
             </div>
             <ul>
                 @if(auth()->user()->is_sub_admin)
-                    <li class="d-none d-lg-inline-block"><a title="Company ID">Company ID: <span>{{auth()->user()->company_number}}</span></a></li>
+                    <li class="d-none d-lg-inline-block"><a title="Company ID">@lang('cruds.header.fields.company_id'): <span>{{auth()->user()->company_number}}</span></a></li>
                 @endif
                 <li class="dropdown">
-                    <a href="javascript:void(0)" title="Notifications/Alerts" class="has_noti dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
-                        <span class="d-none d-lg-block">Notifications/Alerts</span><span class="d-lg-none">
+                    <a href="javascript:void(0)" title="Notifications/Alerts" class="has_noti dropdown-toggle notificationsBtn" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
+                        <span class="d-none d-lg-block">@lang('cruds.header.fields.notifications')</span><span class="d-lg-none">
                             <x-svg-icons icon="notification" />
                         </span></a>
+                    {{-- <ul class="dropdown-menu notifications_area">Notification Landing</ul> --}}
                     <ul class="dropdown-menu notifications_area">
                         <li>
                             <h6>Shifts Picked</h6>
@@ -45,12 +46,12 @@
                     <ul class="dropdown-menu">
                         <li><a href="{{route('show.profile')}}" title="@lang('cruds.user.admin_profile.title')">@lang('cruds.user.admin_profile.title')</a></li>
                         <li><a href="{{route('show.change.password')}}" title="@lang('global.change_password')">@lang('global.change_password')</a></li>
-                        <li class="d-lg-none"><a title="Company ID">Company ID:<span>SS12457</span></a></li>
-                        <li class="d-lg-none"><a href="javascript:void(0)" title="Help">Help</a></li>
+                        <li class="d-lg-none"><a title="Company ID">@lang('cruds.header.fields.company_id'):<span>SS12457</span></a></li>
+                        <li class="d-lg-none"><a href="javascript:void(0)" title="Help">@lang('cruds.header.fields.help')</a></li>
                         {{-- @if(auth()->user()->is_super_admin) --}}
                         <li class="d-lg-none"><a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a></li>
                         {{-- @endif --}}
-                        <li class="d-lg-none"><a href="javascript:void(0)" title="Log Out">Log Out</a></li>
+                        <li class="d-lg-none"><a href="javascript:void(0)" title="Log Out">@lang('global.logout')</a></li>
                     </ul>
                 </li>
                 
@@ -61,7 +62,7 @@
                         <a href="{{route('show.contact-detail')}}" title="@lang('cruds.setting.contact_details.title')">@lang('cruds.setting.contact_details.title')</a>
                     </li>
                 {{-- @endcan --}}
-                <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">Log Out</a></li>
+                <li class="d-none d-lg-inline-block"><a href="{{ route('logout')}}" title="Log Out">@lang('global.logout')</a></li>
             </ul>
         </div>
     </div>

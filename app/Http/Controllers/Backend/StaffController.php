@@ -335,6 +335,32 @@ class StaffController extends Controller
                 
                 $user->update(['is_active' => $updateStatus]);
                 
+                /* Send Notification */
+                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                if($updateStatus == 1){
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.registration_completion_active'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.registration_completion_subject'),
+                        'message'           => trans('messages.registration_completion_message', [
+                            'username'      => $user->name,
+                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                        ]),
+                    ];
+                }else{
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.user_account_deactive'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.user_account_deactivate_subject'),
+                        'message'           => trans('messages.user_account_deactivate_message', [
+                            'username'      => $user->name,
+                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                        ]),
+                    ];
+                }
+                
+                Notification::send($user, new SendNotification($messageData));
+                
                 DB::commit();
                 $response = [
                     'success'    => true,
@@ -356,9 +382,14 @@ class StaffController extends Controller
                 $user = Auth::user();
                 $staffsNotifify = '';
                 if($user->roles->first()->name == 'Super Admin'){
-                    $staffsNotifify = User::whereNotNull('company_id')->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                    $staffsNotifify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
+                            $query->where('is_active', true);
+                        })
+                        ->orderBy('id', 'desc')
+                        ->get()
+                    ->pluck('name', 'uuid');
                 }else{
-                    $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                    $staffsNotifify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
                 }
 
                 $viewHTML = view('admin.staff.notification.create', compact('staffsNotifify'))->render();

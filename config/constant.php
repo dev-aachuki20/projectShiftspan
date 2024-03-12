@@ -88,21 +88,29 @@ return [
 
     'subject_notification_type' => [
         /* shifts */
-        'shift_assign'          => 'Shift Assign',
-        'shift_pickings'        => 'Shift Pickings',
-        'shift_amendments'      => 'Shift Amendments',
-        'shift_cancellations'   => 'Shift Cancellations',
-        'shift_changes'         => 'Shift Changes',
-        'shift_uploads'         => 'Shift Uploads',
-        'completed_shifts'      => 'Completed Shifts',
+        'shift_assign'                      => 'Shift Assign',
+        'shift_pickings'                    => 'Shift Pickings',
+        'shift_amendments'                  => 'Shift Amendments',
+        'shift_cancellations'               => 'Shift Cancellations',
+        'shift_changes'                     => 'Shift Changes',
+        'shift_uploads'                     => 'Shift Uploads',
+        'shifts_completed'                  => 'Shift Completed',
+        'shift_cancels'                     => 'Shift Cancels',
+        'shift_ratings'                     => 'Shift Rating',
+        'shift_delete'                      => 'shift Delete',
 
         /* for registrations */
-        'registration_completion'=> 'Registration is complete, account is activated',
+        'registration_completion_active'    => 'Registration is complete, account is activated',
+        'registration_completion_deactive'  => 'Registration is complete, Account is deactivated',
+
+        /* For Account activate */
+        'user_account_active'               => 'account is activated',
+        'user_account_deactive'             => 'Account is deactivated',
         
         /* for staff */
-        'clock_in'              => 'Clock In',
-        'clock_out'             => 'Clock Out',
-        'authorised_sign'       => 'Authorised Sign Off Timesheet',
+        'clock_in'                          => 'Clock In',
+        'clock_out'                         => 'Clock Out',
+        'authorised_sign'                   => 'Authorised Sign Off Timesheet',
     ],
     
 ];

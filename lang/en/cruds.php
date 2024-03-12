@@ -26,6 +26,16 @@ return [
         ],
     ],
 
+    'header' =>  [
+        'title'          => 'Header',
+        'title_singular' => 'Header',
+        'fields'         => [
+            'notifications'         =>  'Notifications/Alerts',
+            'company_id'            =>  'Company ID',
+            'help'                  =>  'Help',
+        ],
+    ],
+
     'userManagement' => [
         'title'          => 'User Management',
         'title_singular' => 'User Management',

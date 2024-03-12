@@ -13,10 +13,11 @@ class DatabaseChannel
         
         /* Send the immidate notification */
         $user_id = $notifiable->id;
-        if(auth()->user()->is_super_admin){
-            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
-        }elseif(auth()->user()->is_sub_admin){
-            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+        $user = auth()->user();
+        if (auth()->check()) {
+            if ($user->is_super_admin || $user->is_sub_admin) {
+                sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+            }
         }
 
         /* From this Save the value from database */
@@ -29,7 +30,7 @@ class DatabaseChannel
             'message'           => $data['message'],
             'notification_type' => $data['notification_type'],
             'read_at'           => null,
-            'created_by'        => Auth::user()->id,
+            'created_by'        => Auth::user() ? Auth::user()->id : $user_id,
         ]);
     }
 

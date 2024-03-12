@@ -27,9 +27,15 @@ class MessageController extends Controller
             $user = Auth::user();
             $staffsNotifify = '';
             if($user->roles->first()->name == 'Super Admin'){
-                $staffsNotifify = User::whereNotNull('company_id')->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                $staffsNotify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
+                        $query->where('is_active', true);
+                    })
+                    ->orderBy('id', 'desc')
+                    ->get()
+                ->pluck('name', 'uuid');
+
             }else{
-                $staffsNotifify = User::where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                $staffsNotifify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
             }
             return $dataTable->render('admin.message.index', compact('staffsNotifify'));
         } catch (\Exception $e) {

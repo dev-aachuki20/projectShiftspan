@@ -105,4 +105,23 @@ $jsonArr = json_encode($arr);
         }
         $('#header_auth_name').text(user_name);
     }
+
+    /* $(document).on('click', '.notificationsBtn',function () { 
+        setTimeout(() => {
+            $('.loader-div').show();
+        }, 200);       
+        $.ajax({
+            type: 'get',
+            url: "{{route('getNotification')}}",
+            dataType: 'json',
+            success: function (response) {
+                if(response.success) {
+                    $('.notifications_area').html(response.htmlView);
+                    setTimeout(() => {
+                        $('.loader-div').hide();
+                    }, 200); 
+                }
+            },
+        });
+    }); */
 </script>
