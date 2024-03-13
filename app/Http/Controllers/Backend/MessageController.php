@@ -25,7 +25,7 @@ class MessageController extends Controller
         abort_if(Gate::denies('message_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
             $user = Auth::user();
-            $staffsNotifify = '';
+            $staffsNotify = '';
             if($user->roles->first()->name == 'Super Admin'){
                 $staffsNotify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
                         $query->where('is_active', true);
@@ -35,9 +35,9 @@ class MessageController extends Controller
                 ->pluck('name', 'uuid');
 
             }else{
-                $staffsNotifify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                $staffsNotify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
             }
-            return $dataTable->render('admin.message.index', compact('staffsNotifify'));
+            return $dataTable->render('admin.message.index', compact('staffsNotify'));
         } catch (\Exception $e) {
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
         }

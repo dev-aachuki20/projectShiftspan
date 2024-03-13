@@ -380,19 +380,19 @@ class StaffController extends Controller
         try{
             if($request->ajax()) {
                 $user = Auth::user();
-                $staffsNotifify = '';
+                $staffsNotify = '';
                 if($user->roles->first()->name == 'Super Admin'){
-                    $staffsNotifify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
+                    $staffsNotify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
                             $query->where('is_active', true);
                         })
                         ->orderBy('id', 'desc')
                         ->get()
                     ->pluck('name', 'uuid');
                 }else{
-                    $staffsNotifify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                    $staffsNotify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
                 }
 
-                $viewHTML = view('admin.staff.notification.create', compact('staffsNotifify'))->render();
+                $viewHTML = view('admin.staff.notification.create', compact('staffsNotify'))->render();
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             }
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );

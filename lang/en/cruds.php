@@ -246,6 +246,8 @@ return [
             'section'                       => 'Section',
             'subject'                       => 'Subject',
             'message'                       => 'Message',
+            'sent'                          => 'Sent',
+            'received'                      => 'Received',
         ]
     ],
 

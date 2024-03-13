@@ -24,7 +24,7 @@
                                 <p class="selectAll">@lang('cruds.notification.fields.all_staff')</p>
                                 <input type="text" id="searchInput" placeholder="Search...">
                                 <ul class="custom-check">
-                                    @foreach ($staffsNotifify as $key=>$item)
+                                    @foreach ($staffsNotify as $key=>$item)
                                         <li class="select-option">
                                             <label>
                                                 <input type="checkbox" name="staffs[]" class="checkboxes" value="{{$key}}">

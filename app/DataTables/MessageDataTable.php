@@ -30,9 +30,13 @@ class MessageDataTable extends DataTable
                 </label>';
             })
             ->addColumn('message', function ($record) {
+                $messageSentBy = in_array($record->created_by, [
+                    config('constant.roles.super_admin'), config('constant.roles.sub_admin')
+                    ]) ? trans('cruds.message.fields.sent') : trans('cruds.message.fields.received');
+
                 return '<div class="inner-msg noti-before position-relative">' .
                     '<h3>' . $record->subject . '</h3>' .
-                    '<p>' .'Sent: '. $record->message . '</p>' .
+                    '<p>' . $messageSentBy .' : '. $record->message . '</p>' .
                 '</div>';
             })
             ->setRowId('id')
