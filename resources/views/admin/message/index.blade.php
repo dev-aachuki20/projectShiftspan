@@ -17,9 +17,9 @@
             @can('message_delete')
                 <button class="del_btn dash-btn red-bg" id="deleteAllMessage">@lang('cruds.message.fields.delete_message')(s)</button>
             @endcan
-        </div class="table-responsive">
+        </div>
         <div class="c-admin position-relative">
-            <div>
+            <div class="table-responsive">
                 {{$dataTable->table(['class' => 'table common-table', 'style' => 'width:100%;'])}}
             </div>
         </div>

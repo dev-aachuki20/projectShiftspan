@@ -12,7 +12,7 @@
 
             @can('message_access')
                 <li>
-                    <a href="javascript:void(0){{-- {{route('messages.index')}} --}}" class="{{-- {{ request()->is('admin/messages') ? 'active' : '' }} --}}" title="Messages">@lang('cruds.message.title')</a>
+                    <a href="{{route('messages.index')}}" class="{{ request()->is('admin/messages') ? 'active' : '' }}" title="Messages">@lang('cruds.message.title')</a>
                 </li>
             @endcan
             
