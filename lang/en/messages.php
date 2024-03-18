@@ -14,6 +14,9 @@ return [
         'message_sent' => 'Message Successfully sent!',
     ],
 
+    'unable_to_add_blank_field' => 'Sorry, Unable to add a blank field in',
+    'data_already_exists' => 'Sorry, You cannot create new with the same name so use existing.',
+
     'areYouSure'=>'Are you sure you want to delete this record?',
     'areYouSureapprove'=>'Are you sure you want to Approve this record?',
     'areYouSurerestore'=>'Are you sure you want to Restore this Database? It will delete your current database.',

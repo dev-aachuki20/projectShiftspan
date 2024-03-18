@@ -72,13 +72,10 @@
     });
 
     function Checkselect2() {
-        $('#occupation_name').on('select2:open', function (e) {
+        /* $('#occupation_name').on('select2:open', function (e) {
             let a = $(this).data('select2');
             if (!$('.select2-group_add').length) {
                 let buttonText = "+ @lang('global.add') @lang('cruds.occupation.title_singular')";
-                /* let buttonHtml = '<li class="select2-results__option">';
-                    buttonHtml += '<button id="" class="newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewOccupationModal">' + buttonText + '</button></li>'; */
-
                 let buttonHtml = '<button id="" class="select2-group_add newAddLocation" data-bs-toggle="modal" data-bs-target="#addNewOccupationModal">' + buttonText + '</button>';
                 a.$results.parents('.select2-results').prepend(buttonHtml);
                 
@@ -86,9 +83,69 @@
                     event.preventDefault();
                 });
             }
+        }); */
+
+        let searchValue = '';
+        $('#occupation_name').on('select2:open', function (e) {
+            let a = $(this).data('select2');
+            if (!$('.select2-group_add').length) {
+                let buttonText = "+ @lang('global.add') @lang('cruds.occupation.title_singular')";
+                let buttonHtml = '<button class="select2-group_add newAddLocation">' + buttonText + '</button>';
+                a.$results.parents('.select2-results').prepend(buttonHtml);
+
+                $(document).on('keyup', '.select2-search__field', function (e) {
+                    searchValue = $('.select2-search__field').val();
+                });
+
+                $('.select2-group_add').click(function(event){
+                    event.preventDefault();
+
+                    if (searchValue.replace(/^\s+|\s+$/gm,'')) {
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{route('occupations.store')}}",
+                            data: { 
+                                _token: "{{ csrf_token() }}",
+                                name: searchValue, 
+                                save_type: 'new_occupation',
+                            },
+                            success: function (response) {                
+                                if(response.success) {
+                                    $('#occupation-table').DataTable().ajax.reload(null, false);
+                                    $('#addOccupationModal').modal('hide');
+                                    $('#addNewOccupationModal').modal('hide');
+
+                                    $('#addNewOccupationForm')[0].reset();
+                                    $('.popup_render_div').html('');
+
+                                    toasterAlert('success',response.message);
+                                }
+                            },
+                            error: function (response) {
+                                if(response.responseJSON.error_type == 'something_error'){
+                                    toasterAlert('error',response.responseJSON.error);
+                                } else {                    
+                                    // var errorLabelTitle = '';
+                                    $.each(response.responseJSON.errors, function (key, item) {
+                                        /* errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
+                                        $(errorLabelTitle).insertAfter("input[name='"+key+"']"); */
+                                        toasterAlert('error', item[0]);
+                                    });
+                                }
+                            },
+                            complete: function(res){
+                                $(".submitBtn").attr('disabled', false);
+                                $('.loader-div').hide();
+                            }
+                        });
+                    }else{
+                        toasterAlert('warning', @json(trans('messages.unable_to_add_blank_field') . ' ' . trans('cruds.occupation.title_singular') . '.'));
+                    }
+                });
+            }
         });
 
-        $('#location_name').on('select2:close', function (e) {
+        $('#occupation_name').on('select2:close', function (e) {
             $('.select2-group_add').remove();
         });
     }

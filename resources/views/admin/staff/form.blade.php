@@ -16,7 +16,7 @@
     </div>
     <div class="form-label">
         <label>@lang('cruds.staff.fields.username'):</label>
-        <input type="text" name="name" value="{{ (isset($staff) && !empty($staff->name)) ? $staff->name : ''}}" @if(isset($staff) && !empty($staff->name)) readonly @endif>
+        <input type="text" name="name" value="{{ (isset($staff) && !empty($staff->name)) ? $staff->name : ''}}" @if(isset($staff) && !empty($staff->name)) {{-- readonly --}} @endif>
     </div>
     {{-- <div class="form-label">
         <label>@lang('cruds.staff.fields.name'):</label>
@@ -28,7 +28,7 @@
     </div> --}}
     <div class="form-label">
         <label>@lang('cruds.staff.fields.email'):</label>
-        <input type="email" name="email" value="{{ (isset($staff) && !empty($staff->email)) ? $staff->email : ''}}" @if(isset($staff) && !empty($staff->username)) readonly @endif>
+        <input type="email" name="email" value="{{ (isset($staff) && !empty($staff->email)) ? $staff->email : ''}}" @if(isset($staff) && !empty($staff->username)) {{-- readonly --}} @endif>
     </div>
     @if(!isset($staff))    
         <div class="form-label password-area">

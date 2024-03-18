@@ -73,7 +73,7 @@
     });
 
     function Checkselect2() {
-        $('#location_name').on('select2:open', function (e) {
+        /* $('#location_name').on('select2:open', function (e) {
             let a = $(this).data('select2');
             if (!$('.select2-group_add').length) {
                 let buttonText = "+ @lang('global.add') @lang('cruds.location.title_singular')";
@@ -84,13 +84,76 @@
                     event.preventDefault();
                 });
             }
+
+            $(document).on('keyup', '.select2-search__field', function (e) {    
+                var keyUpValue = $('.select2-search__field').val();
+            });
+        }); */
+
+        let searchValue = '';
+        $('#location_name').on('select2:open', function (e) {
+            let a = $(this).data('select2');
+            if (!$('.select2-group_add').length) {
+                let buttonText = "+ @lang('global.add') @lang('cruds.location.title_singular')";
+                let buttonHtml = '<button class="select2-group_add newAddLocation">' + buttonText + '</button>';
+                a.$results.parents('.select2-results').prepend(buttonHtml);
+
+                $(document).on('keyup', '.select2-search__field', function (e) {
+                    searchValue = $('.select2-search__field').val();
+                });
+
+                $('.select2-group_add').click(function(event){
+                    event.preventDefault();
+
+                    if (searchValue.replace(/^\s+|\s+$/gm,'')) {
+ 
+                        $.ajax({
+                            type: 'POST',
+                            url: "{{route('locations.store')}}",
+                            data: { 
+                                _token: "{{ csrf_token() }}",
+                                name: searchValue, 
+                                save_type: 'new_location',
+                            },
+                            success: function (response) {      
+                                console.log(response);          
+                                if(response.success) {
+                                    $('#location-table').DataTable().ajax.reload(null, false);
+                                    $('#addLocationModal').modal('hide');
+                                    $('#addNewLocationModal').modal('hide');
+
+                                    $('#addNewLocationForm')[0].reset();
+                                    $('.popup_render_div').html('');
+                                    toasterAlert('success',response.message);
+                                }
+                            },
+                            error: function (response) {
+                                if(response.responseJSON.error_type == 'something_error'){
+                                    toasterAlert('error',response.responseJSON.error);
+                                } else {        
+                                    // var errorLabelTitle = '';
+                                    $.each(response.responseJSON.errors, function (key, item) {
+                                        /* errorLabelTitle = '<span class="validation-error-block">'+item+'</sapn>';
+                                        $(errorLabelTitle).insertAfter("input[name='"+key+"']"); */
+                                        toasterAlert('error', item[0]);
+                                    });
+                                }
+                            },
+                            complete: function(res){
+                                $(".submitBtn").attr('disabled', false);
+                                $('.loader-div').hide();
+                            }
+                        });
+                    }else{
+                        toasterAlert('warning', @json(trans('messages.unable_to_add_blank_field') . ' ' . trans('cruds.location.title_singular') . '.'));
+                    }
+                });
+            }
         });
 
         $('#location_name').on('select2:close', function (e) {
             $('.select2-group_add').remove();
         });
-
-
     }
 
 

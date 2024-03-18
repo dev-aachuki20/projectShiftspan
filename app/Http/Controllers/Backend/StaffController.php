@@ -10,7 +10,7 @@ use App\Models\User;
 use App\Models\Profile;
 use App\Notifications\SendNotification;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Validator;
@@ -66,7 +66,7 @@ class StaffController extends Controller
         try {
             if ($request->ajax()){
                 DB::beginTransaction();
-                $input = $request->all();
+                $input = $request->validated();
 
                 if(!(auth()->user()->is_super_admin)){
                     $input['company_id'] = auth()->user()->id;
@@ -163,7 +163,7 @@ class StaffController extends Controller
             if($request->ajax()) {
                 $staff = User::where('uuid', $id)->first();
                 if(auth()->user()->is_super_admin){
-                    $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'id', 'uuid');
+                    $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'id');
                     $viewHTML = view('admin.staff.edit', compact('staff', 'subAdmins'))->render();
                     return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
                 }
