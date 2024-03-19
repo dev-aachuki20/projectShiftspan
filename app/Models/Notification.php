@@ -38,6 +38,9 @@ class Notification extends Model
         'id' => 'string'
     ];
 
+
+    protected $appends = ['user'];
+
     /* protected static function boot ()
     {
         parent::boot();
@@ -48,8 +51,11 @@ class Notification extends Model
         });
     } */
 
-    /* public function notifiable()
+    public function getUserAttribute()
     {
-        return $this->morphTo();
-    } */
+        $user = User::find($this->notifiable_id);
+        return $user ? $user->company_id : null;
+    }
+
+
 }

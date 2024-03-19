@@ -455,6 +455,7 @@ th.mw-250{
 }
 .header-inner .dropdown-menu>li a{
     padding: 10px 22px;
+    width: 100%;
 }
 .header-inner .has_noti{
     padding-left: 52px;

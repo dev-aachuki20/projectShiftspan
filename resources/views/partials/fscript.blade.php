@@ -105,23 +105,51 @@ $jsonArr = json_encode($arr);
         }
         $('#header_auth_name').text(user_name);
     }
+    
+    $(document).on('click', '.notificationsBtn', function () {
+        getNotifications();
+    });
 
-    /* $(document).on('click', '.notificationsBtn',function () { 
+    function getNotifications() {
         setTimeout(() => {
             $('.loader-div').show();
-        }, 200);       
+        }, 100);       
         $.ajax({
             type: 'get',
-            url: "{{route('getNotification')}}",
+            url: "{{ route('getNotification') }}",
             dataType: 'json',
             success: function (response) {
                 if(response.success) {
                     $('.notifications_area').html(response.htmlView);
                     setTimeout(() => {
                         $('.loader-div').hide();
-                    }, 200); 
+                    }, 100); 
                 }
             },
         });
-    }); */
+    }
+
+    function markAsRead(notify_id){
+        /* setTimeout(() => {
+            $('.loader-div').show();
+        }, 100);  
+        $.ajax({
+            type: 'get',
+            url: "{{route('read.notification')}}",
+            dataType: 'json',
+            data:{
+                _token: "{{ csrf_token() }}",
+                notification: notify_id,   
+            },
+            success: function (response) {
+                console.log(response);
+                if(response.success == true){
+                    setTimeout(() => {
+                        $('.loader-div').hide();
+                        getNotifications();
+                    }, 100); 
+                }
+            },
+        }); */
+    }
 </script>

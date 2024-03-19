@@ -15,8 +15,8 @@
                         <span class="d-none d-lg-block">@lang('cruds.header.fields.notifications')</span><span class="d-lg-none">
                             <x-svg-icons icon="notification" />
                         </span></a>
-                    {{-- <ul class="dropdown-menu notifications_area">Notification Landing</ul> --}}
-                    <ul class="dropdown-menu notifications_area">
+                    <ul class="dropdown-menu notifications_area">Notification Landing</ul>
+                    {{-- <ul class="dropdown-menu notifications_area">
                         <li>
                             <a href="javascript:void(0)" class="un-read">
                                 <h6>Shifts Picked</h6>
@@ -35,7 +35,7 @@
                                 <p>VICKY MAYNARD picked a shift. please refer to the shift list page for more information. </p>
                             </a>
                         </li>
-                    </ul>
+                    </ul> --}}
                 </li>
             </ul>
         </div>
