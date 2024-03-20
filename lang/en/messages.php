@@ -86,13 +86,13 @@ return [
         'shift_completed_admin_message'         => 'User :username has :status the shift :completed_at.',
 
         'shift_clock_in_subject'                => 'Clock In',
-        'shift_clock_in_admin_message'          => 'User :username has clocked in for the shift :shift_id at :clockin_date.',
+        'shift_clock_in_admin_message'          => ':username has clocked in for the shift at :clockin_date :clockin_time.',
         
         'shift_clock_out_subject'               => 'Clock Out',
-        'shift_clock_out_admin_message'         => 'User :username has clocked out from the shift :shift_id at :clockout_date.',
+        'shift_clock_out_admin_message'         => ':username has clocked out from the shift at :clockout_date :clockout_time.',
 
         'shift_authorised_sign_subject'         => 'Shift Authorised Sign',
-        'shift_authorised_sign_admin_message'   => 'User :username has been authorised by :manager_name for the shift :shift_id at :authorize_at.',
+        'shift_authorised_sign_admin_message'   => ':username has been authorised by :manager_name for the shift at :authorize_at :authorize_time.',
 
         'shift_rating_subject'                  => 'Shift Rating Notification',
         'shift_rating_message'                  => 'Hi :username, your shift has been rated :rating star by the :admin. Thank you for your service.',

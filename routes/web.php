@@ -28,6 +28,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/log-file', function () {
+    $file = File::get(storage_path() . '/logs/laravel.log');
+    return "<div style='white-space: pre;'>$file</div>";
+})->name('logFile');
+
+Route::get('/clear-log-file', function () {
+    $file = File::put(storage_path() . '/logs/laravel.log', '');
+    return $file;
+})->name('clearlogFile');
+
 // Authentication Routes
 Route::group(['middleware' => 'guest'], function () {
     Route::controller(LoginController::class)->group(function(){

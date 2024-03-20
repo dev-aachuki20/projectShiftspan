@@ -126,14 +126,19 @@ $jsonArr = json_encode($arr);
                     }, 100); 
                 }
             },
+            error: function (response) {
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                    setTimeout(() => {
+                        $('.loader-div').hide();
+                    }, 100); 
+                } 
+            },
         });
     }
 
     function markAsRead(notify_id){
-        /* setTimeout(() => {
-            $('.loader-div').show();
-        }, 100);  
-        $.ajax({
+        /* $.ajax({
             type: 'get',
             url: "{{route('read.notification')}}",
             dataType: 'json',
@@ -149,6 +154,14 @@ $jsonArr = json_encode($arr);
                         getNotifications();
                     }, 100); 
                 }
+            },
+            error: function (response) {
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                    setTimeout(() => {
+                        $('.loader-div').hide();
+                    }, 100); 
+                } 
             },
         }); */
     }

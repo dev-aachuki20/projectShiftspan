@@ -159,7 +159,7 @@ if (!function_exists('sendNotification')) {
     {
         try {
 			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
-			
+			// \Log::info(['firebaseToken' => $firebaseToken]);
 			$response = null;
 			if($firebaseToken){
 				$SERVER_API_KEY = env('FIREBASE_KEY');
@@ -199,7 +199,7 @@ if (!function_exists('sendNotification')) {
 				curl_setopt($ch, CURLOPT_POSTFIELDS, $encodedData);
 				$response = curl_exec($ch);
 			}
-			// \Log::info($response);
+			\Log::info('Response ' . $response);
 			return $response;
 		} catch (\Exception $e) {
 			\Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());

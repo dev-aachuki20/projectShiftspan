@@ -342,7 +342,7 @@ class ShiftController extends APIController
                 'clockin_latitude'  => $request->latitude,
                 'clockin_longitude' => $request->longitude
             ]);
-
+            $shift =  Shift::find($request->id);
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
             $messageData = [
                 'notification_type' => array_search(config('constant.subject_notification_type.clock_in'), config('constant.subject_notification_type')),
@@ -350,8 +350,8 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_clock_in_subject'),
                 'message'           => trans('messages.shift.shift_clock_in_admin_message', [
                     'username'      => $user->name,
-                    'shift_id'      => $request->id,
                     'clockin_date'  => date('Y-m-d'),
+                    'clockin_time'  => $shift->start_time.' to '.$shift->end_time,
                 ]),
             ];
             
@@ -407,8 +407,8 @@ class ShiftController extends APIController
                     'subject'           => trans('messages.shift.shift_clock_out_subject'),
                     'message'           => trans('messages.shift.shift_clock_out_admin_message', [
                         'username'      => $user->name,
-                        'shift_id'      => $request->id,
                         'clockout_date' => date('Y-m-d'),
+                        'clockout_time' => $shift->start_time.' to '.$shift->end_time,
                     ]),
                 ];
                 
@@ -484,10 +484,9 @@ class ShiftController extends APIController
                 'authorize_at'      => date('Y-m-d H:i:s')
             ]);
 
+            $shift = Shift::where('id', $request->id)->first();
             if($authSign && $request->has('signature')){
-
-                Shift::where('id',$request->id)->update(['is_authorized'=>1]);
-
+                $shift->update(['is_authorized' => 1]);
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
             }
 
@@ -498,9 +497,9 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_authorised_sign_subject'),
                 'message'           => trans('messages.shift.shift_authorised_sign_admin_message', [
                     'username'      => $user->name,
-                    'shift_id'      => $request->id,
                     'manager_name'  => $request->full_name,
-                    'authorize_at'  => date('Y-m-d')
+                    'authorize_at'  => date('Y-m-d'),
+                    'authorize_time'=> $shift->start_time.' to '.$shift->end_time,
                 ]),
             ];
             

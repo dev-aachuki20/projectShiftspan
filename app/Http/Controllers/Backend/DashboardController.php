@@ -8,7 +8,8 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Models\Notification;
-use Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
@@ -61,13 +62,19 @@ class DashboardController extends Controller
 
     public function readNotification(Request $request)
     {
+        DB::beginTransaction();
         try {
-            $notification = Notification::where('id', $request->notification)->first();
-            if ($notification->update(['read_at' => now()])) {
-                return response()->json(['success' => true]);
+            if($request->ajax()){
+                $notification = Notification::where('id', $request->notification)->first();
+                if ($notification) {
+                    $notification->update(['read_at' => now()]);
+                    DB::commit();
+                    return response()->json(['success' => true]);
+                }
             }
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         } catch (\Exception $e) {
+            DB::rollback();
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());          
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
