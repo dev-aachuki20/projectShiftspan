@@ -159,7 +159,7 @@ if (!function_exists('sendNotification')) {
     {
         try {
 			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
-			// \Log::info(['firebaseToken' => $firebaseToken]);
+			\Log::info(['firebaseToken' => $firebaseToken]);
 			$response = null;
 			if($firebaseToken){
 				$SERVER_API_KEY = env('FIREBASE_KEY');
