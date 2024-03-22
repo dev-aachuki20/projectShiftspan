@@ -49,7 +49,7 @@ class ShiftController extends APIController
                         ->whereTime('start_time', '>', $currentDateTime->toTimeString());
                 });
             })
-            ->where(function ($query) use($request,$staffAssignedShifts) {
+            ->where(function ($query) use($request) {
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
                     $query->whereHas('location', function($q) use($locationId){
