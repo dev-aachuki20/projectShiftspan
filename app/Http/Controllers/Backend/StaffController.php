@@ -136,17 +136,18 @@ class StaffController extends Controller
         abort_if(Gate::denies('staff_view'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
             try{
-                $users = User::where('uuid', $id)->first();
-                $subAdmins = null;
-                if(auth()->user()->is_super_admin){
-                    $subAdmins = User::where('id', $users->company_id)->first();                    
-                    $viewHTML = view('admin.staff.show', compact('users', 'subAdmins'))->render();
-                    return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
-                }
-                $viewHTML = view('admin.staff.show', compact('users', 'subAdmins'))->render();
+                $user = User::where('uuid', $id)->first();
+             
+                $rating = getStaffRating($user->id);
+
+                $viewHTML = view('admin.staff.show', compact('user','rating'))->render();
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+
             } 
             catch (\Exception $e) {
+                
+                // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

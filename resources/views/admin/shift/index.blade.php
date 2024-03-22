@@ -348,7 +348,7 @@
 
     @can('shift_edit')
         // Edit Shift Modal
-        $(document).on("click",".editShiftBtn", function() {
+        $(document).on("click",".editShiftBtn", function() {  
             $('.loader-div').show();
             var url = $(this).data('href');
             $.ajax({

@@ -111,9 +111,9 @@ $jsonArr = json_encode($arr);
     });
 
     function getNotifications() {
-        setTimeout(() => {
-            $('.loader-div').show();
-        }, 100);       
+        // setTimeout(() => {
+        //     $('.loader-div').show();
+        // }, 100);       
         $.ajax({
             type: 'get',
             url: "{{ route('getNotification') }}",
@@ -121,24 +121,24 @@ $jsonArr = json_encode($arr);
             success: function (response) {
                 if(response.success) {
                     $('.notifications_area').html(response.htmlView);
-                    setTimeout(() => {
-                        $('.loader-div').hide();
-                    }, 100); 
+                    // setTimeout(() => {
+                    //     $('.loader-div').hide();
+                    // }, 100); 
                 }
             },
             error: function (response) {
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
-                    setTimeout(() => {
-                        $('.loader-div').hide();
-                    }, 100); 
+                    // setTimeout(() => {
+                    //     $('.loader-div').hide();
+                    // }, 100); 
                 } 
             },
         });
     }
 
     function markAsRead(notify_id){
-        /* $.ajax({
+       /* $.ajax({
             type: 'get',
             url: "{{route('read.notification')}}",
             dataType: 'json',
@@ -149,18 +149,20 @@ $jsonArr = json_encode($arr);
             success: function (response) {
                 console.log(response);
                 if(response.success == true){
-                    setTimeout(() => {
-                        $('.loader-div').hide();
-                        getNotifications();
-                    }, 100); 
+                    // setTimeout(() => {
+                    //     $('.loader-div').hide();
+                    //     getNotifications();
+                    // }, 100); 
+
+                    getNotifications();
                 }
             },
             error: function (response) {
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
-                    setTimeout(() => {
-                        $('.loader-div').hide();
-                    }, 100); 
+                    // setTimeout(() => {
+                    //     $('.loader-div').hide();
+                    // }, 100); 
                 } 
             },
         }); */

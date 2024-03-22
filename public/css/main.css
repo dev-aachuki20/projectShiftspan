@@ -1561,11 +1561,11 @@ body .dataTables_wrapper .dataTables_paginate>.paginate_button.disabled:hover{
     position: relative;
     line-height: 18px;
 }
-.form-rating ul li .fill-star{
+/*.form-rating ul li .fill-star{
     position: absolute;
     left: 0;
     top: 0;
-}
+}*/
 .form-rating ul li input{
     position: absolute;
     left: 0;

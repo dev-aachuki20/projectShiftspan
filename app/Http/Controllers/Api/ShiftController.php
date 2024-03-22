@@ -27,31 +27,21 @@ class ShiftController extends APIController
 
             $currentDateTime = Carbon::now();
 
-            /* $staffAssignedShifts = $user->assignShifts()->where(function ($query) use ($currentDateTime) {
+        /*  $staffAssignedShifts = $user->assignShifts()->where(function ($query) use ($currentDateTime) {
                 $query->whereDate('start_date', '>', $currentDateTime->toDateString())
                 ->orWhere(function ($query) use ($currentDateTime) {
                     $query->whereDate('start_date', '=', $currentDateTime->toDateString())
                         ->whereTime('start_time', '>', $currentDateTime->toTimeString());
                 });
-            })->get();
-            $startDateTimes = [];
-            foreach($staffAssignedShifts as $key => $assignShift){
-                $startDate  = $assignShift->start_date;
-                $endDate    = $assignShift->end_date;
+            })
+            ->where('status', '=', 'picked')
+            ->get();
+        */
 
-                $start      = Carbon::parse($startDate);
-                $end        = Carbon::parse($endDate);
-
-                for ($date = $start; $date->lte($end); $date->addDay()) {
-                    $startDateTimes[] = [ 'date' => $date->format('Y-m-d'), 'start_time' => $assignShift->start_time, 'end_time' => $assignShift->end_time, 'start_date' => $assignShift->start_date, 'end_date' => $assignShift->end_date]; 
-                }
-            } */
-
-            $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
+           $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
             ->select('id', 'sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
 
             ->whereStatus('open')
-
             ->where(function ($query) use ($currentDateTime) {
                 $query->whereDate('start_date', '>', $currentDateTime->toDateString())
                 ->orWhere(function ($query) use ($currentDateTime) {
@@ -59,8 +49,7 @@ class ShiftController extends APIController
                         ->whereTime('start_time', '>', $currentDateTime->toTimeString());
                 });
             })
-
-            ->where(function($query) use($request){
+            ->where(function ($query) use($request,$staffAssignedShifts) {
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
                     $query->whereHas('location', function($q) use($locationId){
@@ -73,25 +62,22 @@ class ShiftController extends APIController
                         $q->where('id', $occupationId);
                     });
                 }
-                /* foreach($startDateTimes as $dateData){
-                    $query->where(function($subquery) use($dateData){
-
-                        $subquery->whereDate('start_date', '<=', $dateData['date'])                    
-                            ->whereDate('end_date', '>=', $dateData['date'])
-
-                            ->where(function($subsubquery) use($dateData){
-                                $subsubquery->WhereTime('start_time', '>', $dateData['end_time'])
-                                    ->orwhereTime('end_time', '<', $dateData['start_time']);
-                            });
-                    })
-                    ->orWhere(function($q) use($dateData){
-                        $q->where('start_date', '<', $dateData['start_date'])
-                        ->orWhere('end_date', '>', $dateData['end_date']);
+               /* foreach($staffAssignedShifts as $dateData){
+                    $query->where(function ($query) use($dateData) {
+                        $query->where('start_date', '>', $dateData->start_date)
+                            ->orWhere('end_date', '<', $dateData->end_date);
+                    })->orWhere(function ($query) use($dateData) {
+                        $query->whereBetween('start_date', [$dateData->start_date, $dateData->end_date])
+                            ->orWhereBetween('end_date', [$dateData->start_date, $dateData->end_date]);
+                    })->where(function ($query) use($dateData) {
+                        $query->where('start_time', '>', $dateData->start_time)
+                            ->orWhere('end_time', '<', $dateData->end_time);
                     });
-                } */
-            })        
-            ->orderBy('start_date', 'asc')
-            ->orderBy('start_time', 'asc')            
+                }*/
+            })
+            ->where('end_time','>',DB::raw('NOW()'))
+            ->orderBy('start_date', 'ASC')
+            ->orderBy('start_time', 'ASC')
             ->get();
 
             $shiftsData = [];
@@ -153,11 +139,9 @@ class ShiftController extends APIController
                 $startTime = Carbon::parse($shift->start_time);
                 $endTime = Carbon::parse($shift->end_time);
 
-                $daysDiff = $endDate->diffInDays($startDate) + 1;
+                $timeDifferenceInMinutes = calculateTimeDifferenceInMinutes($startTime, $endTime);
+                $totalWorkingHour += $timeDifferenceInMinutes / 60;
 
-                $workingHoursPerDay = $startTime->diffInHours($endTime);
-                $totalWorkingHour += $workingHoursPerDay * $daysDiff;
-                
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
                     'sub_admin_name'    => $shift->client->name,
@@ -212,10 +196,8 @@ class ShiftController extends APIController
                 $startTime = Carbon::parse($shift->start_time);
                 $endTime = Carbon::parse($shift->end_time);
 
-                $daysDiff = $endDate->diffInDays($startDate) + 1;
-
-                $workingHoursPerDay = $startTime->diffInHours($endTime);
-                $totalWorkingHour += $workingHoursPerDay * $daysDiff;
+                $timeDifferenceInMinutes = calculateTimeDifferenceInMinutes($startTime, $endTime);
+                $totalWorkingHour += $timeDifferenceInMinutes / 60;
 
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
@@ -247,40 +229,77 @@ class ShiftController extends APIController
 
     public function pickShift(Request $request){
         $user = auth()->user();
-        $currentDateTime = Carbon::now();
         $request->validate([
-            'id' => ['required', 'exists:shifts,id,deleted_at,NULL', function ($attribute, $value, $fail) use($user, $currentDateTime) {
+            'id' => ['required', 'exists:shifts,id,deleted_at,NULL', function ($attribute, $value, $fail) use($user) {
                 $selectedShift = Shift::find($value);
                 if($selectedShift->status != 'open'){
                     $fail('The shift already picked');
                 }
 
-                /* $isShiftWithinAssignedShifts = $user->assignShifts()
-                ->where(function ($query) use ($selectedShift) {
-                    $query->where(function ($subquery) use ($selectedShift) {
-                        $subquery->where('start_date', '<=', $selectedShift->start_date)
-                            ->where('end_date', '>=', $selectedShift->start_date)
-                            ->where(function ($q) use ($selectedShift) {
-                                $q->where('end_time', '>=', $selectedShift->start_time)
-                                    ->orWhere('start_time', '<=', $selectedShift->start_time);
-                            });
+                $isShiftWithinAssignedShifts = $user->assignShifts()
+                ->whereIn('status', ['picked','complete'])
+                ->where(function ($query) use($selectedShift) {
+                    $query->where(function ($q)  use($selectedShift) {
+                        $q->whereBetween('start_date', [$selectedShift->start_date, $selectedShift->end_date])
+                          ->orWhereBetween('end_date', [$selectedShift->start_date, $selectedShift->end_date]);
                     })
-                    ->orWhere(function ($subquery) use ($selectedShift) {
-                        $subquery->where('start_date', '<=', $selectedShift->end_date)
-                            ->where('end_date', '>=', $selectedShift->end_date)
-                            ->where(function ($q) use ($selectedShift) {
-                                $q->where('end_time', '>=', $selectedShift->end_time)
-                                    ->orWhere('start_time', '<=', $selectedShift->end_time);
-                            });
+                    ->where(function ($q)  use($selectedShift) {
+                        $q->where('start_time', '>=', $selectedShift->start_time)
+                          ->where('end_time', '<=', $selectedShift->end_time);
                     });
                 })
+
+                // ->where(function ($query) use($selectedShift) {
+                //     $query->where('start_date', '>', $selectedShift->start_date)
+                //         ->orWhere('end_date', '<', $selectedShift->end_date);
+                // })->orWhere(function ($query) use($selectedShift) {
+                //     $query->whereBetween('start_date', [$selectedShift->start_date, $selectedShift->end_date])
+                //         ->orWhereBetween('end_date', [$selectedShift->start_date, $selectedShift->end_date]);
+                // })->where(function ($query) use($selectedShift) {
+                //     $query->where('start_time', '>', $selectedShift->start_time)
+                //         ->orWhere('end_time', '<', $selectedShift->end_time);
+                // })
+
                 ->exists();
+
+                // dd($isShiftWithinAssignedShifts);
 
                 if($isShiftWithinAssignedShifts){
                     $fail("The shift's time slot overlaps with your assigned shifts.");
-                } */
+                } 
             }]
         ]);
+
+        if(isset($request->assign_staff)){
+            $startTime = $input['start_time']; 
+            $endTime   = $input['end_time']; 
+
+            $startDate   = $input['start_date']; 
+            $endDate     = $input['end_date']; 
+
+            $assignStaff = User::where('uuid', $request->assign_staff)->first();
+            $conflictingShifts = $assignStaff->assignShifts()
+            ->where(function ($query) use ($startTime, $endTime) {
+                $query->whereBetween('start_time', [$startTime, $endTime])
+                    ->orWhereBetween('end_time', [$startTime, $endTime])
+                    ->orWhereRaw('? BETWEEN start_time AND end_time', [$startTime])
+                    ->orWhereRaw('? BETWEEN start_time AND end_time', [$endTime]);
+            })
+            ->where('end_date', '>=', DB::raw('CURDATE()'))
+            ->where('status','picked')
+            ->whereNull('cancel_at')
+            ->get();
+
+           if($conflictingShifts->count() > 0){
+                $response = [
+                    'success' => false,
+                    'error_type' => 'something_error',
+                    'error' => 'Staff is not available for the selected time slot. Please choose a different time slot.',
+                ];
+                return response()->json($response,422);
+
+           }
+        }
 
         DB::beginTransaction();
         try {
@@ -447,7 +466,7 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_completed_subject'),
                 'message'           => trans('messages.shift.shift_completed_admin_message', [
                     'username'      => $user->name,
-                    'picked_at'     => date('Y-m-d'),
+                    'cancel_at'     => date('Y-m-d'),
                     'status'        => 'cancel',
                 ]),
             ];
@@ -470,9 +489,9 @@ class ShiftController extends APIController
     public function authorizedSign(Request $request){
         $user = auth()->user();
         $request->validate([
-            'id'        => ['required', 'exists:shifts,id,deleted_at,NULL'],
+            'id'         => ['required', 'exists:shifts,id,deleted_at,NULL'],
             'full_name'  => ['required', 'string', new NoMultipleSpacesRule],
-            'signature' => ['required'],
+            'signature'  => ['required'],
         ]);
 
         DB::beginTransaction();
@@ -486,7 +505,7 @@ class ShiftController extends APIController
 
             $shift = Shift::where('id', $request->id)->first();
             if($authSign && $request->has('signature')){
-                $shift->update(['is_authorized' => 1]);
+                Shift::where('id', $request->id)->update(['is_authorized' => 1]);
                 uploadImage($authSign, $request->signature, 'shifts/authorize-signature',"authorize-signature", 'original', 'save', null);
             }
 

@@ -163,7 +163,7 @@ return [
             'name'              => 'Name',
             'address'           => 'Address',
             'shop_description'  => 'Shops Nearby',
-            'travel_info'       => 'Travel info',
+            'travel_info'       => 'Travel Info',
             'building_image'    => 'Building Image',
             'status'            => 'Status',
             'client_admin_name' => 'Client Admin Name',

@@ -164,6 +164,8 @@ if (!function_exists('sendNotification')) {
 			if($firebaseToken){
 				$SERVER_API_KEY = env('FIREBASE_KEY');
 
+				\Log::info(['SERVER_API_KEY' => $SERVER_API_KEY]);
+				
 				$notification = [
 					"title" => $subject,
 					"body" 	=> $message,
@@ -205,4 +207,39 @@ if (!function_exists('sendNotification')) {
 			\Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
 		}
     }
+}
+
+if (!function_exists('calculateTimeDifferenceInMinutes')) {
+
+	function calculateTimeDifferenceInMinutes($startTime, $endTime) {
+		$start = Carbon::parse($startTime);
+		$end = Carbon::parse($endTime);
+
+		$diffInMinutes = $start->diffInMinutes($end);
+
+		if ($diffInMinutes < 0) {
+			$diffInMinutes += 1440;
+		}
+
+		return $diffInMinutes;
+	}
+}
+
+if (!function_exists('getStaffRating')) {
+
+	function getStaffRating($staff_id) {
+		$user = User::where('id',$staff_id)->first();
+
+		$totalCompletedShift = $user->assignShifts()->where('status','complete')->whereNotNull('rating')->count();
+
+		$sumOfTotalRating = $user->assignShifts()->where('status','complete')->whereNotNull('rating')->sum('rating');
+
+		$rating = null;
+
+		if($totalCompletedShift > 0){
+			$rating = round(((int)$sumOfTotalRating / $totalCompletedShift));
+		}
+
+		return $rating;
+	}
 }

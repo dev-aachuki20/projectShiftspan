@@ -27,8 +27,8 @@ class RegisterController extends APIController
             'name'              => ['required','string','max:150'],
             'email'             => ['required','email:dns','unique:users,email,NULL,id,deleted_at,NULL'],
             'password'          => ['required', 'string', 'min:8','confirmed'],
-            'company_id'        => ['required','numeric','exists:users,id,deleted_at,NULL','exists:role_user,role_id,user_id,'.config('constant.roles.sub_admin')],
-            
+            'company_id'        => ['required','numeric','exists:users,id,deleted_at,NULL','exists:role_user,user_id,role_id,'.config('constant.roles.sub_admin')],
+            'occupation_id'     => ['required', 'exists:occupations,id,deleted_at,NULL'],
             'is_criminal'       => ['required','boolean','in:1,0'],
             'user_dbs_certificate' => ['required','file','max:2048','mimes:pdf'],
             'user_cv'           => ['required','file','max:2048','mimes:pdf'],
@@ -36,7 +36,7 @@ class RegisterController extends APIController
             'user_staff_budge'  => ['required','file','max:2048','mimes:pdf'],
             'user_dbs_check'    => ['required','file','max:2048','mimes:pdf'],
             'user_training_check' => ['nullable','file','max:2048','mimes:pdf'],
-        ]);
+        ],[],['occupation_id' => 'Occupation']);
         
         DB::beginTransaction();
         try {
@@ -51,6 +51,7 @@ class RegisterController extends APIController
 
             $user->profile()->create([
                 'is_criminal' => $request->is_criminal,
+                'occupation_id' => $request->occupation_id,
             ]);
 
             $user->roles()->sync(config('constant.roles.staff'));

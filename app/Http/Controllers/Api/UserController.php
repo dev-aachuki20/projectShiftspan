@@ -38,6 +38,7 @@ class UserController extends APIController
                 'user_staff_budge'      => $user->staff_budge_url ? $user->staff_budge_url : "",
                 'user_dbs_check'        => $user->dbs_check_url ? $user->dbs_check_url : "",
                 'user_training_check'   => $user->training_check_url ? $user->training_check_url : "",
+                'rating'                => getStaffRating($user->id),
             ]
         ])->setStatusCode(Response::HTTP_OK);
     }

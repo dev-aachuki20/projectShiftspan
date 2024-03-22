@@ -92,6 +92,19 @@ Route::group(['namespace' => 'Api'], function () {
     */
     Route::get('companies', [HomeController::class,'companyList']);
 
+     /*
+    |--------------------------------------------------------------------------
+    |  Get Occupations API Routes
+    |--------------------------------------------------------------------------
+    |
+    | Route         : http://localhost:8000/api/occupations
+    | Method        : Get
+    | Parameters    : company_id
+    |
+    */
+    Route::get('occupations', [HomeController::class, 'occupationsList']);
+
+
 });
 
 
@@ -116,20 +129,7 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     */
     Route::post('logout', [HomeController::class,'logout']);
 
-    /*
-    |--------------------------------------------------------------------------
-    |  Get Occupations API Routes
-    |--------------------------------------------------------------------------
-    |
-    | Route         : http://localhost:8000/api/occupations
-    | Header        : Content-Type:application/json
-    |               : Authorization : Token
-    | Method        : Get
-    | Parameters    : company_id
-    |
-    */
-    Route::get('occupations', [HomeController::class, 'occupationsList']);
-
+   
     /*
     |--------------------------------------------------------------------------
     |  Get Locations API Routes
