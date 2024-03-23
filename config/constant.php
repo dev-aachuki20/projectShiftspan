@@ -112,5 +112,7 @@ return [
         'clock_out'                         => 'Clock Out',
         'authorised_sign'                   => 'Authorised Sign Off Timesheet',
     ],
+
+    'upcoming_add_hour_to_end_time' => 24,
     
 ];

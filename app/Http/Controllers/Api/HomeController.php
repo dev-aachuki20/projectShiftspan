@@ -85,7 +85,10 @@ class HomeController extends APIController
 
 
     public function occupationsList(Request $request){
-        $occupationList = Occupation::select('id','name')->where('created_by',$request->company_id)->orderBy('name', 'asc')->get();
+        $company = User::find($request->company_id);
+
+        $occupationList = $company->occupations()->select('id','name')->orderBy('name', 'asc')->get();
+        // $occupationList = Occupation::select('id','name')->where('created_by',$request->company_id)->orderBy('name', 'asc')->get();
         return $this->respondOk([
             'status'   => true,
             'message'   => trans('messages.record_retrieved_successfully'),

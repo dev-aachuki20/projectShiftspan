@@ -42,13 +42,13 @@ class ShiftController extends APIController
             ->select('id', 'sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
 
             ->whereStatus('open')
-            ->where(function ($query) use ($currentDateTime) {
-                $query->whereDate('start_date', '>', $currentDateTime->toDateString())
-                ->orWhere(function ($query) use ($currentDateTime) {
-                    $query->whereDate('start_date', '=', $currentDateTime->toDateString())
-                        ->whereTime('start_time', '>', $currentDateTime->toTimeString());
-                });
-            })
+           /* ->where(function ($query) use ($currentDateTime) {
+                 $query->whereDate('start_date', '>', $currentDateTime->toDateString());
+                 ->orWhere(function ($query) use ($currentDateTime) {
+                     $query->whereDate('start_date', '=', $currentDateTime->toDateString())
+                         ->whereTime('start_time', '>', $currentDateTime->toTimeString());
+                 });
+            })*/
             ->where(function ($query) use($request) {
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
@@ -75,6 +75,7 @@ class ShiftController extends APIController
                     });
                 }*/
             })
+            ->where('start_date','=',DB::raw('CURDATE()'))
             ->where('end_time','>',DB::raw('NOW()'))
             ->orderBy('start_date', 'ASC')
             ->orderBy('start_time', 'ASC')
@@ -104,7 +105,7 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
-            // dd($e->getMessage().'->'.$e->getLine());
+            dd($e->getMessage().'->'.$e->getLine());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -177,13 +178,6 @@ class ShiftController extends APIController
 
             $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
             ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
-            ->where(function ($query) use ($currentDateTime) {
-                $query->whereDate('start_date', '>', $currentDateTime->toDateString())
-                ->orWhere(function ($query) use ($currentDateTime) {
-                    $query->whereDate('start_date', '=', $currentDateTime->toDateString())
-                        ->whereTime('start_time', '>', $currentDateTime->toTimeString());
-                });
-            })
             ->orderBy('start_date', 'desc')
             ->get();
 
@@ -213,7 +207,7 @@ class ShiftController extends APIController
                     'check_out_status'  => $shift->clockInOuts()->where('clockout_date','<',Carbon::now())->exists(),
                 ];
             }
-            $shiftsData['total_hours'] = $totalWorkingHour;
+            $shiftsData['total_hours'] = number_format($totalWorkingHour,2);
 
             return $this->respondOk([
                 'status'   => true,
@@ -455,9 +449,7 @@ class ShiftController extends APIController
 
         DB::beginTransaction();
         try {
-            $shift = Shift::where('id', $request->id)->first();
-            
-            $shift->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+            Shift::where('id', $request->id)->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
 
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
             $messageData = [
