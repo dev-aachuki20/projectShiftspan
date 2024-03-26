@@ -72,7 +72,7 @@ class ShiftDataTable extends DataTable
 
             ->editColumn('clientDetail.name', function($record){
                 if(auth()->user()->is_sub_admin){
-                    $clientName = $record->client ? $record->client->name : '';
+                    $clientDetailName = $record->clientDetail ? $record->clientDetail->name : '';
                     $imagePath = asset('images/check-mark.png');
                     $removeImagePath = asset('images/remove.png');
                     $authData = $record->authorize ? $imagePath : $removeImagePath;
@@ -82,7 +82,7 @@ class ShiftDataTable extends DataTable
                     }else{
                         $clockimage = $removeImagePath;
                     }
-                    return $clientDetailName . '<br>
+                    return $clientDetailName. '<br>
                         <div class="shift-btns">
                             <a href="javascript:void(0)" title="'.__('cruds.shift.fields.clock_in').'" class="clock-btns '.($record->clockIn->count() > 0 ? 'clockIn' : '').'" data-shift_id="'.$record->id.'">
                                 <span>
