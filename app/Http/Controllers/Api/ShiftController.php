@@ -75,8 +75,11 @@ class ShiftController extends APIController
                     });
                 }*/
             })
-            ->where('start_date','=',DB::raw('CURDATE()'))
-            ->where('end_time','>',DB::raw('NOW()'))
+            // ->where('start_date','=',DB::raw('CURDATE()'))
+            // ->where('end_time','>',DB::raw('NOW()'))
+
+            ->whereDate('end_date', '>=', Carbon::now()->toDateString())
+            ->whereTime('end_time', '>=', Carbon::now()->toTimeString())
             ->orderBy('start_date', 'ASC')
             ->orderBy('start_time', 'ASC')
             ->get();

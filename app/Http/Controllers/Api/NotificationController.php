@@ -71,4 +71,33 @@ class NotificationController extends APIController
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
+
+    public function makeAsRead($uuid){
+
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+        
+            $notification = $user->notifications()->where('id',$uuid)->update(['read_at'=>now()]);
+            
+            if (!$notification) {
+                return $this->respondOk([
+                    'status'   => true,
+                    'message'   => trans('messages.notification.not_found')
+                ])->setStatusCode(Response::HTTP_OK);
+            }
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.notification.mark_as_read')
+            ])->setStatusCode(Response::HTTP_OK);
+            
+        } catch (\Exception $e) {
+            DB::rollBack();
+            // return $this->throwValidation([$e->getMessage()]);
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+    }
 }

@@ -355,5 +355,18 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     */
     Route::post('help-chat-store', [NotificationController::class,'helpChatNotification']);
 
+
+     /*
+    |--------------------------------------------------------------------------
+    |  Mark As Read Notification API Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/mark-as-read
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : PUT
+    | 
+    */
+    Route::put('/notifications/{uuid}/mark-as-read', [NotificationController::class,'makeAsRead']);
     
 });

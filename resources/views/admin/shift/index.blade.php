@@ -117,7 +117,7 @@
 
                 $("#start_time").val('');
                 $("#end_time").val('');
-
+                
                 // set min time of start time
                 if (selectedDate.toDateString() === currentDate.toDateString()) {
                     var currentHour = currentDate.getHours();
@@ -128,6 +128,7 @@
                 } else {
                     $("#start_time").timepicker('option', 'minTime', null);
                 }
+
             }
 		});
 

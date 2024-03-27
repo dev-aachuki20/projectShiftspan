@@ -107,4 +107,9 @@ return [
 
     'user_account_deactivate_subject'          => 'Your Account has been Deactivated',
     'user_account_deactivate_message'          => 'Hi :username, your account has been deactivated by :admin. If you believe this is a mistake, please contact support.',
+
+    'notification'=>[
+        'not_found' => 'Notification not found',
+        'mark_as_read' => 'Notification marked as read',
+    ]
 ];

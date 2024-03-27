@@ -25,7 +25,7 @@ class RegisterController extends APIController
         $request->validate([
             'title'             => ['required','string','max:10'],
             'name'              => ['required','string','max:150'],
-            'email'             => ['required','email:dns','unique:users,email,NULL,id,deleted_at,NULL'],
+            'email'             => ['required','email','regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i','unique:users,email,NULL,id,deleted_at,NULL'],
             'password'          => ['required', 'string', 'min:8','confirmed'],
             'company_id'        => ['required','numeric','exists:users,id,deleted_at,NULL','exists:role_user,user_id,role_id,'.config('constant.roles.sub_admin')],
             'occupation_id'     => ['required', 'exists:occupations,id,deleted_at,NULL'],
