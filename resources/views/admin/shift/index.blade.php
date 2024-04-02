@@ -135,7 +135,7 @@
 			dateFormat: "{{config('constant.js_date_format.date')}}", 
 			minDate: 0,
 			firstDay: 1,
-            /* onSelect: function(date) {
+            onSelect: function(date) {
                 var parts = date.split('-'); 
                 var endDate = new Date(parts[2], parts[1] - 1, parts[0]); 
                 
@@ -154,14 +154,14 @@
                 } else {
                     $("#end_time").timepicker('option', 'minTime', null);
                 }
-            } */
+            }
 		});
 
         $( "#start_time" ).timepicker({ 
 			show2400: true,
             step: step,
             timeFormat: "{{config('constant.js_date_format.time')}}",
-            disableTextInput: true,
+            // disableTextInput: true,
             maxTime: '24:00'
 		});
 
@@ -169,7 +169,7 @@
 			show2400: true,
             step: step,
             timeFormat: "{{config('constant.js_date_format.time')}}",
-            disableTextInput: true,
+            // disableTextInput: true,
             maxTime: "{{config('constant.timepicker_max_time')}}"
 		});
     });
@@ -298,9 +298,13 @@
         // Submit Add Shift Form
         $(document).on('submit', '#addShiftForm', function (e) {
             e.preventDefault();
+            $('.validation-error-block').remove();
+
+            if(checkTimeFormat()){
+                return false;
+            }
             $('.loader-div').show();
 
-            $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
             var formData = new FormData(this);
@@ -379,8 +383,11 @@
         // Submit Edit Shift Form
         $(document).on('submit', '#editShiftForm', function (e) {
             e.preventDefault();
-            $('.loader-div').show();
             $('.validation-error-block').remove();
+            if(checkTimeFormat()){
+                return false;
+            }
+            $('.loader-div').show();
             $(".submitBtn").attr('disabled', true);
             var formData = new FormData(this);
 
@@ -661,12 +668,14 @@
         var minutes = parts[1];
         var nextMinute = parseInt(minutes) + step;
 
-        $("#end_time").timepicker('option', 'minTime', hours + ':' + nextMinute);
-        /* if(startDate && endDate && startDate < endDate){
+        $("#end_time").val('');
+
+        // $("#end_time").timepicker('option', 'minTime', hours + ':' + nextMinute);
+        if(startDate && endDate && startDate < endDate){
             $("#end_time").timepicker('option', 'minTime', null);
         } else {
             $("#end_time").timepicker('option', 'minTime', hours+':'+nextMinute);
-        } */
+        }
     });
 
     function setOnEditTime(){
@@ -701,6 +710,51 @@
 
     }
     
+    function checkTimeFormat(){
+        var errorLabelTitle = '';
+        var startTime = $('#start_time').val();
+        var endTime = $('#end_time').val();
+
+        var errorFlg = false;
+
+        var startTimePart = startTime.split(':'); 
+        var endTimePart = endTime.split(':'); 
+
+        var startTimePartOneStr = startTimePart[0].toString();
+        var startTimePartTwoStr = startTimePart[1].toString();
+
+        var endTimePartOneStr = endTimePart[0].toString();
+        var endTimePartTwoStr = endTimePart[1].toString();
+
+        var checkStartError = (startTimePartOneStr.length < 2 || startTimePartOneStr.length > 2) || (startTimePartTwoStr.length < 2 || startTimePartTwoStr.length > 2);
+        var checkEndError = (endTimePartOneStr.length < 2 || endTimePartOneStr.length > 2) || (endTimePartTwoStr.length < 2 || endTimePartTwoStr.length > 2);
+
+        if(checkStartError){
+            errorLabelTitle = '<span class="validation-error-block">The start time must be in the format HH:MM.</sapn>';
+            $(errorLabelTitle).insertAfter("#start_time");
+            errorFlg = true;
+        }
+
+        if(checkEndError){
+            errorLabelTitle = '<span class="validation-error-block">The end time must be in the format HH:MM.</sapn>';
+            $(errorLabelTitle).insertAfter("#end_time");
+            errorFlg = true;
+        }
+        if(!errorFlg){
+            if(startTimePart[1]%step != 0){
+                errorLabelTitle = '<span class="validation-error-block">The start time must be selected from list</sapn>';
+                $(errorLabelTitle).insertAfter("#start_time");
+                errorFlg = true;
+            }
+
+            if(endTimePart[1]%step != 0){
+                errorLabelTitle = '<span class="validation-error-block">The end time must be selected from list</sapn>';
+                $(errorLabelTitle).insertAfter("#end_time");
+                errorFlg = true;
+            }
+        }
+        return errorFlg;
+    }
 </script>
 
 @endsection

@@ -34,11 +34,11 @@
 </div>
 <div class="form-label">
     <label>@lang('cruds.shift.fields.start_time'):</label>
-    <input type="text" name="start_time" id="start_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
+    <input type="text" name="start_time" id="start_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
 </div>
 <div class="form-label">
     <label>@lang('cruds.shift.fields.end_time'):</label>
-    <input type="text" name="end_time" id="end_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) />
+    <input type="text" name="end_time" id="end_time" class="timepicker" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
 </div>
 
 <div class="form-label select-label">
