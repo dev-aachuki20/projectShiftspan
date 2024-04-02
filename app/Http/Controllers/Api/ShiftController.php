@@ -452,7 +452,17 @@ class ShiftController extends APIController
 
         DB::beginTransaction();
         try {
-            Shift::where('id', $request->id)->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+            $shift = Shift::find($request->id);
+
+            $currentDate = Carbon::now()->toDateString();
+            $currentDateTime  = Carbon::now();
+            
+            $endDateTime = Carbon::parse($shift->end_date . ' ' . $shift->end_time);
+            if ($currentDateTime->gt($endDateTime)) {
+                Shift::where('id', $request->id)->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+            }else{
+                Shift::where('id', $request->id)->update(['status' => 'open', 'cancel_at' => Null]);
+            }
 
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
             $messageData = [
