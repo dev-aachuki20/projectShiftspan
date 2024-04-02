@@ -128,7 +128,6 @@
                 } else {
                     $("#start_time").timepicker('option', 'minTime', null);
                 }
-
             }
 		});
 

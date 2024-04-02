@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Backend;
 
 use App\Models\Location;
+use App\Models\ClientDetail;
 use App\Models\Shift;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -17,16 +18,18 @@ class DashboardController extends Controller
     {
         $user = Auth::user();
         $data = [
-            'userCount' => 0, 'shiftCount' => 0, 'locationCount' => 0
+            'userCount' => 0, 'shiftCount' => 0, /* 'locationCount' => 0 */ 'clientDetailCount' => 0
         ];
         if($user->roles->first()->name == 'Super Admin'){
             $data['userCount'] = User::whereNotNull('company_id')->count();
             $data['shiftCount'] = Shift::Count();
-            $data['locationCount'] = Location::count();
+            // $data['locationCount'] = Location::count();
+            $data['clientDetailCount'] = ClientDetail::count();
         }else/* if($user->roles->first()->name == 'Sub Admin') */{
             $data['userCount'] = User::where('company_id', $user->id)->count();
             $data['shiftCount'] = Shift::where('sub_admin_id', $user->id)->count();
-            $data['locationCount'] = $user->locations()->count();
+            // $data['locationCount'] = $user->locations()->count();
+            $data['clientDetailCount'] = $user->clientDetails()->count();
         }
 
         return view('admin.dashboard', compact('data'));

@@ -250,7 +250,11 @@ class ShiftDataTable extends DataTable
                         [10, 25, 50, 100, /*-1*/], // Page length values
                         [10, 25, 50, 100, /*'All'*/]  // Display text for each value
                     ])                    
-                    ->selectStyleSingle();
+                    ->selectStyleSingle()
+                    ->lengthMenu([
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, 'All']
+                    ]);
     }
 
     /**

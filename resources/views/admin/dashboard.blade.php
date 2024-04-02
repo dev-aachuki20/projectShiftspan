@@ -19,9 +19,9 @@
             <p>@lang('cruds.dashboard.fields.total_shifts')</p>
             <span>{{$data['shiftCount']}}</span>
         </a>
-        <a href="{{route('locations.index')}}" class="count-box">
+        <a href="{{route('client-details.index')}}" class="count-box">
             <p>@lang('cruds.dashboard.fields.business_location')</p>
-            <span>{{$data['locationCount']}}</span>
+            <span>{{$data['clientDetailCount']}}</span>
         </a>
     </div>
 </div>

@@ -22,7 +22,8 @@ return [
         'fields'         => [
             'register_staff'        =>  'Registered Staff',
             'total_shifts'          =>  'Total Shifts',
-            'business_location'     =>  'Business Locations',
+            // 'business_location'     =>  'Business Locations',
+            'business_location'     =>  'Listed Businesses',
         ],
     ],
 
@@ -156,6 +157,27 @@ return [
     'client_detail' => [
         'title' => 'Client Details',
         'title_singular' => 'Client Detail',
+        'fields' => [
+            'id'                => 'ID',
+            'client_admin'       => 'Client Admin',
+            'client_name'       => 'Client Name',
+            'name'              => 'Name',
+            'address'           => 'Address',
+            'shop_description'  => 'Shops Nearby',
+            'travel_info'       => 'Travel Info',
+            'building_image'    => 'Building Image',
+            'status'            => 'Status',
+            'client_admin_name' => 'Client Admin Name',
+            'created_by'        => 'Created By',
+            'created_at'        => 'Created at',
+            'updated_at'        => 'Updated at',
+            'deleted_at'        => 'Deleted at',
+        ]
+    ],
+
+    'listed_businesses' => [
+        'title' => 'Listed Businesses',
+        'title_singular' => 'Listed Businesse',
         'fields' => [
             'id'                => 'ID',
             'client_admin'       => 'Client Admin',

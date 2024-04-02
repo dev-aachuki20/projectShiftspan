@@ -26,7 +26,8 @@ class StoreRequest extends FormRequest
     public function rules(): array
     {
         $rules = [];
-        $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule];
+        // $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule];
+        $rules['name'] = ['required', 'regex:/^[a-zA-Z\s\-\'\.\,\(\)\[\]\{\}\<\>\*\&\^\%\$\#\@\!\~\`\|\+\=\;\:\?\"\\\©]+$/u', 'string', 'max:255', new NoMultipleSpacesRule];
         $rules['email'] = ['required','email', 'regex:/(.+)@(.+)\.(.+)/i', 'unique:users,email,NULL,id,deleted_at,NULL'];
         $rules['password'] = ['required', 'string', 'min:8'];
 

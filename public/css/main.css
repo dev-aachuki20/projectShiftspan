@@ -473,9 +473,33 @@ th.mw-250{
     height: 12px;
     border-radius: 50%;
 }
-.notifications_area{
+.header-inner .menu-left>ul li.dropdown .has_noti{
+    border-radius: 28px 0 0 0;
+}
+.header-inner .menu-left>ul li.dropdown .has_noti::after{
+    content: '';
+    position: absolute;
+    right: -80px;
+    top: 0;
+    width: 80px;
+    height: 100%;
+    background-color: var(--gray-color);
+    display: block;
+    margin: 0;
+    border: none;
+    border-radius: 0 28px 0 0;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 350ms ease-in-out;
+}
+.header-inner .menu-left>ul li.dropdown .has_noti.show::after{
+    opacity: 1;
+    visibility: visible;
+}
+.header-inner .notifications_area{
     padding-left: 20px;
     padding-right: 20px;
+    width: calc(100% + 70px);
 }
 .notifications_area>li>a{
     background-color: var(--white);
@@ -2087,6 +2111,9 @@ th.datatable_desription{
         width: calc(100% - 4px);
         left: 2px !important;
     }
+    .header-inner .notifications_area{
+        width: calc(100% + 76px);
+    }
     .header-inner .has_noti{
         padding-left: 35px;
         padding-right: 26px;
@@ -2236,7 +2263,7 @@ th.datatable_desription{
         right: 0 !important;
     }
     .header-inner .dropdown-menu.notifications_area{
-        min-width: 250px;
+        width: 300px;
         padding-left: 10px;
         padding-right: 10px;
         margin-top: 28px !important;
@@ -2308,7 +2335,8 @@ th.datatable_desription{
     }
     .dashboard-page::before,
     .sidebar-menu ul li>a::after,
-    .header-inner ul>li>a.dropdown-toggle.has_noti::after{
+    .header-inner ul>li>a.dropdown-toggle.has_noti::after,
+    .header-inner .menu-left>ul li.dropdown .has_noti::after{
         display: none;
     }
     .sidebar-close{
@@ -2630,6 +2658,10 @@ th.datatable_desription{
     .dataTables_paginate{
         justify-content: flex-start;
         -webkit-justify-content: flex-start;
+    }
+    .header-inner .dropdown-menu.notifications_area{
+        width: calc(100% + 60px);
+        margin-left: -40px !important;
     }
 }
 

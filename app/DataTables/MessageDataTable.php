@@ -81,6 +81,10 @@ class MessageDataTable extends DataTable
                     ->minifiedAjax()
                     ->orderBy(0)
                     ->selectStyleSingle()
+                    ->lengthMenu([
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, 'All']
+                    ])
                     ->buttons([
                         Button::make('excel'),
                         Button::make('csv'),

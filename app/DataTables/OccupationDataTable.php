@@ -89,7 +89,11 @@ class OccupationDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy($orderByColumn)
-                    ->selectStyleSingle();
+                    ->selectStyleSingle()
+                    ->lengthMenu([
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, 'All']
+                    ]);
     }
 
     /**

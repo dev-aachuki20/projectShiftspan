@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered mw-820">
         <div class="modal-content">
             <div class="modal-header justify-content-center yellow-bg">
-                <h5 class="modal-title text-center" id="viewSubAdminDetailLabel">@lang('global.view') @lang('cruds.client_detail.title_singular')</h5>
+                <h5 class="modal-title text-center" id="viewSubAdminDetailLabel">@lang('global.view') @lang('cruds.listed_businesses.title_singular')</h5>
                 <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body inner-size-l">

@@ -111,7 +111,11 @@ class SubAdminDetailDataTable extends DataTable
                     ->minifiedAjax()
                     //->dom('Bfrtip')
                     ->orderBy(0)                    
-                    ->selectStyleSingle();
+                    ->selectStyleSingle()
+                    ->lengthMenu([
+                        [10, 25, 50, 100, -1],
+                        [10, 25, 50, 100, 'All']
+                    ]);
     }
 
     /**
