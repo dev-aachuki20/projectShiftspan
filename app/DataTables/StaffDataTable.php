@@ -68,7 +68,7 @@ class StaffDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('staff_view')) {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn viewStaffBtn"  data-href="'.route('staffs.show', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn viewStaffBtn" data-type="staff"  data-href="'.route('staffs.show', $record->uuid).'">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.view').'">
                             '.(getSvgIcon('view')).'
                         </span>

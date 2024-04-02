@@ -105,9 +105,20 @@ class ShiftDataTable extends DataTable
                 }
             })
 
-            ->editColumn('staffs.name', function($record){
+            // ->editColumn('staffs.name', function($record){
+            //     $selectedStaffs = $record->staffs()->pluck('name')->toArray();
+            //     return implode(', ', $selectedStaffs);
+            // })
+
+            ->editColumn('staffs.name', function($record) {
                 $selectedStaffs = $record->staffs()->pluck('name')->toArray();
-                return implode(', ', $selectedStaffs);
+                $staffUuids = $record->staffs()->pluck('uuid')->toArray();
+
+                $anchorTags = array_map(function ($staffName, $staffUuid) use ($record) {
+                    return '<a class="viewStaffBtn" href="' . route('staffs.show', $staffUuid) . '" data-type="shift" data-href="' . route('staffs.show', $staffUuid) . '">' . $staffName . '</a>';
+                }, $selectedStaffs, $staffUuids);
+
+                return implode(', ', $anchorTags);
             })
 
             ->editColumn('start_date', function($record){
@@ -217,7 +228,8 @@ class ShiftDataTable extends DataTable
                 'checkbox',
                 'rating', 
                 auth()->user()->is_super_admin ? 'client.name' : '', 
-                auth()->user()->is_sub_admin ? 'clientDetail.name' : ''
+                auth()->user()->is_sub_admin ? 'clientDetail.name' : '',
+                'staffs.name'
             ]);
     }
 

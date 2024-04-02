@@ -99,8 +99,19 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::get('/notifications-create', [StaffController::class, 'createNotification'])->name('staffs.createNotification');
         Route::post('/notifications-store', [StaffController::class, 'notificationStore'])->name('staffs.notificationStore');
         
-        Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
-        Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
+        // Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
+        // Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
+
+        Route::resource('/listed-businesses', SubAdminDetailController::class, ['parameters' => ['listed-businesses' => 'subAdminDetail'], 'names' => [
+            'index' => 'client-details.index',
+            'create' => 'client-details.create',
+            'store' => 'client-details.store',
+            'show' => 'client-details.show',
+            'edit' => 'client-details.edit',
+            'update' => 'client-details.update',
+            'destroy' => 'client-details.destroy',
+        ]]);
+        Route::post('/listed-businesses/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
         
         Route::resource('/shifts',ShiftController::class);
         Route::post('/shifts/mass-destroy', [ShiftController::class, 'massDestroy'])->name('shifts.massDestroy');

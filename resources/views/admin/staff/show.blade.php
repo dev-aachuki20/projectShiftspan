@@ -324,9 +324,11 @@
                         </div>
                     </div>
                 </form>
+                @if(isset($type) && $type == 'staff')
                 <div class="form-label text-center mt-3 pt-1">
                     <button class="cbtn sky-bg mw-160 text-capitalize editStaffBtn" data-href="{{route('staffs.edit', $user->uuid)}}">@lang('global.edit')</button>
                 </div>
+                @endif
             </div>
         </div>
     </div>

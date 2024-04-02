@@ -390,31 +390,6 @@
         })
     @endcan
 
-    @can('staff_view')
-        $(document).on("click",".viewStaffBtn", function() {
-            $('.loader-div').show();
-
-            var url = $(this).data('href');
-            $.ajax({
-                type: 'get',
-                url: url,
-                dataType: 'json',
-                success: function (response) {
-                    if(response.success) {
-                        $('.popup_render_div').html(response.htmlView);
-                        $('#staffDetails').modal('show');
-                        $('.loader-div').hide();
-                    }
-                },
-                error: function (response) {
-                    if(response.responseJSON.error_type == 'something_error'){
-                        toasterAlert('error',response.responseJSON.error);
-                    } 
-                }
-            });
-        });
-    @endcan
-
     $(document).on("click",".changeStaffStatus", function(e) {
         e.preventDefault();
 

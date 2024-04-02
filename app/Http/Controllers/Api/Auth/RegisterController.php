@@ -30,11 +30,11 @@ class RegisterController extends APIController
             'company_id'        => ['required','numeric','exists:users,id,deleted_at,NULL','exists:role_user,user_id,role_id,'.config('constant.roles.sub_admin')],
             'occupation_id'     => ['required', 'exists:occupations,id,deleted_at,NULL'],
             'is_criminal'       => ['required','boolean','in:1,0'],
-            'user_dbs_certificate' => ['required','file','max:2048','mimes:pdf'],
+            'user_dbs_certificate' => ['nullable','file','max:2048','mimes:pdf'],
             'user_cv'           => ['required','file','max:2048','mimes:pdf'],
-            'user_training_doc' => ['required','file','max:2048','mimes:pdf'],
-            'user_staff_budge'  => ['required','file','max:2048','mimes:pdf'],
-            'user_dbs_check'    => ['required','file','max:2048','mimes:pdf'],
+            'user_training_doc' => ['nullable','file','max:2048','mimes:pdf'],
+            'user_staff_budge'  => ['nullable','file','max:2048','mimes:pdf'],
+            'user_dbs_check'    => ['nullable','file','max:2048','mimes:pdf'],
             'user_training_check' => ['nullable','file','max:2048','mimes:pdf'],
         ],[],['occupation_id' => 'Occupation']);
         

@@ -167,4 +167,36 @@ $jsonArr = json_encode($arr);
             },
         }); */
     }
+
+    @can('staff_view')
+        $(document).on("click",".viewStaffBtn", function($type) {
+            event.preventDefault();
+            $('.loader-div').show();
+
+            var url = $(this).data('href');
+            var type = $(this).data('type');
+            $.ajax({
+                type: 'get',
+                url: url,
+                data: {
+                    'type' : type
+                },
+                dataType: 'json',
+                success: function (response) {
+
+                    if(response.success) {
+                        $('.popup_render_div').html(response.htmlView);
+                        $('#staffDetails').modal('show');
+                        $('.loader-div').hide();
+                    }
+                },
+                error: function (response) {
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } 
+                }
+            });
+        });
+    @endcan
+
 </script>

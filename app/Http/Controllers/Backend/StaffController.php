@@ -140,9 +140,10 @@ class StaffController extends Controller
              
                 $rating = getStaffRating($user->id);
 
-                $viewHTML = view('admin.staff.show', compact('user','rating'))->render();
-                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+                $type = $request->type;
 
+                $viewHTML = view('admin.staff.show', compact('user','rating','type'))->render();
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } 
             catch (\Exception $e) {
                 
