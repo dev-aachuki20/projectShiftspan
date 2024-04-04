@@ -20,6 +20,7 @@ use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendNotification;
+use Carbon\Carbon;
 
 class ShiftController extends Controller
 {
@@ -407,6 +408,17 @@ class ShiftController extends Controller
         $input['start_time']        = date('H:i:s', strtotime($req->start_time));
         $input['end_time']          = date('H:i:s', strtotime($req->end_time));
 
+        if($req->start_date != $req->end_date){
+            $startTime = Carbon::parse($req->start_time);
+            $endTime = Carbon::parse($req->end_time);
+            
+            if ($startTime->gt($endTime)) {
+                $input['shift_type'] = 1;
+            } else {
+                $input['shift_type'] = 0;
+            }
+        }
+
         return $input;
     }
 
@@ -502,7 +514,7 @@ class ShiftController extends Controller
             }
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }catch(\Exception $e){
-            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
     }

@@ -48,11 +48,15 @@ class UpdateRequest extends FormRequest
                 $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to the current time.');
             }
         } */];
-        $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time')/* , function ($attribute, $value, $fail) {
-            if ($value < $this->start_time) {
+        $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time'), function ($attribute, $value, $fail) {
+            if($this->start_date == $this->end_date && $value < $this->start_time) {
                 $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than the start time.');
             }
-        } */];
+
+            if($value == $this->start_time){
+                $fail('The ' . str_replace('_', ' ',$attribute) . ' cannot be equal to the start time.');
+            }
+        }];
         
 
         $rules['location_id'] = ['required', 'exists:locations,uuid,deleted_at,NULL'];

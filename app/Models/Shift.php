@@ -29,6 +29,7 @@ class Shift extends Model
         'rating',
         'quantity',
         'status',
+        'shift_type',
         'created_by',
         'created_at',
         'updated_at',

@@ -78,8 +78,9 @@ class ShiftController extends APIController
             // ->where('start_date','=',DB::raw('CURDATE()'))
             // ->where('end_time','>',DB::raw('NOW()'))
 
-            ->whereDate('end_date', '>=', Carbon::now()->toDateString())
-            ->whereTime('end_time', '>=', Carbon::now()->toTimeString())
+            // ->whereDate('end_date', '>=', Carbon::now()->toDateString())
+            // ->whereTime('end_time', '<=', Carbon::now()->toTimeString())
+            ->where(DB::raw("CONCAT(end_date, ' ', end_time)"), '>=', $currentDateTime->toDateTimeString())
             ->orderBy('start_date', 'ASC')
             ->orderBy('start_time', 'ASC')
             ->get();
@@ -179,15 +180,15 @@ class ShiftController extends APIController
             
             $user = auth()->user();
 
-            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
+            $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
             ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
             ->orderBy('start_date', 'desc')
             ->get();
 
             $shiftsData = [];
             $totalWorkingHour = 0;
-            $shiftsData['count'] = $completedShifts->count();
-            foreach($completedShifts as $shift){
+            $shiftsData['count'] = $upcomingShifts->count();
+            foreach($upcomingShifts as $shift){
                 $startDate = Carbon::parse($shift->start_date);
                 $endDate = Carbon::parse($shift->end_date);
                 $startTime = Carbon::parse($shift->start_time);
@@ -408,10 +409,17 @@ class ShiftController extends APIController
                 'clockout_longitude' => $request->longitude
             ]);
 
-            $endDate = Carbon::parse($shift->end_date)->format('Y-m-d');
-            $currentDate = Carbon::now()->format('Y-m-d');
+            if($shift->shift_type == 1){
+                $startDateTime = Carbon::parse($shift->end_date)->subDays(1)->setTimeFrom($shift->start_time);
+                $endDateTime = Carbon::parse($shift->end_date.' '.$shift->end_time);
+            } else {
+                $startDateTime = Carbon::parse($shift->end_date.' '. $shift->start_time);
+                $endDateTime = Carbon::parse($shift->end_date.' '.$shift->end_time);
+            }
 
-            if ($endDate == $currentDate) {
+            $currentDateTime = Carbon::now();
+
+            if ($currentDateTime->between($startDateTime, $endDateTime) || $currentDateTime->gt($endDateTime)) {
                 $shift->status = 'complete';
                 if($request->has('type') && $request->type == 'complete'){
                     $shift->is_authorized = 1;
