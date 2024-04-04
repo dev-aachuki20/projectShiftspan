@@ -412,8 +412,10 @@ class ShiftController extends APIController
             $currentDate = Carbon::now()->format('Y-m-d');
 
             if ($endDate == $currentDate) {
-
                 $shift->status = 'complete';
+                if($request->has('type') && $request->type == 'complete'){
+                    $shift->is_authorized = 1;
+                }
                 $shift->save();
 
                 $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
