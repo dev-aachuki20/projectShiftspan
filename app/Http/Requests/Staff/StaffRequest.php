@@ -53,17 +53,17 @@ class StaffRequest extends FormRequest
             $rules['previous_name']             = ['nullable', 'string'];
             $rules['national_insurance_number'] = ['nullable', 'string'];
             $rules['address']                   = ['nullable', 'string'];
-            $rules['education']                 = ['nullable', 'string'];
+            // $rules['education']                 = ['nullable', 'string'];
             $rules['prev_emp_1']                = ['nullable', 'string'];
             $rules['prev_emp_2']                = ['nullable', 'string'];
             $rules['reference_1']               = ['nullable', 'string'];
             $rules['reference_2']               = ['nullable', 'string'];
-            $rules['date_sign']                 = ['required', 'date','before_or_equal:' . now()->format('Y-m-d')];
+            // $rules['date_sign']                 = ['required', 'date','before_or_equal:' . now()->format('Y-m-d')];
             $rules['is_criminal']               = ['required','boolean'];
             $rules['is_rehabilite']             = ['required','boolean'];
-            $rules['is_enquire']                = ['required','boolean'];
+            // $rules['is_enquire']                = ['required','boolean'];
             $rules['is_health_issue']           = ['required','boolean'];
-            $rules['is_statement']              = ['required','boolean'];
+            // $rules['is_statement']              = ['required','boolean'];
             
             $rules['image']                     = ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:2048'];
             $rules['relevant_training']         = ['nullable', 'file', 'mimes:pdf', 'max:2048'];

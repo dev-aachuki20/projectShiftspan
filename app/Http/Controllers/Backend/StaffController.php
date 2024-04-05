@@ -99,7 +99,8 @@ class StaffController extends Controller
                 }
 
                 if($staff && $request->has('staff_budge')){
-                    uploadImage($staff, $request->image, 'staff/staff-budge',"user_staff_budge", 'original', 'save', null);
+
+                    uploadImage($staff, $request->staff_budge, 'staff/staff-budge',"user_staff_budge", 'original', 'save', null);
                 }
 
                 if($staff && $request->has('dbs_check')){
@@ -240,7 +241,7 @@ class StaffController extends Controller
                 
                 if($user && $request->has('staff_budge')){
                     $uploadImageId = $user->staffBudge ? $user->staffBudge->id : null;
-                    uploadImage($user, $request->image, 'staff/staff-budge',"user_staff_budge", 'original', $user->staffBudge ? 'update' : 'save', $uploadImageId ? $uploadImageId : null);
+                    uploadImage($user, $request->staff_budge, 'staff/staff-budge',"user_staff_budge", 'original', $user->staffBudge ? 'update' : 'save', $uploadImageId ? $uploadImageId : null);
                 }
                 
                 if ($user && $request->has('dbs_check')) {

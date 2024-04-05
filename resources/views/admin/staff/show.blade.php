@@ -127,14 +127,14 @@
                         </div>
                     @endif
 
-                    @if(isset($user->profile) && !empty($user->profile->education))
+                    {{-- @if(isset($user->profile) && !empty($user->profile->education))
                         <div class="form-label">
                             <label>@lang('cruds.staff.fields.education'):</label>
                             <div class="right-sidebox d-flex align-items-center justify-content-center">
                             <span class="fw-600">{{$user->profile->education}}</span>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
                     @if(isset($user->profile) && !empty($user->profile->prev_emp_1))
                         <div class="form-label">
@@ -172,14 +172,14 @@
                         </div>
                     @endif
 
-                    @if(isset($user->profile) && !empty($user->profile->date_sign))
+                    {{-- @if(isset($user->profile) && !empty($user->profile->date_sign))
                         <div class="form-label">
                             <label>@lang('cruds.staff.fields.date_sign'):</label>
                             <div class="right-sidebox d-flex align-items-center justify-content-center">
                             <span class="fw-600">{{date('d-m-Y', strtotime($user->profile->date_sign))}}</span>
                             </div>
                         </div>
-                    @endif
+                    @endif --}}
 
                     
                     <div class="form-label">
@@ -200,14 +200,14 @@
                         </div>
                     </div>
 
-                    <div class="form-label">
+                    {{-- <div class="form-label">
                         <label>@lang('cruds.staff.fields.enquires'):</label>
                         <div class="right-sidebox d-flex align-items-center justify-content-center">
                             @if(isset(config('constant.staff_info')[$user->profile->is_enquire]))
                                 <span class="fw-600">{{ config('constant.staff_info')[$user->profile->is_enquire] }}</span>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
                     <div class="form-label">
                         <label>@lang('cruds.staff.fields.health_issue'):</label>
@@ -218,14 +218,14 @@
                         </div>
                     </div>
 
-                    <div class="form-label">
+                    {{-- <div class="form-label">
                         <label>@lang('cruds.staff.fields.statement'):</label>
                         <div class="right-sidebox d-flex align-items-center justify-content-center">
                             @if(isset(config('constant.staff_info')[$user->profile->is_statement]))
                                 <span class="fw-600">{{ config('constant.staff_info')[$user->profile->is_statement] }}</span>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
 
                     <div class="form-label">

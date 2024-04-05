@@ -61,10 +61,10 @@
         <label>@lang('cruds.staff.fields.address'):</label>
         <textarea name="address">{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->address : '' }}</textarea>
     </div>
-    <div class="form-label">
+    {{-- <div class="form-label">
         <label>@lang('cruds.staff.fields.education'):</label>
         <input type="text" name="education" value="{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->education : '' }}">
-    </div>
+    </div> --}}
     <div class="form-label">
         <label>@lang('cruds.staff.fields.prev_emp_1'):</label>
         <input type="text" name="prev_emp_1" value="{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->prev_emp_1 : '' }}">
@@ -81,10 +81,10 @@
         <label>@lang('cruds.staff.fields.reference_2'):</label>
         <input type="text" name="reference_2" value="{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->reference_2 : '' }}">
     </div>
-    <div class="form-label">
+    {{-- <div class="form-label">
         <label>@lang('cruds.staff.fields.date_sign'):</label>
         <input type="text" name="date_sign" id="date_sign" class="datepicker" value="{{ (isset($staff) && !empty($staff->profile)) ? dateFormat($staff->profile->date_sign, 'Y-m-d') : '' }}" readonly/>
-    </div>
+    </div> --}}
 
     <div class="form-label select-label">
         <label>@lang('cruds.staff.fields.criminal'):</label>
@@ -104,14 +104,14 @@
         </select>
     </div>
 
-    <div class="form-label select-label">
+    {{-- <div class="form-label select-label">
         <label for="is_enquire">@lang('cruds.staff.fields.enquires'):</label>      
         <select class="select2" name="is_enquire" id="is_enquire" title="@lang('cruds.staff.fields.enquires')" required>
             @foreach (config('constant.staff_info') as $key=>$val)
                 <option value="{{$key}}" @if(isset($staff) && !empty($staff->profile) && $staff->profile->is_enquire == $key) selected @endif>{{ $val }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
 
     <div class="form-label select-label">
         <label for="is_health_issue">@lang('cruds.staff.fields.health_issue'):</label>      
@@ -122,14 +122,14 @@
         </select>
     </div>
 
-    <div class="form-label select-label">
+    {{-- <div class="form-label select-label">
         <label for="is_statement">@lang('cruds.staff.fields.statement'):</label>      
         <select class="select2" name="is_statement" id="is_statement" title="@lang('cruds.staff.fields.statement')" required>
             @foreach (config('constant.staff_info') as $key=>$val)
                 <option value="{{$key}}" @if(isset($staff) && !empty($staff->profile) && $staff->profile->is_statement == $key) selected @endif>{{ $val }}</option>
             @endforeach
         </select>
-    </div>
+    </div> --}}
 
     <div class="form-label">
         <label>@lang('cruds.staff.fields.staff_image'):</label>
