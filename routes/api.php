@@ -92,6 +92,17 @@ Route::group(['namespace' => 'Api'], function () {
     */
     Route::get('companies', [HomeController::class,'companyList']);
 
+
+	/*
+    |--------------------------------------------------------------------------
+    | Open API Routes
+    |--------------------------------------------------------------------------
+    | Method        : Post
+    | Validate company_number with company
+    |
+    */
+    Route::post('company', [HomeController::class,'companyNumberExist']);
+
      /*
     |--------------------------------------------------------------------------
     |  Get Occupations API Routes
