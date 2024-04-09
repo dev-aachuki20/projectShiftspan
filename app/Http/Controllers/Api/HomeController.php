@@ -89,11 +89,18 @@ class HomeController extends APIController
      * @return \Illuminate\Http\JsonResponse
     */
     public function companyNumberExist(Request $request){
-        $request->validate(['company_number' => ['required', 'exists:users,company_number,deleted_at,NULL']],[],['company_number' => 'Company ID']); 
-
-
+        // dd($request);
+        $credentials = $request->validate([
+            'company_number'    => ['required','exists:users,company_number,deleted_at,NULL']
+        ],[
+            'company_number.exists' => trans('validation.invalid'),
+        ],
+        [
+            'company_number' => 'Company ID'
+        ]);
+        
         $company_role_id= config('constant.roles.sub_admin');
-        $companyData = User::select('company_number','name')->where('company_number',$request->company_number)->whereHas('roles', function ($query) use ($company_role_id) {
+        $companyData = User::select('id','company_number','name')->where('company_number',$request->company_number)->whereHas('roles', function ($query) use ($company_role_id) {
             $query->where('id', $company_role_id);
         })->first();
 
