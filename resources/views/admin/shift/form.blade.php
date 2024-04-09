@@ -1,3 +1,9 @@
+
+<div class="form-label position-relative">
+    <label>@lang('cruds.shift.fields.shift_label'):</label>
+    <input type="text" name="shift_label" id="shift_label"  value="{{ isset($shift) ? $shift->shift_label : '' }}" autocomplete="off" @required(true) />
+</div>
+
 @if(auth()->user()->is_super_admin)
     <div class="form-label select-label">
         <label>@lang('cruds.shift.fields.client_name'):</label>

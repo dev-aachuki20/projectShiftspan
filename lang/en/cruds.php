@@ -256,6 +256,7 @@ return [
         'title_singular' => 'Shift',
         'fields' => [
             'id'                => 'ID',
+            'shift_label'      => 'Shift Label',
             'client_name'      => 'Client Admin',
             'client_detail_name'=> 'Listed Business Name',
             'staff_name'        => 'Staff Name',

@@ -121,6 +121,10 @@ class ShiftDataTable extends DataTable
                 return implode(', ', $anchorTags);
             })
 
+            ->editColumn('shift_label', function($record){
+                return $record->shift_label ? $record->shift_label  : '';
+            })
+
             ->editColumn('start_date', function($record){
                 return $record->start_date ? dateFormat($record->start_date, config('constant.date_format.date')) : '';
             })
@@ -284,7 +288,10 @@ class ShiftDataTable extends DataTable
             $columns[] = Column::make('client.name')->title('<span>'.trans('cruds.shift.fields.client_name').'</span>')->titleAttr(trans('cruds.shift.fields.client_name'));
         }
         $columns[] = Column::make('clientDetail.name')->title('<span>'.trans('cruds.shift.fields.client_detail_name').'</span>')->titleAttr(trans('cruds.shift.fields.client_detail_name'));
+
+
         $columns[] = Column::make('staffs.name')->title('<span>'.trans('cruds.shift.fields.staff_name').'</span>')->titleAttr(trans('cruds.shift.fields.staff_name'));
+        $columns[] = Column::make('shift_label')->title('<span>'.trans('cruds.shift.fields.shift_label').'</span>')->titleAttr(trans('cruds.shift.fields.shift_label'));
         $columns[] = Column::make('start_date')->title('<span>'.trans('cruds.shift.fields.start_date').'</span>')->titleAttr(trans('cruds.shift.fields.start_date'));
         $columns[] = Column::make('end_date')->title('<span>'.trans('cruds.shift.fields.end_date').'</span>')->titleAttr(trans('cruds.shift.fields.end_date'));
 

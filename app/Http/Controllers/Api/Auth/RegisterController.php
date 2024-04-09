@@ -36,7 +36,12 @@ class RegisterController extends APIController
             'user_staff_budge'  => ['nullable','file','max:2048','mimes:pdf'],
             'user_dbs_check'    => ['nullable','file','max:2048','mimes:pdf'],
             'user_training_check' => ['nullable','file','max:2048','mimes:pdf'],
-        ],[],['occupation_id' => 'Occupation']);
+            'profile_image'  => ['required', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
+        ],[
+            'profile_image.image' =>'Please upload image.',
+            'profile_image.mimes' =>'Please upload image with extentions: jpeg,png,jpg.',
+            'profile_image.max' =>'The image size must equal or less than '.config('constant.profile_max_size_in_mb'),
+        ],['occupation_id' => 'Occupation']);
         
         DB::beginTransaction();
         try {
@@ -53,6 +58,16 @@ class RegisterController extends APIController
                 'is_criminal' => $request->is_criminal,
                 'occupation_id' => $request->occupation_id,
             ]);
+
+            if($request->has('profile_image')){
+                $uploadId = null;
+                $actionType = 'save';
+                if($profileImageRecord = $user->profileImage){
+                    $uploadId = $profileImageRecord->id;
+                    $actionType = 'update';
+                }
+                uploadImage($user, $request->profile_image, 'user/profile-images',"user_profile", 'original', $actionType, $uploadId);
+            }
 
             $user->roles()->sync(config('constant.roles.staff'));
             foreach ($request->allFiles() as $key => $file) {

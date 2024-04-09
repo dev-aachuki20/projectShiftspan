@@ -15,6 +15,7 @@ class Shift extends Model
     protected $guard = 'web';
     public $table = 'shifts';
     protected $fillable = [
+        'shift_label',
         'sub_admin_id',
         'client_detail_id',
         'location_id',

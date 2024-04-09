@@ -2,16 +2,17 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Models\AuthorizedShift;
-use App\Models\Shift;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
+use App\Models\Shift;
 use App\Models\ClockInOut;
+use Illuminate\Http\Request;
+use App\Models\AuthorizedShift;
+use Illuminate\Support\Facades\DB;
 use App\Rules\NoMultipleSpacesRule;
-use Illuminate\Support\Facades\Notification;
 use App\Notifications\SendNotification;
+use Illuminate\Support\Facades\Notification;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ShiftController extends APIController
 {
@@ -23,32 +24,13 @@ class ShiftController extends APIController
         ]);
 
         try{
-            $user = auth()->user();
+           $user = auth()->user();
 
-            $currentDateTime = Carbon::now();
-
-        /*  $staffAssignedShifts = $user->assignShifts()->where(function ($query) use ($currentDateTime) {
-                $query->whereDate('start_date', '>', $currentDateTime->toDateString())
-                ->orWhere(function ($query) use ($currentDateTime) {
-                    $query->whereDate('start_date', '=', $currentDateTime->toDateString())
-                        ->whereTime('start_time', '>', $currentDateTime->toTimeString());
-                });
-            })
-            ->where('status', '=', 'picked')
-            ->get();
-        */
+           $currentDateTime = Carbon::now();
 
            $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
-            ->select('id', 'sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
-
+            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
             ->whereStatus('open')
-           /* ->where(function ($query) use ($currentDateTime) {
-                 $query->whereDate('start_date', '>', $currentDateTime->toDateString());
-                 ->orWhere(function ($query) use ($currentDateTime) {
-                     $query->whereDate('start_date', '=', $currentDateTime->toDateString())
-                         ->whereTime('start_time', '>', $currentDateTime->toTimeString());
-                 });
-            })*/
             ->where(function ($query) use($request) {
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
@@ -62,24 +44,7 @@ class ShiftController extends APIController
                         $q->where('id', $occupationId);
                     });
                 }
-               /* foreach($staffAssignedShifts as $dateData){
-                    $query->where(function ($query) use($dateData) {
-                        $query->where('start_date', '>', $dateData->start_date)
-                            ->orWhere('end_date', '<', $dateData->end_date);
-                    })->orWhere(function ($query) use($dateData) {
-                        $query->whereBetween('start_date', [$dateData->start_date, $dateData->end_date])
-                            ->orWhereBetween('end_date', [$dateData->start_date, $dateData->end_date]);
-                    })->where(function ($query) use($dateData) {
-                        $query->where('start_time', '>', $dateData->start_time)
-                            ->orWhere('end_time', '<', $dateData->end_time);
-                    });
-                }*/
             })
-            // ->where('start_date','=',DB::raw('CURDATE()'))
-            // ->where('end_time','>',DB::raw('NOW()'))
-
-            // ->whereDate('end_date', '>=', Carbon::now()->toDateString())
-            // ->whereTime('end_time', '<=', Carbon::now()->toTimeString())
             ->where(DB::raw("CONCAT(end_date, ' ', end_time)"), '>=', $currentDateTime->toDateTimeString())
             ->orderBy('start_date', 'ASC')
             ->orderBy('start_time', 'ASC')
@@ -90,6 +55,7 @@ class ShiftController extends APIController
             foreach($companyShifts as $key => $shift){
                 $shiftsData[] = [
                     'shift_id'          => $shift->id,
+                    'shift_label'       => $shift->shift_label,
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
@@ -109,7 +75,8 @@ class ShiftController extends APIController
             ])->setStatusCode(Response::HTTP_OK);
         } 
         catch(\Exception $e){
-            dd($e->getMessage().'->'.$e->getLine());
+            // dd($e->getMessage().'->'.$e->getLine());
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -124,7 +91,7 @@ class ShiftController extends APIController
             $user = auth()->user();
 
             $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')
+            ->select('id','shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')
             ->whereStatus('complete');
 
             if($request->type == 'shift'){
@@ -149,6 +116,7 @@ class ShiftController extends APIController
 
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
+                    'shift_label'       => $shift->shift_label,
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
@@ -169,7 +137,7 @@ class ShiftController extends APIController
         } 
         catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
-
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -181,7 +149,7 @@ class ShiftController extends APIController
             $user = auth()->user();
 
             $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id', 'sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time')->whereStatus('picked')
+            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time', 'shift_type')->whereStatus('picked')
             ->orderBy('start_date', 'desc')
             ->get();
 
@@ -197,8 +165,24 @@ class ShiftController extends APIController
                 $timeDifferenceInMinutes = calculateTimeDifferenceInMinutes($startTime, $endTime);
                 $totalWorkingHour += $timeDifferenceInMinutes / 60;
 
+                if($shift->shift_type == 1){
+                    $startDateTime = Carbon::parse($shift->end_date)->subDays(1)->setTimeFrom($shift->start_time);
+                    $endDateTime = Carbon::parse($shift->end_date.' '.$shift->end_time);
+                } else {
+                    $startDateTime = Carbon::parse($shift->end_date.' '. $shift->start_time);
+                    $endDateTime = Carbon::parse($shift->end_date.' '.$shift->end_time);
+                }
+    
+                $currentDateTime = Carbon::now();
+                
+                $lastShift = false;
+                if ($currentDateTime->between($startDateTime, $endDateTime) || $currentDateTime->gt($endDateTime)) {
+                    $lastShift = true;
+                }
+
                 $shiftsData['records'][] = [
                     'shift_id'          => $shift->id,
+                    'shift_label'       => $shift->shift_label,
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
@@ -209,6 +193,7 @@ class ShiftController extends APIController
                     'end_time'          => $shift->end_time,
                     'check_in_status'   => $shift->clockInOuts()->where('clockin_date','<',Carbon::now())->exists(),
                     'check_out_status'  => $shift->clockInOuts()->where('clockout_date','<',Carbon::now())->exists(),
+                    'is_last_shift'     => $lastShift,
                 ];
             }
             $shiftsData['total_hours'] = number_format($totalWorkingHour,2);
@@ -221,6 +206,7 @@ class ShiftController extends APIController
         } 
         catch(\Exception $e){
             // dd($e->getMessage().'->'.$e->getLine());
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -246,21 +232,7 @@ class ShiftController extends APIController
                           ->where('end_time', '<=', $selectedShift->end_time);
                     });
                 })
-
-                // ->where(function ($query) use($selectedShift) {
-                //     $query->where('start_date', '>', $selectedShift->start_date)
-                //         ->orWhere('end_date', '<', $selectedShift->end_date);
-                // })->orWhere(function ($query) use($selectedShift) {
-                //     $query->whereBetween('start_date', [$selectedShift->start_date, $selectedShift->end_date])
-                //         ->orWhereBetween('end_date', [$selectedShift->start_date, $selectedShift->end_date]);
-                // })->where(function ($query) use($selectedShift) {
-                //     $query->where('start_time', '>', $selectedShift->start_time)
-                //         ->orWhere('end_time', '<', $selectedShift->end_time);
-                // })
-
                 ->exists();
-
-                // dd($isShiftWithinAssignedShifts);
 
                 if($isShiftWithinAssignedShifts){
                     $fail("The shift's time slot overlaps with your assigned shifts.");
@@ -334,6 +306,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -382,6 +355,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -450,6 +424,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -497,6 +472,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
@@ -548,6 +524,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }   
@@ -581,6 +558,7 @@ class ShiftController extends APIController
 
                 $shiftsData[] = [
                     'shift_id'          => $shift->id,
+                    'shift_label'       => $shift->shift_label,
                     'sub_admin_name'    => $shift->client ? $shift->client->name : null,
                     'company_address'   => $shift->clientDetail ? $shift->clientDetail->address : null,
                     'occupation_name'   => $shift->occupation ? $shift->occupation->name : null,
@@ -608,7 +586,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
-            return $this->throwValidation([trans('messages.error_message'),$e->getMessage().' '.$e->getFile().' '.$e->getCode()]);
+            return $this->throwValidation([trans('messages.error_message')]);
         }
     }
 }
