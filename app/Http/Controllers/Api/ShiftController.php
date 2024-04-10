@@ -451,13 +451,15 @@ class ShiftController extends APIController
 
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
             $messageData = [
-                'notification_type' => array_search(config('constant.subject_notification_type.shifts_completed'), config('constant.subject_notification_type')),
+                'notification_type' => array_search(config('constant.subject_notification_type.shift_cancels'), config('constant.subject_notification_type')),
                 'section'           => $key,
-                'subject'           => trans('messages.shift.shift_completed_subject'),
-                'message'           => trans('messages.shift.shift_completed_admin_message', [
+                'subject'           => trans('messages.shift.shift_canceled_subject'),
+                'message'           => trans('messages.shift.shift_canceled_admin_message', [
                     'username'      => $user->name,
-                    'cancel_at'     => date('Y-m-d'),
-                    'status'        => 'cancel',
+                    'status'        => 'canceled',
+                    'start_date'    => Carbon::parse($shift->start_date)->format('d-m-Y'),
+                    'start_time'    => Carbon::parse($shift->start_time)->format('H:i'),
+                    'cancel_at'     => date('d-m-Y H:i'),
                 ]),
             ];
             

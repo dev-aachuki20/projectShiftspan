@@ -189,7 +189,7 @@ class ShiftController extends Controller
                     $shift->staffs()->sync([$staffId->id => ['created_at' => date('Y-m-d H:i:s')]]);
 
                     /* Send Notification */
-                    if($request->assign_staff){
+                    /*if($request->assign_staff){
                         $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
                         $messageData = [
                             'notification_type' => array_search(config('constant.subject_notification_type.shift_changes'), config('constant.subject_notification_type')),
@@ -202,7 +202,7 @@ class ShiftController extends Controller
                         ];
                         
                         Notification::send($shift->staffs->first(), new SendNotification($messageData));
-                    }
+                    }*/
                     
                 }else{
                     $shift->update([

@@ -29,7 +29,7 @@ class UpdateRequest extends FormRequest
     {
         $rules = [];
         
-        $rules['shift_label'] = ['required', 'string','max:30'];
+        $rules['shift_label'] = ['required', 'string','max:15'];
 
         if($this->has('sub_admin_id')){
             $rules['sub_admin_id'] = ['required', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.sub_admin'), '', 'uuid')];

@@ -97,6 +97,8 @@ return [
         'shift_rating_subject'                  => 'Shift Rating Notification',
         'shift_rating_message'                  => 'Hi :username, your shift has been rated :rating star by the :admin. Thank you for your service.',
 
+        'shift_canceled_subject'               => 'Canceled Shift',
+        'shift_canceled_admin_message'         => 'User :username has :status their shift scheduled for :start_date at :start_time. The cancellation was made at :cancel_at',
     ],
 
     'registration_completion_subject'           => 'Completed successfully. Thank you for registering your account.',
