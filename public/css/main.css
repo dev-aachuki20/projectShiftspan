@@ -525,7 +525,7 @@ th.mw-250{
     top: 50%;
     transform: translateY(-50%);
     -webkit-transform: translateY(-50%);
-    background-color: var(--tertiary);
+    /* background-color: var(--tertiary); */
     width: 12px;
     height: 12px;
     border-radius: 50%;
@@ -823,7 +823,7 @@ th.mw-250{
     border-radius: 50%;
 }
 .inner-msg{
-    padding-left: 30px;
+    /* padding-left: 30px; */
     text-transform: none;
 }
 .inner-msg>h3{

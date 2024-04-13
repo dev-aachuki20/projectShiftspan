@@ -41,7 +41,7 @@ class SettingController extends Controller
                     }
                     elseif($setting->type === 'file'){
                         if ($value) {
-                            $uploadId = $setting->image ? $setting->image->id : null;
+                            $uploadId = $setting->doc ? $setting->doc->id : null;
                             if($uploadId){
                                 uploadImage($setting, $value, 'settings/doc/', "setting-file", 'original', 'update', $uploadId);
                             }else{

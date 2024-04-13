@@ -51,7 +51,7 @@ $jsonArr = json_encode($arr);
 
     // Password field hide/show functiolity
     $(document).on('click', '.toggle-password',function () {        
-        var passwordInput = $(this).prev('input');        
+        var passwordInput = $(this).closest('.password-area').find('input');        
         if (passwordInput.attr('type') === 'password') {
             passwordInput.attr('type', 'text');
             $(this).removeClass('close-eye').addClass('open-eye');

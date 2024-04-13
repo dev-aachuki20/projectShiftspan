@@ -18,7 +18,7 @@
                                 </div>
                             </div>
                             <div class="form-label">
-                                <label>@lang('cruds.shift.fields.geoloaction'):</label>
+                                <label>@lang('cruds.shift.fields.geolocation'):</label>
                                 <div class="right-sidebox">
                                     <div id="map" class="map-container" style="width: 100%; height: 200px;" data-lat="{{ $data['clockin_latitude'] }}" data-lng="{{ $data['clockin_longitude'] }}"></div>
                                 </div>
@@ -52,7 +52,7 @@
                                 </div>
                             </div>
                             <div class="form-label">
-                                <label>@lang('cruds.shift.fields.geoloaction'):</label>
+                                <label>@lang('cruds.shift.fields.geolocation'):</label>
                                 <div class="right-sidebox">
                                     <div id="map" class="map-container" style="width: 100%; height: 200px;" data-lat="{{ $data['clockout_latitude'] }}" data-lng="{{ $data['clockout_longitude'] }}"></div>
                                 </div>

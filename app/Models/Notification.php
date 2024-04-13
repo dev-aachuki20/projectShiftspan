@@ -57,5 +57,15 @@ class Notification extends Model
         return $user ? $user->company_id : null;
     }
 
+    public function notifyUser()
+    {
+        return $this->belongsTo(User::class,'notifiable_id','id');
+    }
+
+    public function createdBy()
+    {
+        return $this->belongsTo(User::class,'created_by','id');
+    }
+
 
 }

@@ -150,7 +150,7 @@ class ShiftController extends APIController
 
             $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
             ->select('id', 'shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time', 'shift_type')->whereStatus('picked')
-            ->orderBy('start_date', 'desc')
+            ->orderBy(DB::raw('CONCAT(start_date, " ", start_time)'), 'asc')
             ->get();
 
             $shiftsData = [];
@@ -446,7 +446,11 @@ class ShiftController extends APIController
             if ($currentDateTime->gt($endDateTime)) {
                 Shift::where('id', $request->id)->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
             }else{
-                Shift::where('id', $request->id)->update(['status' => 'open', 'cancel_at' => Null]);
+                $isupdated = Shift::where('id', $request->id)->update(['status' => 'open', 'cancel_at' => Null]);
+
+                if($isupdated){
+                   $shift->staffs()->sync([]);
+                }
             }
 
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));

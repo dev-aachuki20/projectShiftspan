@@ -246,8 +246,8 @@ return [
             'section'                       => 'Section',
             'subject'                       => 'Subject',
             'message'                       => 'Message',
-            'sent'                          => 'Sent',
-            'received'                      => 'Received',
+            'sent'                          => 'Sent To',
+            'received'                      => 'Received From',
         ]
     ],
 
@@ -283,7 +283,7 @@ return [
             'manager_name'      => 'Manager Name',
             'clock_in_time'     => 'Clock In Time',
             'clock_out_time'    => 'Clock Out Time',
-            'geoloaction'       => 'Geoloaction',
+            'geolocation'       => 'Geolocation',
             'manager_signature' => 'Manager Signature'
         ]
     ],

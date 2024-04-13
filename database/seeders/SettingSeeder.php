@@ -57,7 +57,7 @@ class SettingSeeder extends Seeder
                 'value'  => null,
                 'type'   => 'file',
                 'details' => null,
-                'display_name'=>'Help Pdf',
+                'display_name'=>'Help PDF',
                 'group'  => 'web',
                 'status' => 1,
                 'position' => 4,

@@ -30,13 +30,22 @@ class MessageDataTable extends DataTable
                 </label>';
             })
             ->addColumn('message', function ($record) {
-                $messageSentBy = in_array($record->created_by, [
+                $userRoleId = $record->createdBy->roles()->first()->id;
+
+                $messageSentBy = in_array($userRoleId, [
                     config('constant.roles.super_admin'), config('constant.roles.sub_admin')
                     ]) ? trans('cruds.message.fields.sent') : trans('cruds.message.fields.received');
 
-                return '<div class="inner-msg noti-before position-relative">' .
+                $userName =  in_array($userRoleId, [
+                    config('constant.roles.super_admin'), config('constant.roles.sub_admin')
+                    ]) ? $record->notifyUser->name  : $record->createdBy->name;
+
+                
+                // return '<div class="inner-msg noti-before position-relative">' .
+                return '<div class="inner-msg  position-relative">' .
                     '<h3>' . $record->subject . '</h3>' .
-                    '<p>' . $messageSentBy .' : '. $record->message . '</p>' .
+                    '<p>' . $messageSentBy .' : '. ucwords($userName) . '</p>' .
+                    '<p>' . $record->message . '</p>' .
                 '</div>';
             })
             ->setRowId('id')

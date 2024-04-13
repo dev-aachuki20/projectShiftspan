@@ -119,7 +119,7 @@
                 $("#end_time").val('');
                 
                 // set min time of start time
-                if (selectedDate.toDateString() === currentDate.toDateString()) {
+               if (selectedDate.toDateString() === currentDate.toDateString()) {
                     var currentHour = currentDate.getHours();
                     var currentMinute = currentDate.getMinutes();
                     var nextDivisibleMinute = Math.ceil(currentMinute / step) * step;
