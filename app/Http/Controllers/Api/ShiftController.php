@@ -46,8 +46,9 @@ class ShiftController extends APIController
                 }
             })
             ->where(DB::raw("CONCAT(end_date, ' ', end_time)"), '>=', $currentDateTime->toDateTimeString())
-            ->orderBy('start_date', 'ASC')
-            ->orderBy('start_time', 'ASC')
+            // ->orderBy('start_date', 'ASC')
+            // ->orderBy('start_time', 'ASC')
+            ->orderByRaw("CONCAT(start_date, ' ', start_time), DAYOFWEEK(start_date) ASC")
             ->get();
 
             $shiftsData = [];
@@ -150,7 +151,8 @@ class ShiftController extends APIController
 
             $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
             ->select('id', 'shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time', 'shift_type')->whereStatus('picked')
-            ->orderBy(DB::raw('CONCAT(start_date, " ", start_time)'), 'asc')
+            // ->orderBy(DB::raw('CONCAT(start_date, " ", start_time)'), 'asc')
+            ->orderByRaw("CONCAT(start_date, ' ', start_time), DAYOFWEEK(start_date) ASC")
             ->get();
 
             $shiftsData = [];
