@@ -37,6 +37,8 @@ $jsonArr = json_encode($arr);
 @endphp
 
 <script>
+    getNotifications();
+    
     // Custom select box
     $(document).on('click', '.select-styled', function() {
 		$('.select-options').not($(this).next('.select-options')).slideUp();
@@ -107,38 +109,68 @@ $jsonArr = json_encode($arr);
     }
     
     $(document).on('click', '.notificationsBtn', function () {
-        getNotifications();
+
+        markAsReadAll();
+    
+    });
+
+    $(document).on('click','.clear-notify-btn',function(){
+        clearNotifications();
+    });
+
+    $(document).on('click','.deleteNotfiyBtn',function(e){
+        e.preventDefault();
+
+        var uuid = $(this).attr('data-uuid');
+        deleteNotification(uuid);
+
+    });
+
+    $(document).on('click','.notificationlist .dropdown',function(e){
+        e.preventDefault();
+        var element = $('.notificationlist');
+
+        if (element.hasClass('active')) {
+            element.removeClass('active');
+        } else {
+            element.addClass('active');
+        }
     });
 
     function getNotifications() {
-        // setTimeout(() => {
-        //     $('.loader-div').show();
-        // }, 100);       
+       
+        // $('.loader-div').show();
         $.ajax({
             type: 'get',
             url: "{{ route('getNotification') }}",
             dataType: 'json',
             success: function (response) {
+                 // $('.loader-div').hide();
                 if(response.success) {
+                    if(response.total == 0){
+                        $('.notificationsBtn').addClass('notify-read');
+                        $('.clear-notify-btn').parent().css('display','none');
+                    }else{
+                        $('.notificationsBtn').removeClass('notify-read');
+                        $('.clear-notify-btn').parent().css('display','block');
+                    }
+
                     $('.notifications_area').html(response.htmlView);
-                    // setTimeout(() => {
-                    //     $('.loader-div').hide();
-                    // }, 100); 
+                   
                 }
             },
             error: function (response) {
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
-                    // setTimeout(() => {
-                    //     $('.loader-div').hide();
-                    // }, 100); 
+                    //$('.loader-div').hide();
                 } 
             },
         });
     }
 
     function markAsRead(notify_id){
-       /* $.ajax({
+        // $('.loader-div').show();
+       $.ajax({
             type: 'get',
             url: "{{route('read.notification')}}",
             dataType: 'json',
@@ -147,25 +179,99 @@ $jsonArr = json_encode($arr);
                 notification: notify_id,   
             },
             success: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response.success == true){
-                    // setTimeout(() => {
-                    //     $('.loader-div').hide();
-                    //     getNotifications();
-                    // }, 100); 
+                   
+                    getNotifications();
 
+                    // $('.loader-div').hide();
+                }
+            },
+            error: function (response) {
+                // $('.loader-div').hide();
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                } 
+            },
+        });
+    }
+
+    function markAsReadAll(){
+        // $('.loader-div').show();
+       $.ajax({
+            type: 'get',
+            url: "{{route('readall.notification')}}",
+            dataType: 'json',
+            success: function (response) {
+                // console.log(response);
+                if(response.success == true){ 
                     getNotifications();
                 }
             },
             error: function (response) {
+                // $('.loader-div').hide();
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
-                    // setTimeout(() => {
-                    //     $('.loader-div').hide();
-                    // }, 100); 
                 } 
             },
-        }); */
+        });
+    }
+
+    function clearNotifications() {
+
+       $('.loader-div').show();     
+
+        $.ajax({
+            type: 'get',
+            url: "{{ route('clear.notification') }}",
+            dataType: 'json',
+            success: function (response) {
+                $('.loader-div').hide();
+                if(response.success) {
+                    toasterAlert('success',response.message);
+                    getNotifications();
+                }
+            },
+            error: function (response) {
+                $('.loader-div').hide();
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                }else if(response.responseJSON.error_type == 'warning'){ 
+                    toasterAlert('warning',response.responseJSON.message);
+                }
+            },
+        });
+
+    }
+
+    function deleteNotification(uuid) {
+
+        $('.loader-div').show();     
+
+        $.ajax({
+            type: 'post',
+            url: "{{ route('delete.notification') }}",
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}"
+            },
+            data:{'uuid':uuid},
+            dataType: 'json',
+            success: function (response) {
+                $('.loader-div').hide();
+                if(response.success) {
+                    getNotifications();
+                    toasterAlert('success',response.message);
+                }
+            },
+            error: function (response) {
+                $('.loader-div').hide();
+                if(response.responseJSON.error_type == 'something_error'){
+                    toasterAlert('error',response.responseJSON.error);
+                }else if(response.responseJSON.error_type == 'warning'){ 
+                    toasterAlert('warning',response.responseJSON.message);
+                }
+            },
+        });
     }
 
     @can('staff_view')

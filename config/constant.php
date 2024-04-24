@@ -112,8 +112,37 @@ return [
         'clock_in'                          => 'Clock In',
         'clock_out'                         => 'Clock Out',
         'authorised_sign'                   => 'Authorised Sign Off Timesheet',
+
     ],
 
     'upcoming_add_hour_to_end_time' => 24,
+
+    'notification_routes' => [
+        'shifts' => [
+            'shift_assign',
+            'shift_pickings',
+            'shift_amendments',
+            'shift_cancellations',
+            'shift_changes',
+            'shift_uploads',
+            'shifts_completed',
+            'shift_cancels',
+            'shift_ratings',
+            'shift_delete',
+        ],
+        
+        'staffs' => [
+            'clock_in',
+            'clock_out',
+            'authorised_sign',
+            'registration_completion_active',
+            'registration_completion_deactive',
+        ],
+
+        'messages'=>[
+            'send_message',
+            'send_notification'
+        ]
+    ],
     
 ];

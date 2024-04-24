@@ -47,6 +47,21 @@
             }
         });
 
+        
+        $('.staff-checkbox').on('change', function() {
+            selectedStaffCheckboxes();
+        });
+
+        $(document).on('click','.selectAllStaff',function(event) {
+        
+            var $checkboxes = $('.options input[type="checkbox"]');
+            var allChecked = $checkboxes.filter(':checked').length === $checkboxes.length;
+            $checkboxes.prop('checked', !allChecked);
+
+            selectedStaffCheckboxes();
+
+        });
+
         $(function () {
             $(".datepicker").datepicker({
                 maxDate: 0,
@@ -79,6 +94,8 @@
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
+            $('.loader-div').show();
+            
             var formData = new FormData(this);
 
             $.ajax({
@@ -88,7 +105,9 @@
                 contentType: false,
                 processData: false,
                 data: formData,
-                success: function (response) {         
+                success: function (response) {       
+                    $('.loader-div').hide();  
+                    $(".submitBtn").attr('disabled', false);
                     if(response.success) {
                         $('#addNotificationForm')[0].reset();
                         $('#NnotificationSettings').modal('hide');
@@ -103,6 +122,9 @@
                     }
                 },
                 error: function (response) {
+                    $('.loader-div').hide();  
+                    $(".submitBtn").attr('disabled', false);
+
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
                     } else {                    
@@ -184,6 +206,24 @@
     $('.btn-close').click(function() {
         $('.validation-error-block').remove();
     });
+
+
+    function selectedStaffCheckboxes(){
+        var selectedDataArray = [];
+        var checkedCheckboxes = $(".staff-checkbox:checked");
+        checkedCheckboxes.each(function(){
+            var dataValue = $(this).attr("data-company"); 
+            if (!selectedDataArray.includes(dataValue)) {
+                selectedDataArray.push(dataValue); 
+            }
+        });
+    
+        if(selectedDataArray.length > 0){
+            $("#companyUUId").val(selectedDataArray.join(','));
+        }else{
+            $("#companyUUId").val('');
+        }
+    }
 </script>
 
 @endsection

@@ -21,18 +21,19 @@
                                 <span class="selected-options">@lang('global.select') ...</span>
                             </div>
                             <div class="options" style="display: none;">
-                                <p class="selectAll">@lang('cruds.notification.fields.all_staff')</p>
+                                <p class="selectAllStaff">@lang('cruds.notification.fields.all_staff')</p>
                                 <input type="text" id="searchInput" placeholder="Search...">
                                 <ul class="custom-check">
                                     @foreach ($staffsNotify as $key=>$item)
                                         <li class="select-option">
                                             <label>
-                                                <input type="checkbox" name="staffs[]" class="checkboxes" value="{{$key}}">
-                                                <span>{{$item}}</span>
+                                                <input type="checkbox" name="staffs[]" class="checkboxes staff-checkbox" value="{{ $item->uuid }}" data-company="{{ $item->company->uuid }}">
+                                                <span>{{ ucwords($item->name) }} ({{ $item->email }})</span>
                                             </label>
                                         </li>
                                     @endforeach
                                 </ul>
+                                <input type="hidden" name="companies[]" id="companyUUId">
                             </div>                          
                         </div>
                         <span class="staffs_error"></span>

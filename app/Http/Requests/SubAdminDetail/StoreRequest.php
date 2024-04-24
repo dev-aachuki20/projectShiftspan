@@ -30,6 +30,10 @@ class StoreRequest extends FormRequest
             $rules['sub_admin_id'] = ['required', 'exists:users,uuid,deleted_at,NULL'];
         }
 
+        if($this->has('location_id')){
+            $rules['location_id'] = ['required', 'exists:locations,uuid,deleted_at,NULL'];
+        }
+
         /* $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', 'max:255', 'unique:client_details,name,NULL,id,deleted_at,NULL', new NoMultipleSpacesRule]; */
         $rules['name'] = ['required', 'regex:/^[a-zA-Z\s\-\'\.\,\(\)\[\]\{\}\<\>\*\&\^\%\$\#\@\!\~\`\|\+\=\;\:\?\"\\\©]+$/u', 'max:255', 'unique:client_details,name,NULL,id,deleted_at,NULL', new NoMultipleSpacesRule];
 

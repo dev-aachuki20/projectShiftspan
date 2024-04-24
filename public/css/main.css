@@ -511,7 +511,7 @@ th.mw-250{
 .notifications_area>li>a{
     background-color: var(--white);
     border-radius: 28px !important;
-    padding: 12px 10px 12px 30px !important;
+    padding: 15px 20px !important;
     position: relative;
     margin-bottom: 12px;
 }
@@ -739,6 +739,7 @@ th.mw-250{
     display: inline-block;
     border: none;
     text-align: center;
+    transition: var(--ease-transition);
 }
 .dash-btn:hover,
 .swal2-container .swal2-confirm:hover,
@@ -2015,6 +2016,450 @@ th.datatable_desription{
 .select2radius-none .select2-container--default .select2-results__option--highlighted.select2-results__option--selectable{
     background-color: transparent;
 }
+
+.clear-btn {
+    position: absolute;
+    top: 15px;
+    right: -55px;
+    z-index: 9999;
+    opacity: 0;
+}
+.header-inner ul>li>a.show .clear-btn{
+    opacity: 1;
+}
+
+.clear-btn .small-btn {
+    border: 1px solid #ee4242;
+    background-color: #ee4242;
+    border-radius: 15px;
+    font-size: 12px;
+    color: #ffffff;
+    padding: 0 8px;
+}
+
+.n-delete-btn {
+    position: relative;
+    z-index: 999999;
+    cursor: pointer;
+}
+
+.n-delete-btn .icon-btn {
+    width: fit-content;
+    padding: 8px 10px !important;
+    font-weight: 400;
+    font-size: 12px;
+    cursor: pointer;
+    position: relative;
+    z-index: 999999;
+}
+
+.n-delete-btn .icon-btn span {
+    gap: 4px;
+}
+
+.notify-read::before{
+    background-color: #aab0b5;
+}
+/* .notificationlist  .innerbody{
+    font-size: var(--body-font-size);
+    color: var(--dark-gray-color);
+    font-weight: var(--fw-600);
+    padding: 15px 22px;
+    display: inline-block;
+    position: relative;
+    border-radius: 28px;
+    transition: all 350ms ease-in-out;
+} */
+.notificationlist .discription {
+    margin-top: 5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-right: 30px;
+    position: relative;
+}
+
+.notificationlist .dropdown {
+    position: absolute;
+    right: 15px;
+    z-index: 11;
+    display: block;
+    width: 30px;
+    height: 30px;
+    top: 30px;
+    z-index: 999999;
+}
+.notificationlist .dropdown svg {
+    height: 100%;
+    width: 100%;
+    object-fit: contain;
+}
+.notificationlist.active .discription {
+    white-space: wrap;
+    overflow: unset;
+    text-overflow: unset;
+}
+.notificationlist.active .dropdown {
+    transform: rotateX(180deg);
+}
+
+
+/* CHatBox Css */
+   /* Custom Styles */
+.overflow-y-auto {
+    overflow-y: auto;
+}
+.chatboxGroup {
+    height: calc(100vh - 270px);
+    /* height: 100%; */
+    min-height: 400px;
+}
+.chatboxGroup .sidebar, .chatboxGroup .chatcard {
+    background-color: var(--white);
+    border: none;
+    border-radius: 30px;
+}
+.chatboxGroup .list-group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.chatboxGroup .list-group .list-group-item.active,.chatboxGroup .list-group .list-group-item:hover {
+    background-color: var(--black);
+    border-color: var(--primary);
+}
+.chatboxGroup .list-group .list-group-item .content {
+    transition: var(--ease-transition);
+    margin: 0px;
+}
+
+.chatboxGroup .list-group .list-group-item h5.content{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 16px;
+}
+.chatboxGroup .list-group .list-group-item .content .time {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    white-space: nowrap;
+    padding-left: 15px;
+}
+.chatboxGroup .list-group .list-group-item.active .content,.chatboxGroup .list-group .list-group-item:hover .content {
+    color: var(--white);
+}
+.chatboxGroup .list-group .list-group-item{
+    padding: 12px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: var(--ease-transition);
+    border: 2px solid var(--light-gray-color);
+}
+/*  */
+.chatboxGroup .userporfile{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.chatboxGroup .userporfile .userimage{
+    width: 50px;
+    height: 50px;
+    min-width: 50px;
+    border-radius: 50%;
+    position: relative;
+}
+.chatboxGroup .userporfile .userimage::before{
+    content: '';
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: absolute;
+    bottom: 2px;
+    right: 2px;
+    background-color: var(--dark-gray-color);
+}
+.chatboxGroup .userporfile.activeAccount .userimage::before{
+    background-color: var(--tertiary);
+}
+.chatboxGroup .userporfile .userimage .userpic{
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.chatboxGroup .userporfile .activeuser{
+    font-size: 14px;
+    line-height: 1;
+    color: var(--dark-gray-color);
+}
+.chatboxGroup .list-group .list-group-item .useraccount{
+    width: calc(100% - 60px);
+}
+.chatboxGroup .chat-panel .userporfile{
+    width: calc(100% - 50px);
+}
+.chatboxGroup .usersetting .dropdown .dropdown-menu{
+    min-width: 100px;
+    }
+.chatboxGroup .usersetting .editbtn{
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+    min-width: unset;
+    background-color: transparent;
+}
+.chatboxGroup .usersetting .dropdown-item{
+    padding: 10px;
+    min-width: unset;
+}
+.chatboxGroup .usersetting .editbtn .editicon{
+    width: 100%;
+    height: 100%;
+}
+/*  */
+
+.chat-panel {
+    overflow-y: auto;
+}
+
+.chatboxGroup .chat-header {
+    background-color: var(--gray-color);
+    color: #fff;
+    padding: 10px;
+}
+
+.chatboxGroup textarea.form-control{
+    height: 48px;
+    min-height: 48px;
+    font-size: var(--heading-6);
+    font-weight: 500;
+    padding: 11px 15px;
+    resize: none;
+    border: 1px solid var(--gray-color);
+    border-radius: 25px;
+    max-height: 100px;
+}
+.chatboxGroup textarea.form-control:focus{
+    border-color: var(--primary);
+}
+
+.chatboxGroup .message-container {
+    padding-bottom: 10px;
+    padding-top: 40px;
+}
+.chatboxGroup .message {
+    margin-bottom: 20px;
+    max-width: 60%;
+}
+.chatboxGroup .message .message-content {
+    padding: 12px;
+    border-radius: 14px 14px 14px 0px;
+    font-size: 14px;
+    line-height: 24px;
+    font-weight: 400;
+    background-color: #e9ecef;
+    width: fit-content;
+    position: relative;
+    word-break: break-all;
+}
+.chatboxGroup .message .message-content:not(:last-child){
+    margin-bottom: 23px;
+}
+.chatboxGroup .message .message-content .message_time {
+    position: absolute;
+    white-space: nowrap;
+    font-size: 10px;
+    line-height: 1;
+    bottom: 100%;
+    color: var(--dark-gray-color);
+    padding-bottom: 4px;
+    left: 0;
+}
+.chatboxGroup .message.outgoing .message-content .message_time{
+    color: var(--dark-gray-color);
+    left: unset;
+    right: 0;
+}
+.chatboxGroup .message.outgoing {
+    margin-left: auto;
+}
+.chatboxGroup .message.outgoing .message-content {
+    border-radius: 14px 14px 0px 14px;
+    background-color: var(--primary);
+    color: var(--white);
+    margin-left: auto;
+}
+
+.chatboxGroup .message-input {
+    background-color: var(--gray-color);
+}
+
+.chatboxGroup .file-label {
+    cursor: pointer;
+}
+
+.chatboxGroup .addimg{
+    max-height: 150px;
+    max-width: 150px;
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--dark-gray-color);
+    transition: var(--ease-transition);
+}
+.chatboxGroup .addimg .closeBtn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    transition: var(--ease-transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.chatboxGroup .addimg .closeBtn:hover{
+    background-color: #0000001a;
+}
+
+.chatboxGroup .add_btn {
+    min-width: unset;
+    height: 48px;
+    width: 48px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+.chatboxGroup .add_btn svg, .chatboxGroup .close-btn svg {
+    height: 100%;
+    width: 100%;
+}
+.chatboxGroup .close-btn {
+    height: 35px;
+    width: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 50%;
+    transition: var(--ease-transition);
+    background-color: var(--white);
+}
+.chatboxGroup .close-btn:hover{
+    background-color: #ffdfdf;
+}
+
+.chatboxGroup .searchbar {
+    position: relative;
+    height: 48px;
+}
+.chatboxGroup .searchbar input {
+    min-height: unset;
+    padding-right: 63px;
+    background: var(--gray-color) !important;
+    z-index: 0 !important;
+}
+.chatboxGroup .searchbar .btn {
+    height: 48px;
+    width: 48px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+}
+
+.chatboxGroup .datemention{
+    text-align: center;
+    padding: 0px 0px 30px;
+    position: relative;
+}
+.chatboxGroup .datemention span{
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 400;
+    color: var(--dark-gray-color);
+    background-color: var(--white);
+    padding: 4px 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.chatboxGroup .datemention::before{
+    content: '';
+    width: 100%;
+    height: 1px;
+    position: absolute;
+    left: 0;
+    top: 10px;
+    background-color: var(--gray-color);
+}
+
+.chatboxGroup textarea.form-control::-webkit-scrollbar {
+    width: 0px;
+    height: 0px
+}
+::-webkit-scrollbar {
+    width: 4px;
+    height: 4px
+}
+::-webkit-scrollbar-button {
+    background: #eee
+}
+::-webkit-scrollbar-track-piece {
+    background: #ccc
+}
+::-webkit-scrollbar-thumb {
+    background: #eee
+}
+
+
+/* Responsive Styles */
+/* @media (max-width: 992px) {
+    .sidebar {
+        height: auto;
+        border-right: none;
+    }
+
+    .chat-panel {
+        height: auto;
+    }
+
+    .message {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        padding: 20px;
+    }
+
+    .message-input {
+        padding: 10px;
+    }
+}
+
+@media (max-width: 576px) {
+    .sidebar {
+        padding: 10px;
+    }
+
+    .message-input {
+        padding: 5px;
+    }
+
+    .message {
+        max-width: 100%;
+    }
+} */
+
 /* Responsive css */
 @media screen and (min-width: 1300px) and (max-width: 1599px){
     .header-inner ul>li>a{
@@ -2169,6 +2614,53 @@ th.datatable_desription{
     .inner-msg>h3{
         line-height: 20px;
     }
+
+    /* ChatBox Css */
+    .chatboxGroup .list-group .list-group-item{
+        padding: 8px 10px;
+    }
+    .chatboxGroup textarea.form-control {
+        padding: 10px 15px;
+        min-height: 46px;
+    }
+    .chatboxGroup .file-label svg {
+        height: 100%;
+        width: 100%;
+    }
+    .chatboxGroup .btn-secondary {
+        height: 46px;
+        width: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .chatboxGroup .add_btn, .chatboxGroup .searchbar .btn, .chatboxGroup .file-label {
+        height: 46px;
+        width: 46px;
+    }
+
+    .chatboxGroup textarea.form-control, .chatboxGroup .searchbar {
+        height: 46px;
+    }
+    .chatboxGroup .searchbar input {
+        padding-right: 55px;
+    }
+    
+    .chatboxGroup .userporfile .userimage{
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    .chatboxGroup .userporfile .activeuser{
+        font-size: 12px;
+    }
+    .chatboxGroup .list-group .list-group-item .useraccount{
+        width: calc(100% - 50px);
+    }
+    
 }
 @media screen and (min-width: 992px) and (max-width: 1199px){
     .header-inner .menu-left > ul li.dropdown .has_noti{
@@ -2455,6 +2947,63 @@ th.datatable_desription{
     .content-area.dashboard-page{
         z-index: auto;
     }
+
+    .chatboxGroup .list-group .list-group-item{
+        padding: 8px 10px;
+    }
+    .chatboxGroup textarea.form-control {
+        padding: 10px 15px;
+        min-height: 46px;
+    }
+    .chatboxGroup .file-label svg {
+        height: 100%;
+        width: 100%;
+    }
+    .chatboxGroup .btn-secondary {
+        height: 46px;
+        width: 46px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .chatboxGroup .add_btn, .chatboxGroup .searchbar .btn, .chatboxGroup .file-label {
+        height: 46px;
+        width: 46px;
+    }
+
+    .chatboxGroup textarea.form-control, .chatboxGroup .searchbar {
+        height: 46px;
+    }
+    .chatboxGroup .searchbar input {
+        padding-right: 55px;
+    }
+
+    .chatboxGroup .message .message-content {
+        padding: 10px;
+        line-height: 18px;
+        border-radius: 10px 10px 10px 0px;
+    }
+    .chatboxGroup .message.outgoing .message-content{
+        border-radius: 10px 10px 0px 10px;
+    }
+    .chatboxGroup .message {
+        max-width: 70%;
+    }
+    
+    .chatboxGroup .userporfile .userimage{
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        border-radius: 50%;
+        position: relative;
+    }
+
+    .chatboxGroup .userporfile .activeuser{
+        font-size: 12px;
+    }
+    .chatboxGroup .list-group .list-group-item .useraccount{
+        width: calc(100% - 50px);
+    }
 }
 @media screen and (max-width: 767px){
     .size-22{
@@ -2564,6 +3113,27 @@ th.datatable_desription{
     .modal-size-l .modal-content{
         width: calc(100% - 36px);
     }
+
+    /* ChatBox Css */
+    .chatboxGroup .chat-panel {
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 999;
+        padding: 10px;
+        background: #0000009e;
+        transform: translateX(120%);
+        transition: var(--ease-transition);
+    }
+    .chatboxGroup.open .chat-panel{
+        transform: translateX(0%);
+    }
+    
+    /*  */
+    .chatboxGroup .chat-panel .userporfile{
+        width: calc(100% - 90px);
+    }
+    /*  */
 }
 @media screen and (max-width: 575px){
     .input-icon{
@@ -2682,6 +3252,14 @@ th.datatable_desription{
         width: 270px;
         margin-left: -40px !important;
         min-width: auto;
+    }
+
+    /* ChatBox Css */
+    .chatboxGroup {
+        height: calc(100vh - 331px);
+    }
+    .chatboxGroup .message {
+        max-width: 80%;
     }
 }
 

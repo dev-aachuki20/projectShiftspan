@@ -64,19 +64,22 @@ class MessageDataTable extends DataTable
     public function query(Notification $model): QueryBuilder
     { 
         $user = auth()->user();
-        if($user->is_super_admin){
-            return $model->where('notification_type', 'send_message')->newQuery();
-        } else {
-            /* return $model->where('created_by', $user->id)->where('notification_type', 'send_message')->newQuery()->filter(function($item) use ($user) {
-                return $user->id == $item->user;
-            }); */
+
+        return $model->where('notifiable_id',$user->id)->where('notification_type', 'send_message')->where('section','=','help_chat')->newQuery();
+
+        // if($user->is_super_admin){
+        //     return $model->where('notifiable_id',$user->id)->where('notification_type', 'send_message')->newQuery();
+        // } else {
+        //     /* return $model->where('created_by', $user->id)->where('notification_type', 'send_message')->newQuery()->filter(function($item) use ($user) {
+        //         return $user->id == $item->user;
+        //     }); */
             
-            return $model->where('notifications.created_by', '!=', config('constant.roles.super_admin'))
-                     ->where('notification_type', 'send_message')
-                     ->join('users', 'users.id', '=', 'notifications.notifiable_id')
-                     ->where('users.company_id', $user->id)
-                     ->select('notifications.*');
-        }
+        //     return $model->where('notifications.created_by', '!=', config('constant.roles.super_admin'))
+        //              ->where('notification_type', 'send_message')
+        //              ->join('users', 'users.id', '=', 'notifications.notifiable_id')
+        //              ->where('users.company_id', $user->id)
+        //              ->select('notifications.*');
+        // }
     }
 
     /**

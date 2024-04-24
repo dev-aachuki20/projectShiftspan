@@ -62,7 +62,6 @@ class StoreRequest extends FormRequest
         // $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time'), 'after:start_time'];
         
 
-        $rules['location_id'] = ['required', 'exists:locations,uuid,deleted_at,NULL' ];
         $rules['occupation_id'] = ['required', 'exists:occupations,uuid,deleted_at,NULL'];
         $rules['assign_staff'] = ['nullable', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), '', 'uuid')];
 

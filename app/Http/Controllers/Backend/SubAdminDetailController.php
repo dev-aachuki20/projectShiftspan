@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SubAdminDetail\StoreRequest;
 use App\Http\Requests\SubAdminDetail\UpdateRequest;
 use App\Models\ClientDetail;
+use App\Models\Location;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -38,17 +39,20 @@ class SubAdminDetailController extends Controller
         abort_if(Gate::denies('sub_admin_detail_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
             try{
+                $locations = Location::where('status',1)->pluck('name', 'uuid');
+
                 if(auth()->user()->is_super_admin){
                     $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'uuid');
                     // dd($subAdmins);
-                    $viewHTML = view('admin.sub_admin_detail.create', compact('subAdmins'))->render();
+
+                    $viewHTML = view('admin.sub_admin_detail.create', compact('subAdmins','locations'))->render();
                     return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
                 }
-                $viewHTML = view('admin.sub_admin_detail.create')->render();
+                $viewHTML = view('admin.sub_admin_detail.create',compact('locations'))->render();
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } 
             catch (\Exception $e) {
-                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message'),'error_details'=>$e->getMessage().'-'.$e->getLine()], 400 );
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
@@ -70,6 +74,11 @@ class SubAdminDetailController extends Controller
                 } else {
                     $input['sub_admin_id'] = User::where('uuid', $request->sub_admin_id)->first()->id;
                 }
+
+                if($request->location_id){
+                    $input['location_id']       = Location::where('uuid', $request->location_id)->first()->id;
+                }
+               
                 $subAdminDetail = ClientDetail::create($input);
 
                 if($subAdminDetail && $request->has('building_image')){
@@ -85,7 +94,7 @@ class SubAdminDetailController extends Controller
                 return response()->json($response);
             } catch (\Exception $e) {
                 DB::rollBack();                
-                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message'),'error_details'=>$e->getMessage().'-'.$e->getLine()], 400 );
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
@@ -123,13 +132,18 @@ class SubAdminDetailController extends Controller
         if($request->ajax()) {
             try{
                 $subAdminDetail = ClientDetail::where('uuid', $id)->first();
+
+                $locations = Location::where('status',1)->pluck('name', 'uuid');
+
                 if(auth()->user()->is_super_admin){
                     $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'uuid');
                     
-                    $viewHTML = view('admin.sub_admin_detail.edit', compact('subAdmins', 'subAdminDetail'))->render();
+                    $locations = Location::where('status',1)->pluck('name', 'uuid');
+
+                    $viewHTML = view('admin.sub_admin_detail.edit', compact('subAdmins', 'subAdminDetail','locations'))->render();
                     return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
                 }
-                $viewHTML = view('admin.sub_admin_detail.edit', compact('subAdminDetail'))->render();
+                $viewHTML = view('admin.sub_admin_detail.edit', compact('subAdminDetail','locations'))->render();
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } 
             catch (\Exception $e) {
@@ -156,6 +170,11 @@ class SubAdminDetailController extends Controller
                 } else {
                     $input['sub_admin_id'] = User::where('uuid', $request->sub_admin_id)->first()->id;
                 }
+
+                if($request->location_id){
+                    $input['location_id']       = Location::where('uuid', $request->location_id)->first()->id;
+                }
+
                 $subAdminDetail->update($input);
 
                 if($subAdminDetail && $request->has('building_image')){

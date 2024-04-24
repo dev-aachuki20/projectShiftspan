@@ -34,7 +34,9 @@ class NotificationRequest extends FormRequest
         }else{
             $rules['staffs']    = ['required', 'array'];
             $rules['staffs.*']  = ['exists:users,uuid'];
-            $rules['section']   = ['required'];
+            $rules['companies']    = ['required', 'array'];
+            $rules['companies.*']  = ['exists:users,uuid'];
+            $rules['section']   = ['required','in:'.implode(',',array_keys(config('constant.notification_subject')))];
             $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
             $rules['message']   = ['required','string'];
         }

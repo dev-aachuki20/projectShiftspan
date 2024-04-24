@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Carbon\Carbon;
 use App\Models\Shift;
+use App\Models\User;
 use App\Models\ClockInOut;
 use Illuminate\Http\Request;
 use App\Models\AuthorizedShift;
@@ -60,7 +61,7 @@ class ShiftController extends APIController
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
-                    'location_name'     => $shift->location->name,
+                    'location_name'     => $shift->clientDetail->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -121,7 +122,7 @@ class ShiftController extends APIController
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
-                    'location_name'     => $shift->location->name,
+                    'location_name'     => $shift->clientDetail->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -188,7 +189,7 @@ class ShiftController extends APIController
                     'sub_admin_name'    => $shift->client->name,
                     'company_address'   => $shift->clientDetail->address,
                     'occupation_name'   => $shift->occupation->name,
-                    'location_name'     => $shift->location->name,
+                    'location_name'     => $shift->clientDetail->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -298,7 +299,9 @@ class ShiftController extends APIController
             ];
             
             Notification::send($user, new SendNotification($messageData));
-            
+
+            $this->sendNotificationToParent($user->company,$messageData);
+           
             DB::commit();
 
             return $this->respondOk([
@@ -348,6 +351,9 @@ class ShiftController extends APIController
             ];
             
             Notification::send($user, new SendNotification($messageData));
+
+            $this->sendNotificationToParent($user->company,$messageData);
+
             DB::commit();
 
             return $this->respondOk([
@@ -415,6 +421,9 @@ class ShiftController extends APIController
                 ];
                 
                 Notification::send($user, new SendNotification($messageData));
+
+                $this->sendNotificationToParent($user->company,$messageData);
+
             }
 
             DB::commit();
@@ -471,6 +480,8 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
+            $this->sendNotificationToParent($user->company,$messageData);
+
             DB::commit();
 
             return $this->respondOk([
@@ -523,6 +534,8 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
+            $this->sendNotificationToParent($user->company,$messageData);
+
             DB::commit();
 
             return $this->respondOk([
@@ -570,7 +583,7 @@ class ShiftController extends APIController
                     'sub_admin_name'    => $shift->client ? $shift->client->name : null,
                     'company_address'   => $shift->clientDetail ? $shift->clientDetail->address : null,
                     'occupation_name'   => $shift->occupation ? $shift->occupation->name : null,
-                    'location_name'     => $shift->location ? $shift->location->name : null,
+                    'location_name'     => $shift->clientDetail->location->name,
                     'start_date'        => $shift->start_date,
                     'end_date'          => $shift->end_date,
                     'start_time'        => $shift->start_time,
@@ -596,5 +609,23 @@ class ShiftController extends APIController
             \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
+    }
+
+    public function sendNotificationToParent($company,$messageData){
+        //Send notification to company with mail
+        if($company){
+            Notification::send($company, new SendNotification($messageData));
+        }
+
+        //Send notification to super admin with mail
+        $superAdmin = User::whereHas('roles',function($query){
+            $query->where('id',config('constant.roles.super_admin'));
+        })->first();
+
+        if($superAdmin){
+            Notification::send($superAdmin, new SendNotification($messageData));
+        }
+
+        return true;
     }
 }

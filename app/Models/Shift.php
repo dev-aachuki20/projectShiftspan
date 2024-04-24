@@ -18,7 +18,6 @@ class Shift extends Model
         'shift_label',
         'sub_admin_id',
         'client_detail_id',
-        'location_id',
         'occupation_id',
         'sub_admin_id',
         'start_date',
@@ -66,11 +65,6 @@ class Shift extends Model
     public function clientDetail()
     {
         return $this->belongsTo(ClientDetail::class, 'client_detail_id', 'id');
-    }
-
-    public function location()
-    {
-        return $this->belongsTo(Location::class);
     }
 
     public function occupation()

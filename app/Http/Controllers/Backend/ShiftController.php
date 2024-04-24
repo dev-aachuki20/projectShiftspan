@@ -9,7 +9,6 @@ use App\Http\Requests\Shift\UpdateRequest;
 use App\Models\AuthorizedShift;
 use App\Models\ClientDetail;
 use App\Models\ClockInOut;
-use App\Models\Location;
 use App\Models\Occupation;
 use App\Models\Shift;
 use App\Models\User;
@@ -142,7 +141,7 @@ class ShiftController extends Controller
         abort_if(Gate::denies('shift_edit'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if($request->ajax()) {
             try{
-                $shift = Shift::with(['client', 'clientDetail', 'location', 'occupation', 'staffs'])->where('uuid', $id)->first();
+                $shift = Shift::with(['client', 'clientDetail', 'occupation', 'staffs'])->where('uuid', $id)->first();
                 $selectedStaffs = $shift->staffs()->pluck('uuid')->toArray();
                 if(auth()->user()->is_super_admin){
                     $subAdmins = User::whereHas('roles', function($q){ $q->where('id', config('constant.roles.sub_admin')); })->pluck('name', 'uuid');
@@ -340,12 +339,6 @@ class ShiftController extends Controller
                         $staffsOptionHtml .= '<option value="'.$staffKey.'" >'.$staff.'</option>';
                     }
 
-                    // locations options
-                    $locationsOptionHtml = '<option value="">'.(trans('global.select').' '.trans('cruds.location.title_singular')).'</option>';
-                    foreach($subData['locations'] as $locationKey => $location){
-                        $locationsOptionHtml .= '<option value="'.$locationKey.'" >'.$location.'</option>';
-                    }
-
                     // occupations options
                     $occupationsOptionHtml = '<option value="">'.(trans('global.select').' '.trans('cruds.occupation.title_singular')).'</option>';
                     foreach($subData['occupations'] as $occupationKey => $occupation){
@@ -361,13 +354,12 @@ class ShiftController extends Controller
                     $response = [
                         'success'    => true,
                         'staff_html' => $staffsOptionHtml,
-                        'location_html' => $locationsOptionHtml,
                         'occupation_html' => $occupationsOptionHtml,
                         'client_detail_html' => $clientDetailsOptionHtml,
                     ];
                     return response()->json($response);
                 } catch (\Exception $e) {
-                    dd($e);
+                    // dd($e);
                     return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
                 }
             }
@@ -378,14 +370,12 @@ class ShiftController extends Controller
     private function getShiftViewData($userId){
         $user = User::whereUuid($userId)->first();
 
-        $locations = $user->locations()->pluck('name', 'uuid');
         $occupations = $user->occupations()->pluck('name', 'uuid');
         $staffs = $user->staffs()->pluck('name', 'uuid');
         $clientDetails = $user->clientDetails()->pluck('name', 'uuid');
 
         return [
             'staffs' => $staffs,
-            'locations' => $locations,
             'occupations' => $occupations,
             'clientDetails' => $clientDetails,
         ];
@@ -400,7 +390,6 @@ class ShiftController extends Controller
             $input['sub_admin_id'] = auth()->user()->id;
         }
         $input['client_detail_id']  = ClientDetail::where('uuid', $req->client_detail_id)->first()->id;
-        $input['location_id']       = Location::where('uuid', $req->location_id)->first()->id;
         $input['occupation_id']     = Occupation::where('uuid', $req->occupation_id)->first()->id;
 
         $input['start_date']        = date('Y-m-d', strtotime($req->start_date));

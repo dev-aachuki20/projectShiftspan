@@ -30,6 +30,10 @@ class UpdateRequest extends FormRequest
             $rules['sub_admin_id'] = ['required', 'exists:users,uuid,deleted_at,NULL'];
         }
 
+        if($this->has('location_id')){
+            $rules['location_id'] = ['required', 'exists:locations,uuid,deleted_at,NULL'];
+        }
+
         // $rules['name'] = ['required', 'regex:/^[a-zA-Z\s]+$/', new NoMultipleSpacesRule, 'max:255', 'unique:client_details,name,'. $this->subAdminDetail.',uuid,deleted_at,NULL'];
         $rules['name'] = ['required', 'regex:/^[a-zA-Z\s\-\'\.\,\(\)\[\]\{\}\<\>\*\&\^\%\$\#\@\!\~\`\|\+\=\;\:\?\"\\\©]+$/u', new NoMultipleSpacesRule, 'max:255', 'unique:client_details,name,'. $this->subAdminDetail.',uuid,deleted_at,NULL'];
 

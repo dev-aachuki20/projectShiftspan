@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Backend;
 use App\DataTables\MessageDataTable;
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Group;
+use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
@@ -26,16 +28,14 @@ class MessageController extends Controller
         try {
             $user = Auth::user();
             $staffsNotify = '';
-            if($user->roles->first()->name == 'Super Admin'){
-                $staffsNotify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
+            if($user->is_super_admin){
+                $staffsNotify = User::with(['company'])->where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
                         $query->where('is_active', true);
                     })
                     ->orderBy('id', 'desc')
-                    ->get()
-                ->pluck('name', 'uuid');
-
+                    ->get();
             }else{
-                $staffsNotify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                $staffsNotify = User::with(['company'])->where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get();
             }
             return $dataTable->render('admin.message.index', compact('staffsNotify'));
         } catch (\Exception $e) {
@@ -62,8 +62,23 @@ class MessageController extends Controller
             $input['notification_type'] = 'send_message';
 
             DB::beginTransaction();
+
             $users = User::whereIn('uuid', $input['staffs'])->get();
             Notification::send($users, new SendNotification($input));
+
+            //If User is login as super admin
+            if(auth()->user()->is_super_admin){
+                $companies = User::whereIn('uuid', $input['companies'])->get();
+                Notification::send($companies, new SendNotification($input));
+            }
+
+            //If User is login as company or sub admin
+            if(auth()->user()->is_sub_admin){ 
+                $superAdmin = User::whereHas('roles',function($query){
+                    $query->where('id',config('constant.roles.super_admin'));
+                })->first();
+                Notification::send($superAdmin, new SendNotification($input));
+            }
 
             DB::commit();
             return response()->json([
@@ -76,7 +91,8 @@ class MessageController extends Controller
             return response()->json([
                 'success' => false, 
                 'error_type' => 'something_error', 
-                'error' => trans('messages.error_message')
+                'error' => trans('messages.error_message'),
+                'error_details'=>$e->getMessage().' '.$e->getFile().' '.$e->getLine(),
             ], 400 );
         }
         

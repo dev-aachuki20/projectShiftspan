@@ -39,6 +39,18 @@
     </div>
     <div class="building_image_error" style="width: 100%"></div>
 </div>
+
+<div class="form-label select-label">
+    <label>@lang('cruds.client_detail.fields.location_id'):</label>
+    <select name="location_id" id="location_id" class="select2">
+        <option value="">@lang('global.select') @lang('cruds.client_detail.fields.location_id')</option>
+            @foreach ($locations as $locationKey => $location)
+                <option value="{{$locationKey}}" @selected(isset($subAdminDetail) && $subAdminDetail->location->uuid == $locationKey ) >{{ $location}}</option>
+            @endforeach
+    </select>
+    <div class="client_detail_name_error error_select" style="width: 100%"></div>
+</div>
+
 <div class="form-label justify-content-center">
     <button type="submit" class="cbtn submitBtn">
         @if(isset($subAdminDetail))

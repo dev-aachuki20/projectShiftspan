@@ -113,5 +113,8 @@ return [
     'notification'=>[
         'not_found' => 'Notification not found',
         'mark_as_read' => 'Notification marked as read',
+        'no_notification'=>'No notifications to clear!',
+        'clear_notification' => 'All notifications have been cleared',
+        'delete'             => 'Notification has been deleted successfully!',
     ]
 ];

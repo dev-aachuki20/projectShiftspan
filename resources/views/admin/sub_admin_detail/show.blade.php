@@ -48,6 +48,14 @@
                             </div>
                         </div>
                     </div>
+                   
+                    <div class="form-label">
+                        <label>@lang('cruds.client_detail.fields.location_id'):</label>
+                        <div class="right-sidebox d-flex align-items-center justify-content-start">
+                            <span class="fw-600">{{$subAdminDetail->location->name}}</span>
+                        </div>
+                    </div>
+                    
                 </form>
                 <div class="form-label text-center mt-3 pt-1">
                     <button class="cbtn sky-bg mw-160 text-capitalize editSubAdminDetailBtn" data-href="{{route('client-details.edit', $subAdminDetail->uuid)}}">@lang('global.edit')</button>

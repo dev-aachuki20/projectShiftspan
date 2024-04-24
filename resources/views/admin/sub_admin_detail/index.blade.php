@@ -32,8 +32,13 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).on('shown.bs.modal', function() {
-        $(".select2").select2({
-            dropdownParent: $('.select-label'),
+        $("#client_name").select2({
+            dropdownParent: $('#client_name').parent('.select-label'),
+            selectOnClose: false
+        });
+
+        $("#location_id").select2({
+            dropdownParent: $('#location_id').parent('.select-label'),
             selectOnClose: false
         });
     });

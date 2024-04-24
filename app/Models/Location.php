@@ -34,9 +34,9 @@ class Location extends Model
         });
     }
 
-    public function shifts()
+    public function clientDetails()
     {
-        return $this->hasMany(Shift::class);
+        return $this->hasMany(ClientDetail::class);
     }
 
     public function createdBy()

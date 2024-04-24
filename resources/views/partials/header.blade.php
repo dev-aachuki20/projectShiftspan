@@ -14,29 +14,13 @@
                     <a href="javascript:void(0)" title="Notifications/Alerts" class="has_noti dropdown-toggle notificationsBtn" data-bs-toggle="dropdown" aria-expanded="false" data-bs-auto-close="outside">
                         <span class="d-none d-lg-block">@lang('cruds.header.fields.notifications')</span><span class="d-lg-none">
                             <x-svg-icons icon="notification" />
-                        </span></a>
+                        </span>
+                        <div class="clear-btn">
+                            <button class="small-btn clear-notify-btn">Clear all</button>
+                        </div>
+                    </a>
                     <div class="dropdown-menu">
                         <ul class="notifications_area">Notification Landing</ul>
-                        {{-- <ul class="dropdown-menu notifications_area">
-                            <li>
-                                <a href="javascript:void(0)" class="un-read">
-                                    <h6>Shifts Picked</h6>
-                                    <p>JASON DONNELLY picked 5 shifts. please refer to the shift list page for more information.</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)" class="un-read">
-                                    <h6>Message</h6>
-                                    <p>JASON DONNELLY responded to payroll message. please refer to the message page for more info.</p>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="javascript:void(0)">
-                                    <h6>Shifts Picked</h6>
-                                    <p>VICKY MAYNARD picked a shift. please refer to the shift list page for more information. </p>
-                                </a>
-                            </li>
-                        </ul> --}}
                     </div>
                 </li>
             </ul>

@@ -85,6 +85,10 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         /* For Header Notification */
         Route::get('notifications', [DashboardController::class, 'notification'])->name('getNotification');
         Route::get('mark-as-read', [DashboardController::class, 'readNotification'])->name('read.notification');
+        Route::get('mark-as-read-all', [DashboardController::class, 'readAllNotification'])->name('readall.notification');
+        Route::get('clear-notification', [DashboardController::class, 'clearNotifications'])->name('clear.notification');
+        Route::post('delete-notification', [DashboardController::class, 'deleteNotifications'])->name('delete.notification');
+
 
         Route::resource('/locations',LocationController::class);
         Route::post('/location/mass-destroy', [LocationController::class, 'massDestroy'])->name('locations.massDestroy');

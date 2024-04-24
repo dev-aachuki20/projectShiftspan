@@ -16,6 +16,7 @@ class ClientDetail extends Model
     protected $fillable = [
         'uuid',
         'sub_admin_id',
+        'location_id',
         'name',
         'address',
         'shop_description',
@@ -63,5 +64,10 @@ class ClientDetail extends Model
     public function client()
     {
         return $this->belongsTo(User::class, 'sub_admin_id', 'id');
+    }
+
+    public function location()
+    {
+        return $this->belongsTo(Location::class);
     }
 }
