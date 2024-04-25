@@ -66,18 +66,22 @@ class MessageController extends Controller
             $users = User::whereIn('uuid', $input['staffs'])->get();
             Notification::send($users, new SendNotification($input));
 
-            //If User is login as super admin
-            if(auth()->user()->is_super_admin){
-                $companies = User::whereIn('uuid', $input['companies'])->get();
-                Notification::send($companies, new SendNotification($input));
-            }
+            if($input['section'] != 'help_chat'){
 
-            //If User is login as company or sub admin
-            if(auth()->user()->is_sub_admin){ 
-                $superAdmin = User::whereHas('roles',function($query){
-                    $query->where('id',config('constant.roles.super_admin'));
-                })->first();
-                Notification::send($superAdmin, new SendNotification($input));
+                //If User is login as super admin
+                if(auth()->user()->is_super_admin){
+                    $companies = User::whereIn('uuid', $input['companies'])->get();
+                    Notification::send($companies, new SendNotification($input));
+                }
+
+                //If User is login as company or sub admin
+                if(auth()->user()->is_sub_admin){ 
+                    $superAdmin = User::whereHas('roles',function($query){
+                        $query->where('id',config('constant.roles.super_admin'));
+                    })->first();
+                    Notification::send($superAdmin, new SendNotification($input));
+                }
+
             }
 
             DB::commit();

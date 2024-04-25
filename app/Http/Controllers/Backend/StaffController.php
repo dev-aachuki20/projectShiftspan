@@ -384,15 +384,14 @@ class StaffController extends Controller
             if($request->ajax()) {
                 $user = Auth::user();
                 $staffsNotify = '';
-                if($user->roles->first()->name == 'Super Admin'){
+                if($user->is_super_admin){
                     $staffsNotify = User::where('is_active', 1)->whereNotNull('company_id')->whereHas('company', function ($query) {
                             $query->where('is_active', true);
                         })
                         ->orderBy('id', 'desc')
-                        ->get()
-                    ->pluck('name', 'uuid');
+                        ->get();
                 }else{
-                    $staffsNotify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get()->pluck('name', 'uuid');
+                    $staffsNotify = User::where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get();
                 }
 
                 $viewHTML = view('admin.staff.notification.create', compact('staffsNotify'))->render();
@@ -400,6 +399,7 @@ class StaffController extends Controller
             }
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }catch (\Exception $e) {
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());          
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
@@ -414,13 +414,32 @@ class StaffController extends Controller
             $input['notification_type'] = 'send_notification';
 
             DB::beginTransaction();
+
             $users = User::whereIn('uuid', $input['staffs'])->get();
             Notification::send($users, new SendNotification($input));
+
+            if($input['section'] != 'help_chat'){
+
+                //If User is login as super admin
+                if(auth()->user()->is_super_admin){
+                    $companies = User::whereIn('uuid', $input['companies'])->get();
+                    Notification::send($companies, new SendNotification($input));
+                }
+
+                //If User is login as company or sub admin
+                if(auth()->user()->is_sub_admin){ 
+                    $superAdmin = User::whereHas('roles',function($query){
+                        $query->where('id',config('constant.roles.super_admin'));
+                    })->first();
+                    Notification::send($superAdmin, new SendNotification($input));
+                }
+                
+            }
 
             DB::commit();
             return response()->json([
                 'success'    => true,
-                'message'    => trans('messages.crud.notification_sent'),
+                'message'    => trans('messages.crud.message_sent'),
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -428,7 +447,8 @@ class StaffController extends Controller
             return response()->json([
                 'success' => false, 
                 'error_type' => 'something_error', 
-                'error' => trans('messages.error_message')
+                'error' => trans('messages.error_message'),
+                'error_details'=>$e->getMessage().' '.$e->getFile().' '.$e->getLine(),
             ], 400 );
         }
         

@@ -13,7 +13,7 @@
                                 <label>@lang('cruds.shift.fields.clock_in_time'):</label>
                                 <div class="right-sidebox d-flex align-items-center justify-content-center">
                                     <span class="fw-600">
-                                        {{ date("h:i A", strtotime($data['clockin_date'])) ?? '08:00 AM (IST)'}}
+                                        {{ date("H:i ", strtotime($data['clockin_date'])) ?? ''}}
                                     </span>
                                 </div>
                             </div>
@@ -48,7 +48,7 @@
                             <div class="form-label">
                                 <label>@lang('cruds.shift.fields.clock_out_time'):</label>
                                 <div class="right-sidebox d-flex align-items-center justify-content-center">
-                                    <span class="fw-600">{{ date("h:i A", strtotime($data['clockout_date'])) ?? '20:00 AM  (IST)'}}</span>
+                                    <span class="fw-600">{{ date("H:i", strtotime($data['clockout_date'])) ?? ''}}</span>
                                 </div>
                             </div>
                             <div class="form-label">

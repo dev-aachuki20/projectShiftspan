@@ -30,15 +30,18 @@ class ShiftController extends APIController
            $currentDateTime = Carbon::now();
 
            $companyShifts = $user->company->companyShifts()->with(['client', 'clientDetail', 'occupation'])
-            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id', 'location_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
+            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id', 'occupation_id', 'start_date', 'start_time', 'end_date', 'end_time')
             ->whereStatus('open')
-            ->where(function ($query) use($request) {
+            ->whereHas('clientDetail',function($query) use($request){
                 if($request->has('location') && !empty($request->location)){
                     $locationId = $request->location;
                     $query->whereHas('location', function($q) use($locationId){
                         $q->where('id', $locationId);
                     });
                 }
+            })
+            ->where(function ($query) use($request) {
+                
                 if($request->has('occupation') && !empty($request->occupation)){
                     $occupationId = $request->occupation;
                     $query->whereHas('occupation', function($q) use($occupationId){
@@ -92,8 +95,8 @@ class ShiftController extends APIController
         try{
             $user = auth()->user();
 
-            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id','shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id',  'start_date', 'start_time', 'end_date', 'end_time','is_authorized')
+            $completedShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation',])
+            ->select('id','shift_label','sub_admin_id', 'client_detail_id','occupation_id','start_date', 'start_time', 'end_date', 'end_time','is_authorized')
             ->whereStatus('complete');
 
             if($request->type == 'shift'){
@@ -150,8 +153,8 @@ class ShiftController extends APIController
             
             $user = auth()->user();
 
-            $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])
-            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id','occupation_id','location_id', 'start_date', 'start_time', 'end_date', 'end_time', 'shift_type')->whereStatus('picked')
+            $upcomingShifts = $user->assignShifts()->with(['client', 'clientDetail','occupation'])
+            ->select('id', 'shift_label','sub_admin_id', 'client_detail_id','occupation_id', 'start_date', 'start_time', 'end_date', 'end_time', 'shift_type')->whereStatus('picked')
             // ->orderBy(DB::raw('CONCAT(start_date, " ", start_time)'), 'asc')
             ->orderByRaw("CONCAT(start_date, ' ', start_time), DAYOFWEEK(start_date) ASC")
             ->get();
@@ -300,7 +303,7 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
-            $this->sendNotificationToParent($user->company,$messageData);
+            $this->sendNotificationToParent($user->company,$messageData,'pick_shift');
            
             DB::commit();
 
@@ -352,7 +355,7 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
-            $this->sendNotificationToParent($user->company,$messageData);
+            $this->sendNotificationToParent($user->company,$messageData,'clock_in_shift');
 
             DB::commit();
 
@@ -422,7 +425,7 @@ class ShiftController extends APIController
                 
                 Notification::send($user, new SendNotification($messageData));
 
-                $this->sendNotificationToParent($user->company,$messageData);
+                $this->sendNotificationToParent($user->company,$messageData,'clock_out_shift');
 
             }
 
@@ -480,7 +483,7 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
-            $this->sendNotificationToParent($user->company,$messageData);
+            $this->sendNotificationToParent($user->company,$messageData,'cancel_shift');
 
             DB::commit();
 
@@ -534,7 +537,7 @@ class ShiftController extends APIController
             
             Notification::send($user, new SendNotification($messageData));
 
-            $this->sendNotificationToParent($user->company,$messageData);
+            $this->sendNotificationToParent($user->company,$messageData,'authorized_sign');
 
             DB::commit();
 
@@ -556,7 +559,7 @@ class ShiftController extends APIController
             $currentMonth = date('m');
             $previousMonth = date('m', strtotime('-1 month'));
         
-            $shifts = $user->assignShifts()->with(['client', 'clientDetail','occupation','location'])->whereIn('status', ['complete', 'picked'])->where(function ($query) use ($currentMonth, $previousMonth) {
+            $shifts = $user->assignShifts()->with(['client', 'clientDetail','occupation'])->whereIn('status', ['complete', 'picked'])->where(function ($query) use ($currentMonth, $previousMonth) {
                 $query->whereMonth('start_date', $currentMonth)
                     ->orWhere(function ($query) use ($previousMonth) {
                         $query->whereMonth('start_date', $previousMonth)
@@ -611,9 +614,11 @@ class ShiftController extends APIController
         }
     }
 
-    public function sendNotificationToParent($company,$messageData){
+    public function sendNotificationToParent($company,$messageData,$actionShift){
+
+
         //Send notification to company with mail
-        if($company){
+        if($company  && config('constant.send_notification_to_parent.'.$actionShift.'.sub_admin')){
             Notification::send($company, new SendNotification($messageData));
         }
 
@@ -622,7 +627,7 @@ class ShiftController extends APIController
             $query->where('id',config('constant.roles.super_admin'));
         })->first();
 
-        if($superAdmin){
+        if($superAdmin && config('constant.send_notification_to_parent.'.$actionShift.'.super_admin')){
             Notification::send($superAdmin, new SendNotification($messageData));
         }
 

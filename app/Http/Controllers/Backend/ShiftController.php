@@ -416,8 +416,31 @@ class ShiftController extends Controller
         if ($request->ajax()) {
             $shift = Shift::where('uuid', $id)->first();
             DB::beginTransaction();
-            try {                
+            try {       
+                
                 $shift->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
+
+                $shift = Shift::where('uuid', $id)->first();
+
+                if($shift->staffs->first()){
+                    $user = $shift->staffs->first();
+                    $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.shift_cancels'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.shift.shift_canceled_subject'),
+                        'message'           => trans('messages.shift.shift_canceled_admin_message', [
+                            'username'      => $user->name,
+                            'status'        => 'canceled',
+                            'start_date'    => Carbon::parse($shift->start_date)->format('d-m-Y'),
+                            'start_time'    => Carbon::parse($shift->start_time)->format('H:i'),
+                            'cancel_at'     => date('d-m-Y H:i'),
+                        ]),
+                    ];
+                    
+                    Notification::send($user, new SendNotification($messageData));
+                }
+              
 
                 DB::commit();
                 $response = [

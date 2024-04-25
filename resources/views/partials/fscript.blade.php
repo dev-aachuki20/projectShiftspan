@@ -147,11 +147,15 @@ $jsonArr = json_encode($arr);
             success: function (response) {
                  // $('.loader-div').hide();
                 if(response.success) {
-                    if(response.total == 0){
+                    if(response.allNotificationReadStatus){
                         $('.notificationsBtn').addClass('notify-read');
+                    }else{
+                        $('.notificationsBtn').removeClass('notify-read')
+                    }
+                    
+                    if(response.total == 0){
                         $('.clear-notify-btn').parent().css('display','none');
                     }else{
-                        $('.notificationsBtn').removeClass('notify-read');
                         $('.clear-notify-btn').parent().css('display','block');
                     }
 

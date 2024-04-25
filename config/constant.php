@@ -145,4 +145,28 @@ return [
         ]
     ],
     
+    'send_notification_to_parent'=>[
+        'pick_shift' => [
+           'super_admin' => true,
+           'sub_admin'  => true,
+        ],
+        'clock_in_shift' => [
+            'super_admin' => true,
+           'sub_admin'  => true,
+        ],
+        'clock_out_shift' => [
+            'super_admin' => true,
+           'sub_admin'  => true,
+        ],
+        'cancel_shift' => [
+            'super_admin' => true,
+            'sub_admin'  => true,
+        ],
+        'authorized_sign' => [
+            'super_admin' => true,
+            'sub_admin'  => true,
+        ],
+    ],
+
+    
 ];

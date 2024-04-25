@@ -50,6 +50,20 @@
             }
         });
 
+        $('.staff-checkbox').on('change', function() {
+            selectedStaffCheckboxes();
+        });
+
+        $(document).on('click','.selectAllStaff',function(event) {
+        
+            var $checkboxes = $('.options input[type="checkbox"]');
+            var allChecked = $checkboxes.filter(':checked').length === $checkboxes.length;
+            $checkboxes.prop('checked', !allChecked);
+
+            selectedStaffCheckboxes();
+
+        });
+
         $(function () {
             $(".datepicker").datepicker({
                 maxDate: 0,
@@ -523,6 +537,23 @@
     $('.btn-close').click(function() {
         $('.validation-error-block').remove();
     });
+
+    function selectedStaffCheckboxes(){
+        var selectedDataArray = [];
+        var checkedCheckboxes = $(".staff-checkbox:checked");
+        checkedCheckboxes.each(function(){
+            var dataValue = $(this).attr("data-company"); 
+            if (!selectedDataArray.includes(dataValue)) {
+                selectedDataArray.push(dataValue); 
+            }
+        });
+    
+        if(selectedDataArray.length > 0){
+            $("#companyUUId").val(selectedDataArray.join(','));
+        }else{
+            $("#companyUUId").val('');
+        }
+    }
 </script>
 
 @endsection

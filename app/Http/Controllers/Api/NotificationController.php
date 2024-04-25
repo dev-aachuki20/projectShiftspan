@@ -55,7 +55,7 @@ class NotificationController extends APIController
             $input['notification_type'] = 'send_message';
             DB::beginTransaction();
 
-            Notification::send($user, new SendNotification($input));
+            Notification::send($user->company, new SendNotification($input));
             $notification = $user->notifications()->latest()->first();
 
             DB::commit();

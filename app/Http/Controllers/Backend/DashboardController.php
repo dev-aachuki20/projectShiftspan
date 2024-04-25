@@ -54,10 +54,15 @@ class DashboardController extends Controller
                 
 
                 $notification = Notification::select('id', 'notifiable_id', 'subject', 'message', 'section', 'notification_type')
-                        ->where('notifiable_id','=',$user->id)->orderBy('created_at', 'desc')->get();
+                        ->where('notifiable_id','=',$user->id)->whereIn('section',['announcements','help_chat'])->orderBy('created_at', 'desc')->get();
+
+                $allNotificationReadCount = Notification::where('notifiable_id','=',$user->id)->whereIn('section',['announcements','help_chat'])->whereNotNull('read_at')->count();
+                
+                $allNotificationReadStatus = ($allNotificationReadCount == $notification->count());
 
                 $viewHTML = view('partials.notification', compact('notification'))->render(); 
-                return response()->json(['success' => true, 'htmlView'=>$viewHTML,'total'=>$notification->count()]);
+
+                return response()->json(['success' => true, 'htmlView'=>$viewHTML,'total'=>$notification->count(),'allNotificationReadStatus'=>$allNotificationReadStatus]);
             } 
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }  catch (\Exception $e) {

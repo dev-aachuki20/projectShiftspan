@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Models\Message;
 use App\Models\Notification;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder as QueryBuilder;
 use Yajra\DataTables\EloquentDataTable;
 use Yajra\DataTables\Html\Builder as HtmlBuilder;
@@ -65,7 +66,21 @@ class MessageDataTable extends DataTable
     { 
         $user = auth()->user();
 
-        return $model->where('notifiable_id',$user->id)->where('notification_type', 'send_message')->where('section','=','help_chat')->newQuery();
+        if($user->is_sub_admin){
+            $superAdminId = User::whereHas('roles',function($query){
+                $query->where('id',config('constant.roles.super_admin'));
+            })->value('id');
+
+            return $model->where(function($query) use($user,$superAdminId){
+                $query->where('notifiable_id',$user->id)
+                ->orWhere('created_by',$user->id)
+                ->orWhere('created_by',$superAdminId);
+            })->whereIn('notification_type', ['send_message','send_notification'])->where('section','=','help_chat')->newQuery();
+        }
+
+        if($user->is_super_admin){
+            return $model->whereIn('notification_type', ['send_message','send_notification'])->where('section','=','help_chat')->newQuery();
+        }
 
         // if($user->is_super_admin){
         //     return $model->where('notifiable_id',$user->id)->where('notification_type', 'send_message')->newQuery();
