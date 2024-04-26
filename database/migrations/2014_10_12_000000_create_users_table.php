@@ -18,6 +18,7 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id')->nullable();
             $table->string('name');
             $table->string('email');
+            $table->string('notification_email')->nullable();
             $table->string('phone')->nullable();
             $table->tinyInteger('is_active')->default(1);
             $table->string('password');

@@ -31,11 +31,13 @@ class UserController extends Controller
         return view('admin.profile', compact('user'));
     }
 
-    public function updateprofile(Request $request){        
+    public function updateprofile(Request $request){
+
         $user = auth()->user();
         $request->validate([
             'name'  => ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule],
             'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
+            'notification_email' => ['nullable','email'],
             'phone' => [
                 'nullable',
                 'numeric',
@@ -53,7 +55,7 @@ class UserController extends Controller
         ]);
         if($request->ajax()){
             DB::beginTransaction();
-            try {            
+            try {
                 $user->update($request->all());
 
                 if($request->has('profile_image')){
@@ -76,7 +78,7 @@ class UserController extends Controller
                 ];
                 return response()->json($data, 200);
             } catch (\Exception $e) {
-                DB::rollBack();                
+                DB::rollBack();
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -126,7 +128,7 @@ class UserController extends Controller
                 ];
                 return response()->json($data, 200);
             } catch (\Exception $e) {
-                DB::rollBack();                
+                DB::rollBack();
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

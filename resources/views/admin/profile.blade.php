@@ -17,10 +17,19 @@
                 <label>@lang('cruds.user.admin_profile.fields.admin_name'):</label>
                 <input type="text" name="name" value="{{$user->name}}">
             </div>
+
             <div class="form-label">
                 <label>@lang('cruds.user.fields.email'):</label>
                 <input type="email" disabled value="{{$user->email}}"/>
             </div>
+
+            @if($user->is_sub_admin){
+            <div class="form-label">
+                <label>@lang('cruds.user.fields.notification_email'):</label>
+                <input type="email" name="notification_email" value="{{$user->notification_email}}"/>
+            </div>
+            @endif
+
             <div class="form-label">
                 <label>@lang('cruds.user.admin_profile.fields.mobile'):</label>
                 <input type="text" name="phone" value="{{$user->phone ?? ''}}">
@@ -29,7 +38,7 @@
                 <label>@lang('cruds.user.admin_profile.fields.image'):</label>
                 <div class="right-sidebox">
                     <div class="img-prevarea img-prePro">
-                        
+
                         {{-- @if($user->profile_image_url)
                             <img src="{{$user->profile_image_url}}" alt="profile image">
                         @else
@@ -71,7 +80,7 @@
             data: formData,
             success: function (response) {
                 if(response.success) {
-                    toasterAlert('success',response.message);                    
+                    toasterAlert('success',response.message);
                     updateHeaderProfile(response.profile_image, response.auth_name);
                 }
             },
@@ -79,11 +88,11 @@
                 console.log(response);
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
-                } else {                    
+                } else {
                     var errorLabelTitle = '';
                     $.each(response.responseJSON.errors, function (key, item) {
                         errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
-                        
+
                         $(errorLabelTitle).insertAfter("input[name='"+key+"']");
 
                         /* if(key == 'profile_image'){

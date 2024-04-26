@@ -50,6 +50,7 @@ return [
             'name'                     => 'Name',
             'full_name'                => 'Full name',
             'email'                    => 'Email',
+            'notification_email'       => 'Notification Email',
             'phone'                    => 'Phone Number',
             'profile_image'            => 'Profile Image',
             'status'                   => 'Status',
@@ -70,9 +71,9 @@ return [
                 'mobile'                   => 'Mobile',
                 'image'                    => 'Image',
             ],
-        ],   
+        ],
     ],
-    
+
 
     'permission'     => [
         'title'          => 'Permissions',
@@ -135,7 +136,7 @@ return [
             ]
         ],
     ],
-    
+
 
     'client_admin' => [
         'title' => 'Client Admins',
