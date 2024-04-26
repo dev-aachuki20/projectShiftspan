@@ -23,7 +23,7 @@
                 <input type="email" disabled value="{{$user->email}}"/>
             </div>
 
-            @if($user->is_sub_admin){
+            @if($user->is_sub_admin)
             <div class="form-label">
                 <label>@lang('cruds.user.fields.notification_email'):</label>
                 <input type="email" name="notification_email" value="{{$user->notification_email}}"/>
