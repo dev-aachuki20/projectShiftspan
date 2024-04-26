@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
+use App\Models\Notification as Notify;
+
 class NotificationController extends APIController
 {
     public function getAnnouncements(NotificationRequest $request){
@@ -35,7 +37,12 @@ class NotificationController extends APIController
             $input = $request->validated();
             $user = auth()->user();
             
-            $notification = $user->notifications()->where('notifiable_id', $user->id)->whereSection($input['section'])->whereNull('deleted_at')->get();
+            $notification = Notify::where(function($query) use($user){
+                $query->where('notifiable_id', $user->id)
+                ->orWhere('created_by', $user->id);
+            })
+            ->whereSection($input['section'])->whereNull('deleted_at')->orderBy('created_at','desc')->get();
+            
             return $this->respondOk([
                 'status'        => true,
                 'message'       => trans('messages.record_retrieved_successfully'),
@@ -56,7 +63,8 @@ class NotificationController extends APIController
             DB::beginTransaction();
 
             Notification::send($user->company, new SendNotification($input));
-            $notification = $user->notifications()->latest()->first();
+            
+            $notification = $user->notificationSender()->latest()->first();
 
             DB::commit();
             return $this->respondOk([
