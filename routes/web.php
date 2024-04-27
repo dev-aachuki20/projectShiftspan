@@ -69,7 +69,7 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::get('change-password', [UserController::class, 'showChangePassword'])->name('show.change.password');
         Route::post('change-password', [UserController::class, 'updateChangePassword'])->name('update.change.password');
 
-        Route::resource('/client-admins',SubAdminController::class);        
+        Route::resource('/client-admins',SubAdminController::class);
         Route::post('/client-admins/mass-destroy', [SubAdminController::class, 'massDestroy'])->name('client-admins.massDestroy');
         Route::post('/update-client-admin-status', [SubAdminController::class, 'statusUpdate'])->name('client-admins.statusUpdate');
 
@@ -78,6 +78,8 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
 
         Route::get('settings/contact-details', [SettingController::class, 'showContactDetails'])->name('show.contact-detail');
         Route::post('settings/update-contact-details', [SettingController::class, 'updateContactDetails'])->name('update.contact-detail');
+        Route::post('settings/subject/store', [SettingController::class, 'storeSubject'])->name('settings.subject.store');
+        Route::post('settings/subject/delete', [SettingController::class, 'deleteSubject'])->name('settings.subject.delete');
 
         Route::get('/dashboard',[DashboardController::class,'index'])->name('dashboard');
         Route::get('/logout',[LoginController::class,'logout'])->name('logout');
@@ -96,13 +98,13 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::resource('/occupations',OccupationController::class);
         Route::post('/occupations/massDestroy', [OccupationController::class, 'massDestroy'])->name('occupations.massDestroy');
 
-        
+
         Route::resource('/staffs',StaffController::class);
         Route::post('/staffs/mass-destroy', [StaffController::class, 'massDestroy'])->name('staffs.massDestroy');
         Route::post('/staffs/update-status', [StaffController::class, 'updateStaffStatus'])->name('staffs.update.status');
         Route::get('/notifications-create', [StaffController::class, 'createNotification'])->name('staffs.createNotification');
         Route::post('/notifications-store', [StaffController::class, 'notificationStore'])->name('staffs.notificationStore');
-        
+
         // Route::resource('/client-details',SubAdminDetailController::class, ['parameters'=>['client-details'=>'subAdminDetail']]);
         // Route::post('/client-details/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
 
@@ -116,14 +118,14 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
             'destroy' => 'client-details.destroy',
         ]]);
         Route::post('/listed-businesses/mass-destroy', [SubAdminDetailController::class, 'massDestroy'])->name('client-details.massDestroy');
-        
+
         Route::resource('/shifts',ShiftController::class);
         Route::post('/shifts/mass-destroy', [ShiftController::class, 'massDestroy'])->name('shifts.massDestroy');
         Route::post('/shifts/cancel/{id}', [ShiftController::class, 'CancelShift'])->name('shifts.cancel');
         Route::post('/shifts/rating/{id}', [ShiftController::class, 'RateShift'])->name('shifts.rating');
         Route::get('/shifts-get-sub-admin-details', [ShiftController::class, 'getSubAdminData'])->name('shifts.get-sub-admin-details');
         Route::get('/shifts-clockin-clockout', [ShiftController::class, 'clockInAndClockOut'])->name('shifts.clockInAndClockOut');
-        
+
         Route::resource('/messages',MessageController::class);
         Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy');
     });

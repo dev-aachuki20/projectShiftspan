@@ -51,7 +51,7 @@ class SettingSeeder extends Seeder
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
             ],
-            
+
             [
                 'key'    => 'help_pdf',
                 'value'  => null,
@@ -87,7 +87,7 @@ class SettingSeeder extends Seeder
                 'position' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
-            ], 
+            ],
             [
                 'key'    => 'privacy_policy',
                 'value'  => '',
@@ -99,7 +99,7 @@ class SettingSeeder extends Seeder
                 'position' => 1,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
-            ], 
+            ],
             [
                 'key'    => 'gdpr_policy',
                 'value'  => '',
@@ -111,7 +111,7 @@ class SettingSeeder extends Seeder
                 'position' => 2,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
-            ], 
+            ],
             [
                 'key'    => 'dbs_copy',
                 'value'  => '',
@@ -123,7 +123,7 @@ class SettingSeeder extends Seeder
                 'position' => 3,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
-            ], 
+            ],
             [
                 'key'    => 'other',
                 'value'  => '',
@@ -135,7 +135,19 @@ class SettingSeeder extends Seeder
                 'position' => 4,
                 'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
                 'created_by' => 1,
-            ],            
+            ],
+            [
+                'key'    => 'message_subject',
+                'value'  => null,
+                'type'   => 'json',
+                'display_name'  => 'Message Subjects',
+                'group'  => 'web',
+                'details' => null,
+                'status' => 1,
+                'position' => 1,
+                'created_at' => Carbon::now()->format('Y-m-d H:i:s'),
+                'created_by' => 1,
+            ],
         ];
         Setting::insert($settings);
     }

@@ -47,13 +47,13 @@
             }
         });
 
-        
+
         $('.staff-checkbox').on('change', function() {
             selectedStaffCheckboxes();
         });
 
         $(document).on('click','.selectAllStaff',function(event) {
-        
+
             var $checkboxes = $('.options input[type="checkbox"]');
             var allChecked = $checkboxes.filter(':checked').length === $checkboxes.length;
             $checkboxes.prop('checked', !allChecked);
@@ -95,7 +95,7 @@
             $(".submitBtn").attr('disabled', true);
 
             $('.loader-div').show();
-            
+
             var formData = new FormData(this);
 
             $.ajax({
@@ -105,13 +105,13 @@
                 contentType: false,
                 processData: false,
                 data: formData,
-                success: function (response) {       
-                    $('.loader-div').hide();  
+                success: function (response) {
+                    $('.loader-div').hide();
                     $(".submitBtn").attr('disabled', false);
                     if(response.success) {
                         $('#addNotificationForm')[0].reset();
                         $('#NnotificationSettings').modal('hide');
-                        
+
                         var selected = [];
                         selected.push($(this).closest(".select-option").find('span').text());
                         $('.selected-options').text(selected.length > 0 ? 'Select...' : 'Select...');
@@ -122,19 +122,21 @@
                     }
                 },
                 error: function (response) {
-                    $('.loader-div').hide();  
+                    $('.loader-div').hide();
                     $(".submitBtn").attr('disabled', false);
 
                     if(response.responseJSON.error_type == 'something_error'){
                         toasterAlert('error',response.responseJSON.error);
-                    } else {                    
+                    } else {
                         var errorLabelTitle = '';
                         $.each(response.responseJSON.errors, function (key, item) {
-                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>'; 
+                            errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
                             if (key.indexOf('staffs') !== -1) {
                                 $(".staffs_error").html(errorLabelTitle);
                             } else if(key== 'section') {
                                 $(".section_error").html(errorLabelTitle);
+                            } else if(key== 'subject') {
+                                $(".subject_error").html(errorLabelTitle);
                             } else{
                                 $(document).find('[name='+key+']').after(errorLabelTitle);
                             }
@@ -144,7 +146,7 @@
                 complete: function(res){
                     $(".submitBtn").attr('disabled', false);
                 }
-            });                    
+            });
         });
     @endcan
 
@@ -164,18 +166,18 @@
                 title: "{{ trans('global.areYouSure') }}",
                 text: "{{ trans('global.onceClickedRecordDeleted') }}",
                 icon: "warning",
-                showDenyButton: true,  
-                //   showCancelButton: true,  
-                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",  
+                showDenyButton: true,
+                //   showCancelButton: true,
+                confirmButtonText: "{{ trans('global.swl_confirm_button_text') }}",
                 denyButtonText: "{{ trans('global.swl_deny_button_text') }}",
             })
             .then(function(result) {
-                if (result.isConfirmed) {      
-                    $('.loader-div').show(); 
+                if (result.isConfirmed) {
+                    $('.loader-div').show();
                     $.ajax({
                         url: "{{route('messages.massDestroy')}}",
                         type: "POST",
-                        data: { 
+                        data: {
                             ids: selectedIds,
                             _token: "{{ csrf_token() }}",
                         },
@@ -212,12 +214,12 @@
         var selectedDataArray = [];
         var checkedCheckboxes = $(".staff-checkbox:checked");
         checkedCheckboxes.each(function(){
-            var dataValue = $(this).attr("data-company"); 
+            var dataValue = $(this).attr("data-company");
             if (!selectedDataArray.includes(dataValue)) {
-                selectedDataArray.push(dataValue); 
+                selectedDataArray.push(dataValue);
             }
         });
-    
+
         if(selectedDataArray.length > 0){
             $("#companyUUId").val(selectedDataArray.join(','));
         }else{

@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
-class svg-icons extends Component
+class SvgIcons extends Component
 {
     /**
      * Create a new component instance.

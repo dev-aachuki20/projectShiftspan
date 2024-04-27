@@ -318,6 +318,20 @@ class PermissionsTableSeeder extends Seeder
                 'updated_at' => $updateDate,
             ],
             [
+                'name'      => 'setting_message_subject_create',
+                'title'      => 'Setting Message Subject Add',
+                'route_name'=>'settings',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
+                'name'      => 'setting_message_subject_delete',
+                'title'      => 'Setting Message Subject Delete',
+                'route_name'=>'settings',
+                'created_at' => $createDate,
+                'updated_at' => $updateDate,
+            ],
+            [
                 'name'      => 'notification_create',
                 'title'      => 'Add',
                 'route_name'=> 'staffs.notificationStore',

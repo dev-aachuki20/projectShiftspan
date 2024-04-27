@@ -119,6 +119,7 @@ return [
 
     'setting' => [
         'title' => 'Settings',
+        'add_message_subject' => 'Add Message Subject',
         'title_singular' => 'Setting',
         'fields' => [
             'site_title'    => 'Title Name',
@@ -134,6 +135,9 @@ return [
                 'contact_phone' => 'Contact Mobile',
                 'contact_details' => 'Contact Details',
             ]
+        ],
+        'message_subject' => [
+            'subject_name'    => 'Subject Name',
         ],
     ],
 

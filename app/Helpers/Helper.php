@@ -101,6 +101,8 @@ if (!function_exists('getSetting')) {
             $result = $setting->image_url;
         } elseif ($setting->type == 'file') {
             $result = $setting->doc_url;
+        } elseif ($setting->type == 'json') {
+            $result = $setting->value ? json_decode($setting->value, true): null;
         } else {
             $result = $setting->value;
         }
@@ -124,7 +126,7 @@ if (!function_exists('str_limit_custom')) {
     }
 }
 
-if (!function_exists('getSvgIcon')) {    
+if (!function_exists('getSvgIcon')) {
     function getSvgIcon($icon){
         return view('components.svg-icons', ['icon' => $icon])->render();
     }
@@ -165,7 +167,7 @@ if (!function_exists('sendNotification')) {
 				$SERVER_API_KEY = env('FIREBASE_KEY');
 
 				\Log::info(['SERVER_API_KEY' => $SERVER_API_KEY]);
-				
+
 				$notification = [
 					"title" => $subject,
 					"body" 	=> $message,

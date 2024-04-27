@@ -34,7 +34,7 @@
                                     @endforeach
                                 </ul>
                                 <input type="hidden" name="companies[]" id="companyUUId">
-                            </div>                          
+                            </div>
                         </div>
                         <span class="staffs_error"></span>
                     </div>
@@ -48,11 +48,17 @@
                         </select>
                         <span class="section_error"></span>
                     </div>
-                    <div class="form-label">
-                        <label class="text-end px-2">@lang('cruds.notification.fields.subject'): </label>
-                        <input type="text" name="subject" value="" placeholder="@lang('cruds.notification.fields.type')......." required>
+                    <div class="form-label select-label">
+                        <label for="subject" class="text-end px-2">@lang('cruds.notification.fields.subject'): </label>
+                        <select class="select2"  name="subject" id="subject">
+                            <option value="">@lang('global.select')  ...</option>
+                            @foreach (getSetting('message_subject') as $val)
+                                <option value="{{$val}}">{{ $val }}</option>
+                            @endforeach
+                        </select>
+                        <span class="subject_error"></span>
                     </div>
-                    
+
                     @if(request()->route()->getName() == 'staffs.createNotification')
                         <div class="form-label with-textarea">
                             <label>@lang('cruds.notification.fields.message'):</label>
