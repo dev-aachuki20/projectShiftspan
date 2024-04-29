@@ -29,11 +29,21 @@ class Message extends Model
     protected static function boot ()
     {
         parent::boot();
+        static::creating(function(Message $model) {
+            $model->id = Str::uuid();
+            $model->user_id = auth()->user()->id;
+        });
     }
 
     public function user()
     {
         return $this->belongsTo(User::class,'user_id','id');
+    }
+
+    public function usersSeen()
+    {
+        return $this->belongsToMany(Message::class, 'message_seen', 'user_id', 'message_id')
+        ->withPivot('group_id', 'reat_at');
     }
 
 }

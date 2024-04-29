@@ -64,6 +64,29 @@ class MessageController extends Controller
             DB::beginTransaction();
 
             $users = User::whereIn('uuid', $input['staffs'])->get();
+/*
+            if($input['section'] == 'help_chat'){
+
+                $group = Group::where('group_name',$input['subject'])->first();
+                if(!$group){
+                    $groupDetail['group_name'] = $input['subject'];
+                    $groupCreated = Group::create($groupDetail);
+                    if($groupCreated){
+                        $groupCreated->users()->attach($input['staffs']);
+                    }
+                }
+
+                $messageInput['content'] = $input['message'];
+                $messageInput['type']    = 'text';
+
+                $messageCreated = Message::create($messageInput);
+
+                if($messageCreated){
+                    $messageCreated->usersSeen()->attach($input['staffs'], ['group_id' => $group->id, 'reat_at' => now()]);
+                }
+                
+            }*/
+
             Notification::send($users, new SendNotification($input));
 
             if($input['section'] != 'help_chat'){

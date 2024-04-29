@@ -19,7 +19,7 @@ class Group extends Model
     protected $fillable = [
         'id',
         'group_name',
-        'message_id',
+        'created_by',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -28,16 +28,20 @@ class Group extends Model
     protected static function boot ()
     {
         parent::boot();
+        static::creating(function(Group $model) {
+            $model->id = Str::uuid();
+            $model->created_by = auth()->user()->id;
+        });
     }
 
-    public function message()
+    public function createdBy()
     {
-        return $this->belongsTo(Message::class,'message_id','id');
+        return $this->belongsTo(User::class,'created_by','id');
     }
 
     public function users()
     {
-        return $this->hasMany(User::class,'users_groups');
+        return $this->belongsToMany(User::class, 'users_groups', 'group_id', 'user_id');
     }
 
 }

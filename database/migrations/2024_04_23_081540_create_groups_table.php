@@ -16,8 +16,8 @@ return new class extends Migration
 
             $table->string('group_name')->nullable();
             
-            $table->uuid('message_id')->nullable();
-            $table->foreign('message_id')->references('id')->on('messages')->onDelete('cascade');
+            $table->unsignedBigInteger('created_by')->nullable();
+            $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');
 
             $table->timestamps();
             $table->softDeletes();
