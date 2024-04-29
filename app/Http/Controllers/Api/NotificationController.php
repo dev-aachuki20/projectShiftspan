@@ -108,4 +108,64 @@ class NotificationController extends APIController
             return $this->throwValidation([trans('messages.error_message')]);
         }
     }
+
+
+    public function deleteNotifications($uuid){
+        
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+            $notification = Notify::where('id',$uuid)->where('notifiable_id','=', $user->id)->orderBy('created_at', 'desc')->delete();
+
+            if (!$notification) {
+                return $this->respondOk([
+                    'status'   => true,
+                    'message'   => trans('messages.notification.not_found')
+                ])->setStatusCode(Response::HTTP_OK);
+            }
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.notification.delete')
+            ])->setStatusCode(Response::HTTP_OK);
+
+        }  catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());          
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+
+    }
+
+    public function clearNotifications(){
+        
+        DB::beginTransaction();
+        try {
+            $user = auth()->user();
+            $notification = Notify::where('notifiable_id','=', $user->id)->delete();
+
+            if (!$notification) {
+                return $this->respondOk([
+                    'status'   => true,
+                    'message'   => trans('messages.notification.not_found')
+                ])->setStatusCode(Response::HTTP_OK);
+            }
+
+            DB::commit();
+
+            return $this->respondOk([
+                'status'   => true,
+                'message'   => trans('messages.notification.clear_notification')
+            ])->setStatusCode(Response::HTTP_OK);
+
+        }  catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine().' '.$e->getCode());          
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+
+    }
+
 }

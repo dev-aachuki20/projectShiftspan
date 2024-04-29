@@ -80,7 +80,7 @@ class DashboardController extends Controller
                
                 $user = Auth::user();
                 if($user){
-                    $notification = Notification::where('notifiable_id','=', $user->id)->orderBy('created_at', 'desc')->delete();
+                    $notification = Notification::where('notifiable_id','=', $user->id)->delete();
                     if($notification){
                         return response()->json(['success' => true, 'message'=>trans('messages.notification.clear_notification')]);
                     }else{

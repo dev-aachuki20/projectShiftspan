@@ -52,9 +52,11 @@
                         <label for="subject" class="text-end px-2">@lang('cruds.notification.fields.subject'): </label>
                         <select class="select2"  name="subject" id="subject">
                             <option value="">@lang('global.select')  ...</option>
+                            @if (getSetting('message_subject'))
                             @foreach (getSetting('message_subject') as $val)
                                 <option value="{{$val}}">{{ $val }}</option>
                             @endforeach
+                            @endif
                         </select>
                         <span class="subject_error"></span>
                     </div>
