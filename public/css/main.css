@@ -2131,6 +2131,32 @@ th.datatable_desription{
 .chatboxGroup .list-group .list-group-item .content {
     transition: var(--ease-transition);
     margin: 0px;
+    width: calc(100% - 30px);
+}
+.msg-type{
+    display: flex;
+    display: -webkit-flex;
+    flex-wrap: wrap;
+    -webkit-flex-wrap: wrap;
+    justify-content: space-between;
+    -webkit-justify-content: space-between;
+}
+.chatmsg-number{
+    min-width: 28px;
+    height: 28px;
+    background-color: var(--primary);
+    border-radius: 50%;
+    font-size: 12px;
+    padding: 4px;
+    display: flex;
+    display: -webkit-flex;
+    align-items: center;
+    -webkit-align-items: center;
+    justify-content: center;
+    -webkit-justify-content: center;
+    transform: translateY(-4px);
+    -webkit-transform: translateY(-4px);
+    color: #fff;
 }
 
 .chatboxGroup .list-group .list-group-item h5.content{
@@ -2138,6 +2164,7 @@ th.datatable_desription{
     align-items: center;
     justify-content: space-between;
     font-size: 16px;
+    width: 100%;
 }
 .chatboxGroup .list-group .list-group-item .content .time {
     font-size: 12px;
@@ -2200,8 +2227,10 @@ th.datatable_desription{
     width: calc(100% - 50px);
 }
 .chatboxGroup .usersetting .dropdown .dropdown-menu{
-    min-width: 100px;
-    }
+    min-width: 180px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.2);
+}
 .chatboxGroup .usersetting .editbtn{
     width: 35px;
     height: 35px;
@@ -2213,8 +2242,11 @@ th.datatable_desription{
     background-color: transparent;
 }
 .chatboxGroup .usersetting .dropdown-item{
-    padding: 10px;
+    padding: 7px 14px;
     min-width: unset;
+}
+.chatboxGroup .usersetting .dropdown-item:active{
+    background-color: #000;
 }
 .chatboxGroup .usersetting .editbtn .editicon{
     width: 100%;
