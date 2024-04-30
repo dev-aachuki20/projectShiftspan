@@ -17,6 +17,7 @@ class NotificationRequest extends FormRequest
         return true;
     }
 
+   
     /**
      * Get the validation rules that apply to the request.
      *
@@ -32,12 +33,16 @@ class NotificationRequest extends FormRequest
             $rules['ids'] = ['required', 'array'];
             $rules['ids.*'] = ['exists:notifications,id'];
         }else{
-            $rules['staffs']    = ['required', 'array'];
-            $rules['staffs.*']  = ['exists:users,uuid'];
-            $rules['companies']    = ['required', 'array'];
+           
+            $rules['staffs']       = ['required', 'array'];
+            $rules['staffs.*']     = ['exists:users,uuid'];
+            $rules['companies']    = ['required','array'];
             $rules['companies.*']  = ['exists:users,uuid'];
             $rules['section']   = ['required','in:'.implode(',',array_keys(config('constant.notification_subject')))];
-            $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
+            
+            $allSubjects = implode(',',getSetting('message_subject'));
+
+            $rules['subject']   = ['required','string', 'in:'.$allSubjects, new NoMultipleSpacesRule];
             $rules['message']   = ['required','string'];
         }
         

@@ -12,13 +12,13 @@ class Message extends Model
 {
     use HasFactory,SoftDeletes,HasApiTokens;
 
-    protected $guard = 'web';
-
     public $table = 'messages';
 
     protected $fillable = [
         'id',
+        'uuid',
         'user_id',
+        'group_id',
         'content',
         'type',
         'created_at',
@@ -30,7 +30,7 @@ class Message extends Model
     {
         parent::boot();
         static::creating(function(Message $model) {
-            $model->id = Str::uuid();
+            $model->uuid = Str::uuid();
             $model->user_id = auth()->user()->id;
         });
     }
@@ -40,10 +40,15 @@ class Message extends Model
         return $this->belongsTo(User::class,'user_id','id');
     }
 
+    public function group()
+    {
+        return $this->belongsTo(Group::class,'group_id','id');
+    }
+
     public function usersSeen()
     {
-        return $this->belongsToMany(Message::class, 'message_seen', 'user_id', 'message_id')
-        ->withPivot('group_id', 'reat_at');
+        return $this->belongsToMany(User::class, 'message_seen', 'message_id','user_id')
+        ->withPivot('group_id', 'read_at');
     }
 
 }

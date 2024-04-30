@@ -422,6 +422,34 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     Route::get('/get-group-subjects', [MessageController::class,'getGroupSubjects']);
 
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Send Group Message Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/sendGroupMessage
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : Post
+    | 
+    */
+    Route::post('/sendGroupMessage', [MessageController::class,'storeGroupMessage']);
+
+
+    /*
+    |--------------------------------------------------------------------------
+    |  Send Group Message Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/getGroupList
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET
+    | 
+    */
+    Route::get('/getGroupList', [MessageController::class,'getGroupList']);
+
+
     
     
 });

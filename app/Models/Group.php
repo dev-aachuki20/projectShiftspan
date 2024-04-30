@@ -12,12 +12,11 @@ class Group extends Model
 {
     use HasFactory,SoftDeletes,HasApiTokens;
 
-    protected $guard = 'web';
-
     public $table = 'groups';
 
     protected $fillable = [
         'id',
+        'uuid',
         'group_name',
         'created_by',
         'created_at',
@@ -29,7 +28,7 @@ class Group extends Model
     {
         parent::boot();
         static::creating(function(Group $model) {
-            $model->id = Str::uuid();
+            $model->uuid = Str::uuid();
             $model->created_by = auth()->user()->id;
         });
     }
@@ -42,6 +41,11 @@ class Group extends Model
     public function users()
     {
         return $this->belongsToMany(User::class, 'users_groups', 'group_id', 'user_id');
+    }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
     }
 
 }

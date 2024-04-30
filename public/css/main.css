@@ -2204,7 +2204,7 @@ th.datatable_desription{
     position: absolute;
     bottom: 2px;
     right: 2px;
-    background-color: var(--dark-gray-color);
+    /* background-color: var(--dark-gray-color); */
 }
 .chatboxGroup .userporfile.activeAccount .userimage::before{
     background-color: var(--tertiary);

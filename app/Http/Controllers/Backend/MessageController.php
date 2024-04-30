@@ -37,7 +37,14 @@ class MessageController extends Controller
             }else{
                 $staffsNotify = User::with(['company'])->where('is_active',1)->where('company_id', $user->id)->orderBy('id', 'desc')->get();
             }
-            return $dataTable->render('admin.message.index', compact('staffsNotify'));
+
+            $groups = Group::whereHas('users',function($query){
+                $query->where('user_id',auth()->user()->id);
+            })->get();
+            // return $dataTable->render('admin.message.index', compact('staffsNotify'));
+
+            return view('admin.message.index', compact('staffsNotify','groups'));
+
         } catch (\Exception $e) {
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
         }
@@ -58,34 +65,42 @@ class MessageController extends Controller
     {
         abort_if(Gate::denies('message_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         try {
-            $input = $request->validated();            
+            $input = $request->validated();          
             $input['notification_type'] = 'send_message';
 
             DB::beginTransaction();
 
             $users = User::whereIn('uuid', $input['staffs'])->get();
-/*
+
             if($input['section'] == 'help_chat'){
 
-                $group = Group::where('group_name',$input['subject'])->first();
-                if(!$group){
-                    $groupDetail['group_name'] = $input['subject'];
-                    $groupCreated = Group::create($groupDetail);
-                    if($groupCreated){
-                        $groupCreated->users()->attach($input['staffs']);
+                foreach($users as $staff){
+                    $userIds= [];
+                    $group = Group::whereHas('users',function($query) use($staff){
+                        $query->where('user_id',$staff->id);
+                    })->where('group_name',$input['subject'])->first();
+
+                    if(!$group){
+                        $groupDetail['group_name'] = $input['subject'];
+                        $groupCreated = Group::create($groupDetail);
+                        if($groupCreated){
+                            $group = $groupCreated;
+                            $userIds[] = $staff->id;
+                            $userIds[] = $groupCreated->created_by;
+
+                            $groupCreated->users()->attach($userIds);
+                        }
                     }
-                }
 
-                $messageInput['content'] = $input['message'];
-                $messageInput['type']    = 'text';
-
-                $messageCreated = Message::create($messageInput);
-
-                if($messageCreated){
-                    $messageCreated->usersSeen()->attach($input['staffs'], ['group_id' => $group->id, 'reat_at' => now()]);
+                    //Start to create message
+                    $messageInput['group_id'] = $group->id;
+                    $messageInput['content']  = $input['message'];
+                    $messageInput['type']     = 'text';
+                    $messageCreated = Message::create($messageInput);
+                    //End to create message
                 }
                 
-            }*/
+            }
 
             Notification::send($users, new SendNotification($input));
 
@@ -177,5 +192,47 @@ class MessageController extends Controller
             // \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
         }
+    }
+
+
+    public function getGroupList(Request $request){
+
+        if($request->ajax()) {
+            try {
+                $groups = Group::whereHas('users',function($query){
+                    $query->where('user_id',auth()->user()->id);
+                })->get();
+               
+                $viewHTML = view('admin.message.partials.group', compact('groups'))->render();
+                
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            } catch (\Exception $e) {
+                // dd($e);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+
+    }
+
+    public function showChatScreen(Request $request){
+        if($request->ajax()) {
+            
+            try {
+                $group = Group::whereHas('users',function($query){
+                    $query->where('user_id',auth()->user()->id);
+                })->where('uuid',$request->groupId)->first();
+               
+                $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+
+                $viewHTML = view('admin.message.partials.chatbox', compact('group','allMessages'))->render();
+                
+                return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
+            } catch (\Exception $e) {
+                // dd($e);
+                return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+            }
+        }
+        return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
 }

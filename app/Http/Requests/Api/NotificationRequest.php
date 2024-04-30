@@ -35,7 +35,6 @@ class NotificationRequest extends FormRequest
             } */
             // $rules['subject']   = ['required','string', new NoMultipleSpacesRule];
             $rules['message']   = ['required','string'];
-            $rules ['section'] = ['required', 'max:20', Rule::in(['help_chat'])];
             $rules ['section'] = ['required', 'max:20', Rule::in(['announcements', 'help_chat'])];
         }elseif($lastnameofUrl == 'announcements'){
             $rules ['section'] = ['required', 'max:20', Rule::in(['announcements'])];

@@ -14,6 +14,7 @@
             <div class="modal-body inner-size-l">
                 <form class="msg-form" id="addNotificationForm" action="" {{-- method="POST" --}} enctype='multipart/form-data'>
                     @csrf
+                    <span class="hiddenInputs"></span>
                     <div class="form-label">
                         <label>@lang('cruds.notification.fields.staff')</label>
                         <div class="right-sidebox-small modal-dropdown">
@@ -33,7 +34,7 @@
                                         </li>
                                     @endforeach
                                 </ul>
-                                <input type="hidden" name="companies[]" id="companyUUId">
+                                
                             </div>
                         </div>
                         <span class="staffs_error"></span>
