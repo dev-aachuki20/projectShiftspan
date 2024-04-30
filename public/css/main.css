@@ -2215,6 +2215,12 @@ th.datatable_desription{
     object-fit: cover;
     border-radius: 50%;
 }
+.chatboxGroup .userporfile.active .userimage .userpic,
+.chatboxGroup .userporfile:hover .userimage .userpic{
+    filter: invert(1);
+    -webkit-filter: invert(1);
+}
+
 .chatboxGroup .userporfile .activeuser{
     font-size: 14px;
     line-height: 1;

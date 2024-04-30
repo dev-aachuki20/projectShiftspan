@@ -272,7 +272,14 @@
     $(document).on('click','.groupItem',function(e){
         e.preventDefault();
 
+        $('.loader-div').show();
+
         var $this = $(this);
+
+        $('.groupItem').removeClass('active');
+
+        $this.addClass('active');
+
         var groupId = $this.attr('data-listId');
 
         getChatBox(groupId);
@@ -319,17 +326,22 @@
     }
 
     async function getChatBox(groupId){
+
         $.ajax({
             type: 'get',
             url: "{{ route('messages.showChatScreen') }}",
             dataType: 'json',
             data: {'groupId':groupId},
             success: function (response) {
+                 $('.loader-div').hide();
+
                 if(response.success){
                     $('.groupChatScreen').html(response.htmlView);
                 }
             },
             error: function (response) {
+                $('.loader-div').hide();
+
                 console.log('Error Response-',response);
                 // if(response.responseJSON.error_type == 'something_error'){
                 //     toasterAlert('error',response.responseJSON.error);

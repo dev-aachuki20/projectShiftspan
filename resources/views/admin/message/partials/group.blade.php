@@ -13,12 +13,18 @@
            
              $latestMessage = $group->messages()->orderBy('created_at','desc')->first();   
             
-             $totalUnreadMessage =  $group->messages()->whereDoesntHave('usersSeen', function ($query) {
+             $totalUnreadMessage =  $group->messages()->where('group_id',$group->id)->where('user_id','!=',auth()->user()->id)->whereDoesntHave('usersSeen', function ($query) {
                                         $query->where('user_id', auth()->user()->id);
                                     })->count();
             @endphp
             <h5 class="content"><span class="text-truncate">{{ ucwords($group->group_name) }}</span> <span class="time">{{ dateFormat($latestMessage->created_at, config('constant.date_format.time'))}}</span></h5>
-            <div class="msg-type"><p class="text-truncate content">{{ $latestMessage->content }}</p><span class="chatmsg-number">{{ $totalUnreadMessage }}</span></div>
+
+           
+            <div class="msg-type"><p class="text-truncate content">{{ $latestMessage->content }}</p>
+                @if($totalUnreadMessage > 0)
+                <span class="chatmsg-number">{{ $totalUnreadMessage }}</span>
+                @endif
+            </div>
         </div>
     </li>
 

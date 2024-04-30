@@ -92,7 +92,7 @@ class MessageController extends APIController
         try {
             $data['groups'] = Group::whereHas('users',function($query){
                 $query->where('user_id',auth()->user()->id);
-            })->get();
+            })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
            
             return $this->respondOk([
                 'status'        => true,

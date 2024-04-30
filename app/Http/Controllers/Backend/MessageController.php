@@ -40,7 +40,8 @@ class MessageController extends Controller
 
             $groups = Group::whereHas('users',function($query){
                 $query->where('user_id',auth()->user()->id);
-            })->get();
+            })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
+
             // return $dataTable->render('admin.message.index', compact('staffsNotify'));
 
             return view('admin.message.index', compact('staffsNotify','groups'));
@@ -201,7 +202,7 @@ class MessageController extends Controller
             try {
                 $groups = Group::whereHas('users',function($query){
                     $query->where('user_id',auth()->user()->id);
-                })->get();
+                })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
                
                 $viewHTML = view('admin.message.partials.group', compact('groups'))->render();
                 
@@ -224,6 +225,18 @@ class MessageController extends Controller
                 })->where('uuid',$request->groupId)->first();
                
                 $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+
+                $user = auth()->user();
+
+                $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                })->count();
+
+                // dd($unseenMessage);
+
+                // if($messageCreated){
+                //     $messageCreated->usersSeen()->attach($userIds, ['group_id' => $group->id]);
+                // }
 
                 $viewHTML = view('admin.message.partials.chatbox', compact('group','allMessages'))->render();
                 

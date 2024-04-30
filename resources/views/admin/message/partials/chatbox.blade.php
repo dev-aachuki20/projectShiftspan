@@ -1,6 +1,6 @@
 <div class="col-12">
     <div class="chat-header p-3 d-flex justify-content-between align-items-center">
-        <div class="userporfile activeAccount">
+        <div class="userporfile">
             <div class="userimage">
                 <img class="userpic" src="{{asset(config('constant.default.user_icon')) }}" alt="">
             </div>
