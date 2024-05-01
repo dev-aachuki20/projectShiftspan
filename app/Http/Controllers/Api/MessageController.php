@@ -54,9 +54,9 @@ class MessageController extends APIController
                 $groupCreated = Group::create($groupDetail);
                 if($groupCreated){
                     $group = $groupCreated;
-                    $userIds[] = $authUser->company_id;
                     $userIds[] = $groupCreated->created_by;
-
+                    $userIds[] = $authUser->company_id;
+                    $userIds[] = $authUser->company->created_by;
                     $groupCreated->users()->attach($userIds);
                 }
             }
@@ -72,6 +72,9 @@ class MessageController extends APIController
             $input['notification_type'] = 'send_message';
             $input['section'] = 'help_chat';
             Notification::send($authUser->company, new SendNotification($input));
+
+            Notification::send($authUser->company->createdBy, new SendNotification($input));
+
 
             DB::commit();
             return $this->respondOk([
@@ -96,10 +99,13 @@ class MessageController extends APIController
            
             foreach($groups as $group){
                 
+
                 $group->total_unread_message =  $group->messages()->where('group_id',$group->id)->where('user_id','!=',auth()->user()->id)->whereDoesntHave('usersSeen', function ($query) {
                     $query->where('user_id', auth()->user()->id);
                 })->count();
                 $group->latestMessages = $group->messages()->orderBy('created_at','desc')->first();   
+
+                $group->latestMessages->user_name = ($group->latestMessages->user->id == auth()->user()->id) ? 'You' : explode(' ',$group->latestMessages->user->name)[0];
                
             }
 
@@ -122,7 +128,7 @@ class MessageController extends APIController
                 $query->where('user_id',auth()->user()->id);
             })->where('uuid',$groupId)->first();
            
-            $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+            $allMessages = $group->messages()->with('user')->orderBy('created_at','asc')->get();   
 
             $user = auth()->user();
 

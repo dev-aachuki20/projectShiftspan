@@ -87,7 +87,8 @@ class MessageController extends Controller
                         if($groupCreated){
                             $group = $groupCreated;
                             $userIds[] = $staff->id;
-                            $userIds[] = $groupCreated->created_by;
+                            $userIds[] = $staff->company->id;
+                            $userIds[] = $staff->company->created_by;
 
                             $groupCreated->users()->attach($userIds);
                         }
@@ -99,6 +100,12 @@ class MessageController extends Controller
                     $messageInput['type']     = 'text';
                     $messageCreated = Message::create($messageInput);
                     //End to create message
+
+                    if(auth()->user()->company){
+                        //Send notification to super admin
+                        Notification::send($staff->company->createdBy, new SendNotification($input));
+                    }
+                   
                 }
                 
             }
@@ -202,7 +209,13 @@ class MessageController extends Controller
             try {
                 $groups = Group::whereHas('users',function($query){
                     $query->where('user_id',auth()->user()->id);
-                })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
+                });
+
+                if($request->search){
+                    $groups = $groups->where('group_name','like','%'.$request->search.'%');
+                }
+                
+                $groups = $groups->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
                
                 $viewHTML = view('admin.message.partials.group', compact('groups'))->render();
                 
@@ -220,30 +233,35 @@ class MessageController extends Controller
         if($request->ajax()) {
             
             try {
+
                 $group = Group::whereHas('users',function($query){
                     $query->where('user_id',auth()->user()->id);
                 })->where('uuid',$request->groupId)->first();
                
-                $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+                if($group){
+                    $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
 
-                $user = auth()->user();
+                    $user = auth()->user();
 
-                // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
-                //     $query->where('user_id', auth()->user()->id);
-                // })->count();
+                    // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                    //     $query->where('user_id', auth()->user()->id);
+                    // })->count();
 
-                $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
-                         $query->where('user_id', auth()->user()->id);
-                    })->pluck('id')->toArray();
+                    $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                            $query->where('user_id', auth()->user()->id);
+                        })->pluck('id')->toArray();
 
-                $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
+                    $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
 
-                if (!$exists) {
-                    $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+                    if (!$exists) {
+                        $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+                    }
+
+                    $viewHTML = view('admin.message.partials.chatbox', compact('group','allMessages'))->render();
+                }else{
+                    $viewHTML = view('admin.message.partials.chatbox')->render();
                 }
 
-                $viewHTML = view('admin.message.partials.chatbox', compact('group','allMessages'))->render();
-                
                 return response()->json(array('success' => true, 'htmlView'=>$viewHTML));
             } catch (\Exception $e) {
                 // dd($e);
@@ -288,10 +306,14 @@ class MessageController extends Controller
                 Notification::send($groupUsersExpectAuthUser, new SendNotification($notificationInput));
             }
 
+            $message =  $messageCreated;
+            $viewMessageHtml = view('admin.message.partials.message-view', compact('message'))->render();
+
             DB::commit();
             return response()->json([
                 'success'    => true,
                 'message'    => trans('messages.crud.message_sent'),
+                'viewMessageHtml'=>$viewMessageHtml
             ]);
         } catch (\Exception $e) {
             DB::rollBack();

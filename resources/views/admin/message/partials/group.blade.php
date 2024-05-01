@@ -20,7 +20,7 @@
             <h5 class="content"><span class="text-truncate">{{ ucwords($group->group_name) }}</span> <span class="time">{{ dateFormat($latestMessage->created_at, config('constant.date_format.time'))}}</span></h5>
 
            
-            <div class="msg-type"><p class="text-truncate content">{{ $latestMessage->content }}</p>
+            <div class="msg-type"><p class="text-truncate content">{{ ($latestMessage->user->id == auth()->user()->id) ? 'You' : explode(' ',$latestMessage->user->name)[0] }} : {{ $latestMessage->content }}</p>
                 @if($totalUnreadMessage > 0)
                 <span class="chatmsg-number totalUnreadMess">{{ $totalUnreadMessage }}</span>
                 @endif

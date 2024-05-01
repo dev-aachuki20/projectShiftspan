@@ -1,3 +1,5 @@
+@if(isset($group))
+
 <div class="col-12">
     <div class="chat-header p-3 d-flex justify-content-between align-items-center">
         <div class="userporfile">
@@ -6,7 +8,11 @@
             </div>
             <div class="useraccount text-truncate">
                 <h4 class="m-0 text-truncate" id="chatHeader">{{ ucwords($group->group_name) }}</h4>
-                <p class="text-truncate content m-0 activeuser"></p>
+                @php
+                  $groupUserList = $group->users()->where('id','!=',auth()->user()->id)->pluck('name')->toArray();
+                  $groupUser = 'You, '.implode(', ',$groupUserList);
+                @endphp
+                <p class="text-truncate content m-0 activeuser">{{ $groupUser }}</p>
             </div>
         </div>
     </div>
@@ -17,22 +23,11 @@
         @if($allMessages->count() > 0)
           @foreach($allMessages as $message)
 
-          @if($message->type == 'text')
-            @if($message->user_id == auth()->user()->id)
-                <div class="message outgoing">
-                    <div class="message-content">{{ $message->content }}<span class="message_time">{{ dateFormat($message->created_at, config('constant.date_format.time'))}}</span></div>
-                </div>
-            @else
-                <div class="message incoming">
-                    <div class="message-content">{{ $message->content }}<span class="message_time">{{ dateFormat($message->created_at, config('constant.date_format.time'))}}</span></div>
-                </div>
-            @endif
-          @endif
+          @include('admin.message.partials.message-view')
 
           @endforeach
         @endif
        
-
         {{-- <div class="datemention"><span>24 April 2024</span></div> --}}
 
         {{-- <div class="datemention"><span>Monday</span></div> --}}
@@ -69,3 +64,22 @@
         </form>
     </div>
 </div>
+
+@else
+
+<div class="col-12">
+    <div class="welcome-screen">
+        <div class="userporfile">
+            <div class="userimage">
+                <img class="userpic" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset(config('constant.default.user_icon')) }}" alt="{{ auth()->user()->name }}">
+            </div>
+            <div class="useraccount text-truncate">
+                <h3>Welcome!</h3>
+                <h4 class="m-0 text-truncate" id="chatHeader">{{ ucwords(auth()->user()->name) }}</h4>
+                <!-- <p class="text-truncate content m-0 activeuser"></p> -->
+            </div>
+        </div>
+    </div>
+</div>
+
+@endif
