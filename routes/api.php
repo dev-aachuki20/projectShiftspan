@@ -462,6 +462,19 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     */
     Route::get('/get-all-messages/{groupId}', [MessageController::class,'getAllMessages']);
 
+    /*
+    |--------------------------------------------------------------------------
+    |  Send Message Routes
+    |--------------------------------------------------------------------------
+    | 
+    | Route         : http://localhost:8000/api/send-message
+    | Header        : Content-Type:application/json
+    |               : Authorization : Token
+    | Method        : GET
+    | 
+    */
+    Route::post('/send-message/{groupId}', [MessageController::class,'sendMessage']);
+
 
     
     

@@ -130,6 +130,8 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
         Route::get('/get-group-list', [MessageController::class, 'getGroupList'])->name('messages.getGroupList');
         Route::get('/showChatScreen', [MessageController::class, 'showChatScreen'])->name('messages.showChatScreen');
 
+        Route::post('/messages/send/{groupId}', [MessageController::class, 'sendMessage'])->name('messages.send');
+
         Route::post('/messages/mass-destroy', [MessageController::class, 'massDestroy'])->name('messages.massDestroy');
     });
 });

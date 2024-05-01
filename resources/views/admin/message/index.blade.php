@@ -285,6 +285,60 @@
         
     });
 
+    $(document).on('submit','#messageInputForm',function(e){
+        e.preventDefault();
+
+        var $this = $(this);
+
+        if($this.find('textarea').val() != ''){
+            $("#messageInputForm .submitBtn").attr('disabled', true);
+
+            var formData = new FormData(this);
+
+            $.ajax({
+                type: $this.attr('method'),
+                url: $this.attr('action'),
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                data: formData,
+                success: function (response) {
+                    
+                    $("#messageInputForm .submitBtn").attr('disabled', false);
+                    if(response.success) {
+                        $('#messageInputForm')[0].reset();
+                        toasterAlert('success',response.message);
+                    }
+                },
+                error: function (response) {
+                    $("#messageInputForm .submitBtn").attr('disabled', false);
+
+                    if(response.responseJSON.error_type == 'something_error'){
+                        toasterAlert('error',response.responseJSON.error);
+                    } else {
+                        // var errorLabelTitle = '';
+                        // $.each(response.responseJSON.errors, function (key, item) {
+                        //     errorLabelTitle = '<span class="validation-error-block">'+item[0]+'</sapn>';
+                        //     if (key.indexOf('staffs') !== -1) {
+                        //         $(".staffs_error").html(errorLabelTitle);
+                        //     } else if(key== 'section') {
+                        //         $(".section_error").html(errorLabelTitle);
+                        //     } else if(key== 'subject') {
+                        //         $(".subject_error").html(errorLabelTitle);
+                        //     } else{
+                        //         $(document).find('[name='+key+']').after(errorLabelTitle);
+                        //     }
+                        // });
+                    }
+                },
+                complete: function(res){
+                    $("#messageInputForm .submitBtn").attr('disabled', false);
+                }
+            });
+        }
+       
+    });
+
     function selectedStaffCheckboxes(){
         var selectedDataArray = [];
         var checkedCheckboxes = $(document).find(".staff-checkbox:checked");

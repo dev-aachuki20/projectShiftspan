@@ -43,9 +43,6 @@ class MessageController extends APIController
         try {
             DB::beginTransaction();
 
-            $input['notification_type'] = 'send_message';
-            $input['section'] = 'help_chat';
-
             $authUser = auth()->user();
 
             $group = Group::whereHas('users',function($query) use($authUser){
@@ -70,7 +67,10 @@ class MessageController extends APIController
             $messageInput['type']     = 'text';
             $messageCreated = Message::create($messageInput);
             //End to create message
-                
+
+            $input['group_uuid'] = $group->uuid;
+            $input['notification_type'] = 'send_message';
+            $input['section'] = 'help_chat';
             Notification::send($authUser->company, new SendNotification($input));
 
             DB::commit();
@@ -95,10 +95,12 @@ class MessageController extends APIController
             })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
            
             foreach($groups as $group){
-
+                
                 $group->total_unread_message =  $group->messages()->where('group_id',$group->id)->where('user_id','!=',auth()->user()->id)->whereDoesntHave('usersSeen', function ($query) {
                     $query->where('user_id', auth()->user()->id);
                 })->count();
+                $group->latestMessages = $group->messages()->orderBy('created_at','desc')->first();   
+               
             }
 
             $data['groups'] = $groups;
@@ -154,5 +156,58 @@ class MessageController extends APIController
            return $this->throwValidation([trans('messages.error_message')]);
        }
     }
+
+   public function sendMessage(Request $request,$groupId){
+        $input = $request->validate([
+            'message_content'=>['required']
+        ]); 
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+
+            $group = Group::whereHas('users',function($query) use($user){
+                $query->where('user_id',$user->id);
+            })->where('uuid',$groupId)->first();
+
+            //Start to create message
+            $messageInput['group_id'] = $group->id;
+            $messageInput['content']  = $input['message_content'];
+            $messageInput['type']     = 'text';
+            $messageCreated = Message::create($messageInput);
+            //End to create message
+              
+            $groupUsersExpectAuthUser = $group->users()->where('id','!=',$user->id)->get();
+            
+            if($groupUsersExpectAuthUser->count() > 0){
+                //Send notfication to staff
+                $notificationInput['group_uuid'] = $group->uuid;
+                $notificationInput['subject'] = $group->group_name;
+                $notificationInput['message'] = $input['message_content'];
+                $notificationInput['notification_type'] = 'send_message';
+                $notificationInput['section'] = 'help_chat';
+
+                Notification::send($groupUsersExpectAuthUser, new SendNotification($notificationInput));
+            }
+
+            DB::commit();
+                
+            $data['message'] = $messageCreated;
+
+            return $this->respondOk([
+                'status'        => true,
+                'message'       => trans('messages.crud.message_sent'),
+                'data'          => $data,
+            ])->setStatusCode(Response::HTTP_OK);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+                // dd($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+            \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+            return $this->throwValidation([trans('messages.error_message')]);
+        }
+   }
+
 
 }

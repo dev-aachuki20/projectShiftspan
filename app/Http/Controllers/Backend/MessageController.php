@@ -252,4 +252,56 @@ class MessageController extends Controller
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
+
+    public function sendMessage(Request $request,$groupId){
+       
+        $input = $request->validate([
+            'message_content'=>['required']
+        ]); 
+
+        try {
+            DB::beginTransaction();
+
+            $user = auth()->user();
+
+            $group = Group::whereHas('users',function($query) use($user){
+                $query->where('user_id',$user->id);
+            })->where('uuid',$groupId)->first();
+
+            //Start to create message
+            $messageInput['group_id'] = $group->id;
+            $messageInput['content']  = $input['message_content'];
+            $messageInput['type']     = 'text';
+            $messageCreated = Message::create($messageInput);
+            //End to create message
+              
+            $groupUsersExpectAuthUser = $group->users()->where('id','!=',$user->id)->get();
+            
+            if($groupUsersExpectAuthUser->count() > 0){
+                //Send notfication to staff
+                $notificationInput['group_uuid'] = $group->uuid;
+                $notificationInput['subject'] = $group->group_name;
+                $notificationInput['message'] = $input['message_content'];
+                $notificationInput['notification_type'] = 'send_message';
+                $notificationInput['section'] = 'help_chat';
+
+                Notification::send($groupUsersExpectAuthUser, new SendNotification($notificationInput));
+            }
+
+            DB::commit();
+            return response()->json([
+                'success'    => true,
+                'message'    => trans('messages.crud.message_sent'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
+            return response()->json([
+                'success' => false, 
+                'error_type' => 'something_error', 
+                'error' => trans('messages.error_message'),
+                'error_details'=>$e->getMessage().' '.$e->getFile().' '.$e->getLine(),
+            ], 400 );
+        }
+    }
 }
