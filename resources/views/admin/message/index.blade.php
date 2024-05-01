@@ -47,35 +47,34 @@
 
                             </div>
                         </div>
+                        <div class="sidebar-loader" style="display: none;">
+                            <img src="../images/loader-spinner2.gif" alt="Loader">
+                        </div>
                     </div>
                 </div>
                 <div class="col-xxl-9 col-md-8 chat-panel h-100 ">
                     <div class="card chatcard h-100 overflow-hidden animate__animated animate__fadeInUp">
-
                         {{-- Start Group Chat Box --}}
                         <div class="row h-100 flex-column flex-nowrap overflow-hidden groupChatScreen">
-
                             <div class="col-12">
-                                <div class="chat-header p-3 d-flex justify-content-between align-items-center">
+                                <div class="welcome-screen">
                                     <div class="userporfile">
                                         <div class="userimage">
                                             <img class="userpic" src="{{ auth()->user()->profile_image_url ? auth()->user()->profile_image_url : asset(config('constant.default.user_icon')) }}" alt="{{ auth()->user()->name }}">
                                         </div>
                                         <div class="useraccount text-truncate">
+                                            <h3>Welcome!</h3>
                                             <h4 class="m-0 text-truncate" id="chatHeader">{{ ucwords(auth()->user()->name) }}</h4>
-                                            <p class="text-truncate content m-0 activeuser"></p>
+                                            <!-- <p class="text-truncate content m-0 activeuser"></p> -->
                                         </div>
                                     </div>
                                 </div>
+                                <div class="screen-loader" style="display: none;">
+                                    <div class="s-loaderinner">
+                                        <img src="../images/loader-spinner.gif" alt="loader-image">
+                                    </div>
+                                </div>
                             </div>
-
-                            <div class="col-12 h-100 flex-fill overflow-y-auto text-center">
-                             
-                               <h2>Welcome</h2>
-
-                            </div>
-
-
                         </div>
                         {{-- End Group Chat Box --}}
 
@@ -337,7 +336,6 @@
 
                 if(response.success){
                     $('.groupChatScreen').html(response.htmlView);
-                    $('.totalUnreadMess').remove();
                 }
             },
             error: function (response) {
