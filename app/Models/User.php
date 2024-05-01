@@ -263,4 +263,10 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->hasMany(Message::class);
     }
+
+    public function seenMessage()
+    {
+        return $this->belongsToMany(Message::class, 'message_seen', 'user_id','message_id')
+        ->withPivot('group_id', 'read_at');
+    }
 }

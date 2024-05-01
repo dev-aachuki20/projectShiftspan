@@ -228,15 +228,19 @@ class MessageController extends Controller
 
                 $user = auth()->user();
 
-                $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
-                })->count();
+                // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                //     $query->where('user_id', auth()->user()->id);
+                // })->count();
 
-                // dd($unseenMessage);
+                $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                         $query->where('user_id', auth()->user()->id);
+                    })->pluck('id')->toArray();
 
-                // if($messageCreated){
-                //     $messageCreated->usersSeen()->attach($userIds, ['group_id' => $group->id]);
-                // }
+                $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
+
+                if (!$exists) {
+                    $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+                }
 
                 $viewHTML = view('admin.message.partials.chatbox', compact('group','allMessages'))->render();
                 

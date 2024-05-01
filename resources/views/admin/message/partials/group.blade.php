@@ -22,7 +22,7 @@
            
             <div class="msg-type"><p class="text-truncate content">{{ $latestMessage->content }}</p>
                 @if($totalUnreadMessage > 0)
-                <span class="chatmsg-number">{{ $totalUnreadMessage }}</span>
+                <span class="chatmsg-number totalUnreadMess">{{ $totalUnreadMessage }}</span>
                 @endif
             </div>
         </div>

@@ -337,6 +337,7 @@
 
                 if(response.success){
                     $('.groupChatScreen').html(response.htmlView);
+                    $('.totalUnreadMess').remove();
                 }
             },
             error: function (response) {

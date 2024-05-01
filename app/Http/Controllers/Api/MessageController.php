@@ -90,10 +90,18 @@ class MessageController extends APIController
 
     public function getGroupList(){
         try {
-            $data['groups'] = Group::whereHas('users',function($query){
+             $groups = Group::whereHas('users',function($query){
                 $query->where('user_id',auth()->user()->id);
             })->orderByDesc(DB::raw('(SELECT MAX(created_at) FROM messages WHERE group_id = groups.id)'))->get();
            
+            foreach($groups as $group){
+
+                $group->total_unread_message =  $group->messages()->where('group_id',$group->id)->where('user_id','!=',auth()->user()->id)->whereDoesntHave('usersSeen', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                })->count();
+            }
+
+            $data['groups'] = $groups;
             return $this->respondOk([
                 'status'        => true,
                 'message'       => trans('messages.record_retrieved_successfully'),
@@ -103,6 +111,48 @@ class MessageController extends APIController
             \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }
+    }
+
+    public function getAllMessages($groupId){
+        try {
+           
+            $group = Group::whereHas('users',function($query){
+                $query->where('user_id',auth()->user()->id);
+            })->where('uuid',$groupId)->first();
+           
+            $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+
+            $user = auth()->user();
+
+            // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+            //     $query->where('user_id', auth()->user()->id);
+            // })->count();
+
+            $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                     $query->where('user_id', auth()->user()->id);
+                })->pluck('id')->toArray();
+
+            $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
+
+            if (!$exists) {
+                $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+            }
+
+            $data['groups'] = $group;
+            $data['messages'] = $allMessages;
+
+           return $this->respondOk([
+               'status'        => true,
+               'message'       => trans('messages.record_retrieved_successfully'),
+               'data'          => $data,
+           ])->setStatusCode(Response::HTTP_OK);
+       } catch (\Exception $e) {
+
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+
+           \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
+           return $this->throwValidation([trans('messages.error_message')]);
+       }
     }
 
 }
