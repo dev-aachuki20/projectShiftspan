@@ -10,6 +10,7 @@ return [
         'help_pdf' => 'default/help_pdf.pdf',
         'user_icon' => 'default/user-icon.svg',
         'datatable_loader' => 'default/datatable_loader.gif',
+        'group_icon' => 'images/groupIcon.svg',
     ],
     'profile_max_size' => 2048,
     'profile_max_size_in_mb' => '2MB',

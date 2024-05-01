@@ -88,7 +88,7 @@ class MessageController extends Controller
                             $group = $groupCreated;
                             $userIds[] = $staff->id;
                             $userIds[] = $staff->company->id;
-                            $userIds[] = $staff->company->created_by;
+                            $userIds[] = auth()->user()->is_super_admin ? auth()->user()->id : $staff->company->created_by;
 
                             $groupCreated->users()->attach($userIds);
                         }

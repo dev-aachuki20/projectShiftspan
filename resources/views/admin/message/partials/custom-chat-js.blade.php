@@ -202,6 +202,15 @@
         
     });
 
+   
+    $(document).on('keypress','#messageInputForm #messageInput',function(event){
+        if (event.keyCode === 13 && !event.shiftKey) {
+            event.preventDefault(); 
+            $('#messageInputForm').submit();
+        }
+    });
+    
+   
     $(document).on('submit','#messageInputForm',function(e){
         e.preventDefault();
 
@@ -227,7 +236,9 @@
 
                         $('#messageContainer').append(response.viewMessageHtml);
 
-                        toasterAlert('success',response.message);
+                        scrollToBottom();
+
+                        // toasterAlert('success',response.message);
                     }
                 },
                 error: function (response) {
@@ -320,8 +331,11 @@
                 $('.screen-loader').hide();
 
                 if(response.success){
+                    
                     $('.totalUnreadMess').remove();
                     $('.groupChatScreen').html(response.htmlView);
+
+                    scrollToBottom();
                 }
             },
             error: function (response) {
@@ -337,5 +351,11 @@
                 $('.screen-loader').hide();
             }
         });
+    }
+
+
+    function scrollToBottom() {
+        var chatBox = document.getElementById("messageContainer");
+        chatBox.scrollTop = chatBox.scrollHeight;
     }
 </script>

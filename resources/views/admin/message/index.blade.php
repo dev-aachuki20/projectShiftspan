@@ -48,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-9 col-md-8 chat-panel h-100 ">
+                <div class="col-xxl-9 col-md-8 chat-panel h-100 overflow-hidden">
                     <div class="card chatcard h-100 overflow-hidden animate__animated animate__fadeInUp">
                         <div class="screen-loader" style="display: none;">
                             <div class="s-loaderinner">
@@ -77,5 +77,6 @@
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    @include('admin.message.partials.custom-chat-js')
+@include('admin.message.partials.custom-chat-js')
+
 @endsection

@@ -4,7 +4,7 @@
     <div class="chat-header p-3 d-flex justify-content-between align-items-center">
         <div class="userporfile">
             <div class="userimage">
-                <img class="userpic" src="{{asset(config('constant.default.user_icon')) }}" alt="">
+                <img class="userpic" src="{{asset(config('constant.default.group_icon')) }}" alt="">
             </div>
             <div class="useraccount text-truncate">
                 <h4 class="m-0 text-truncate" id="chatHeader">{{ ucwords($group->group_name) }}</h4>
@@ -17,8 +17,8 @@
         </div>
     </div>
 </div>
-<div class="col-12 h-100 flex-fill overflow-y-auto">
-    <div class="message-container px-3" id="messageContainer">
+<div class="col-12 h-100 flex-fill overflow-hidden">
+    <div class="message-container px-3 h-100 overflow-y-auto" id="messageContainer">
 
         @if($allMessages->count() > 0)
           @foreach($allMessages as $message)
@@ -55,7 +55,7 @@
                         </label>
                         <input type="file" id="fileInput" class="form-control-file d-none" accept=".jpg, .jpeg, .png" onchange="previewImage()">
                         <button class="btn btn-secondary rounded-circle shadow-none" onclick="toggleEmojiPicker()">😀</button> --}}
-                        <button class="add_btn dash-btn green-bg w-115 m-0 submitBtn" type="submit">
+                        <button class="add_btn dash-btn green-bg w-115 m-0 submitBtn" id="send-button" type="submit">
                            <x-svg-icons icon="messageSendButton"></x-svg-icons>                                                   
                         </button>
                     </div>

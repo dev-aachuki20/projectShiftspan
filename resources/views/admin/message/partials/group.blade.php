@@ -6,7 +6,7 @@
     {{-- <li class="list-group-item userporfile activeAccount active" onclick="selectUser('{{ $group->uuid }}')"> --}}
     <li class="list-group-item userporfile groupItem" data-listId="{{ $group->uuid }}" >
         <div class="userimage">
-            <img class="userpic" src="{{asset(config('constant.default.user_icon')) }}" alt="Group Image">
+            <img class="userpic" src="{{asset(config('constant.default.group_icon')) }}" alt="Group Image">
         </div>
         <div class="useraccount">
             @php
