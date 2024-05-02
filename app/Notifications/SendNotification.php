@@ -29,8 +29,24 @@ class SendNotification extends Notification implements ShouldQueue
      */
     public function via(object $notifiable): array
     {
-        if($notifiable->is_super_admin || $notifiable->is_sub_admin){
+        if($notifiable->is_super_admin){
+
             return ['mail', 'database'];
+
+        }else if($notifiable->is_sub_admin){
+
+            $email = $notifiable->notification_email;
+
+            if(!is_null($email) ){
+
+                return ['mail', 'database'];
+
+            }else{
+
+             return ['database'];
+
+            }  
+
         }else{
             return ['database'];
         }
@@ -50,7 +66,18 @@ class SendNotification extends Notification implements ShouldQueue
         $userName = $notifiable->name;
         $message = $this->data['message'];
 
-        return (new CustomNotificationMail($subject, $userName, $message))->to($notifiable->email);
+        if($notifiable->is_sub_admin){
+
+            $email = $notifiable->notification_email;
+
+            if(!is_null($email) ){
+                return (new CustomNotificationMail($subject, $userName, $message))->to($email);
+            }
+        }else{
+            return (new CustomNotificationMail($subject, $userName, $message))->to($notifiable->email);
+        }
+        
+       
     }
 
     /**

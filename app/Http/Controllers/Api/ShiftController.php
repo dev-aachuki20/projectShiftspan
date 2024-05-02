@@ -317,6 +317,7 @@ class ShiftController extends APIController
         }
         catch(\Exception $e){
             DB::rollBack();
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             \Log::info($e->getMessage().' '.$e->getFile().' '.$e->getCode());
             return $this->throwValidation([trans('messages.error_message')]);
         }

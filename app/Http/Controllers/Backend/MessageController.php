@@ -137,6 +137,7 @@ class MessageController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json([
                 'success' => false, 
