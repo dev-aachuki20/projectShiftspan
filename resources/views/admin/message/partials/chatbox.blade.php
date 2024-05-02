@@ -21,9 +21,34 @@
     <div class="message-container px-3 h-100 overflow-y-auto" id="messageContainer">
 
         @if($allMessages->count() > 0)
-          @foreach($allMessages as $message)
+         @php
+            $previousDate = null;
+         @endphp
 
-          @include('admin.message.partials.message-view')
+          @foreach($allMessages as $createdDate => $messages)
+
+            @if ($createdDate === now()->format('d-F-Y'))
+                @php
+                    $displayDate = 'Today';
+                @endphp
+            @else
+                @php
+                    $displayDate = $createdDate;
+                @endphp
+            @endif
+
+            @if ($displayDate !== $previousDate)
+                <div class="datemention"><span>{{ $displayDate  }}</span></div>
+                @php
+                    $previousDate = $displayDate;
+                @endphp
+            @endif
+
+            @foreach($messages as $message)
+
+                @include('admin.message.partials.message-view')
+
+            @endforeach
 
           @endforeach
         @endif

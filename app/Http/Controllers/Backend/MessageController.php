@@ -240,7 +240,10 @@ class MessageController extends Controller
                 })->where('uuid',$request->groupId)->first();
                
                 if($group){
-                    $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
+                    $allMessages = $group->messages()->orderBy('created_at','asc')->get()->groupBy(function($message) {
+                        return $message->created_at->format('d-F-Y');
+                    });   
+                    // $allMessages = $group->messages()->orderBy('created_at','asc')->get();   
 
                     $user = auth()->user();
 
