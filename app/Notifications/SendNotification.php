@@ -35,9 +35,11 @@ class SendNotification extends Notification implements ShouldQueue
 
         }else if($notifiable->is_sub_admin){
 
+       
             $email = $notifiable->notification_email;
 
             if(!is_null($email) ){
+                \Log::info('Start to send mail to client admin');
 
                 return ['mail', 'database'];
 
@@ -71,6 +73,7 @@ class SendNotification extends Notification implements ShouldQueue
             $email = $notifiable->notification_email;
 
             if(!is_null($email) ){
+                \Log::info('Come toMail Function');
                 return (new CustomNotificationMail($subject, $userName, $message))->to($email);
             }
         }else{

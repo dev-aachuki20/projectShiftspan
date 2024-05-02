@@ -178,6 +178,8 @@ if (!function_exists('sendNotification')) {
 				$bodydata = [
 					"title"=> $subject,
 					"body" => $message,
+					"group_uuid" => $data['group_uuid'] ?? null,
+					"notification_id" => $data['notification_id'] ?? null,
 					"data" => $data,
 					"type" => $section,
 				];

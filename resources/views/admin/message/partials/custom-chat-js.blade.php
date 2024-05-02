@@ -198,7 +198,7 @@
 
         var groupId = $this.attr('data-listId');
 
-        getChatBox(groupId);
+        getChatBox(groupId,$this);
         
     });
 
@@ -318,7 +318,7 @@
         });
     }
 
-    async function getChatBox(groupId=null){
+    async function getChatBox(groupId=null,element=null){
         $('.groupChatScreen').html('');
         $('.screen-loader').show();
 
@@ -332,7 +332,10 @@
 
                 if(response.success){
                     
-                    $('.totalUnreadMess').remove();
+                    if(element){
+                        element.find('.totalUnreadMess').remove();
+                    }
+                
                     $('.groupChatScreen').html(response.htmlView);
 
                     scrollToBottom();

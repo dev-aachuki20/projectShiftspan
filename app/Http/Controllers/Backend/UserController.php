@@ -34,7 +34,7 @@ class UserController extends Controller
     public function updateprofile(Request $request){
 
         $user = auth()->user();
-        $request->validate([
+        $updateRecords = [
             'name'  => ['required', 'regex:/^[a-zA-Z\s]+$/', 'string', 'max:255', new NoMultipleSpacesRule],
             'profile_image'  =>['nullable', 'image', 'max:'.config('constant.profile_max_size'), 'mimes:jpeg,png,jpg'],
             'notification_email' => ['nullable','email'],
@@ -45,7 +45,13 @@ class UserController extends Controller
                 'not_in:-',
                 'unique:users,phone,'. $user->id.',id,deleted_at,NULL',
             ],
-        ],[
+        ];
+
+        if( $user->is_super_admin ){
+            $updateRecords['email'] = ['required','email','regex:/^(?!.*[\/]).+@(?!.*[\/]).+\.(?!.*[\/]).+$/i','unique:users,email,NULL,id,deleted_at,NULL'];
+        }
+
+        $request->validate($updateRecords,[
             'phone.required'=>'The phone number field is required',
             'phone.regex' =>'The phone number length must be 7 to 15 digits.',
             'phone.unique' =>'The phone number already exists.',
@@ -53,6 +59,7 @@ class UserController extends Controller
             'profile_image.mimes' =>'Please upload image with extentions: jpeg,png,jpg.',
             'profile_image.max' =>'The image size must equal or less than '.config('constant.profile_max_size_in_mb'),
         ]);
+        
         if($request->ajax()){
             DB::beginTransaction();
             try {

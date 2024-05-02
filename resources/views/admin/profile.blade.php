@@ -20,7 +20,15 @@
 
             <div class="form-label">
                 <label>@lang('cruds.user.fields.email'):</label>
-                <input type="email" disabled value="{{$user->email}}"/>
+                @if($user->is_sub_admin)
+
+                    <input type="email" disabled value="{{$user->email}}"/>
+
+                @elseif($user->is_super_admin)
+
+                    <input type="email" name="email" value="{{$user->email}}"/>
+
+                @endif
             </div>
 
             @if($user->is_sub_admin)
@@ -85,7 +93,7 @@
                 }
             },
             error: function (response) {
-                console.log(response);
+                // console.log(response);
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
                 } else {

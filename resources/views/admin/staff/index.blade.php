@@ -499,7 +499,7 @@
             data: formData,
             success: function (response) {                
                 if(response.success) {
-                    console.log(response.message);
+                    // console.log(response.message);
                     $('#addNotificationForm')[0].reset();
                     $('#NnotificationSettings').modal('hide');
                     
@@ -512,6 +512,7 @@
                 }
             },
             error: function (response) {
+                $(".submitBtn").attr('disabled', false);
                 if(response.responseJSON.error_type == 'something_error'){
                     toasterAlert('error',response.responseJSON.error);
                 } else {                    
@@ -540,18 +541,20 @@
 
     function selectedStaffCheckboxes(){
         var selectedDataArray = [];
-        var checkedCheckboxes = $(".staff-checkbox:checked");
+        var checkedCheckboxes = $(document).find(".staff-checkbox:checked");
         checkedCheckboxes.each(function(){
-            var dataValue = $(this).attr("data-company"); 
+            var dataValue = $(this).attr("data-company");
             if (!selectedDataArray.includes(dataValue)) {
-                selectedDataArray.push(dataValue); 
+                selectedDataArray.push(dataValue);
             }
         });
-    
+       
         if(selectedDataArray.length > 0){
-            $("#companyUUId").val(selectedDataArray.join(','));
-        }else{
-            $("#companyUUId").val('');
+            var hiddenInputs = ''; 
+            selectedDataArray.forEach(function(id) {
+                hiddenInputs += '<input type="hidden" name="companies[]" value="' + id + '" id="companyUUId_' + id + '">';
+            });
+            $('#addNotificationForm .hiddenInputs').html(hiddenInputs);
         }
     }
 </script>

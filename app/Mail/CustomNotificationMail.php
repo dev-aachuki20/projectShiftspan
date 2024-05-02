@@ -33,6 +33,7 @@ class CustomNotificationMail extends Mailable implements ShouldQueue
      */
     public function build()
     {
+        \Log::info('Mail Send');
         return $this->markdown('emails.custom-notification-mail', [
                 'userName'  => $this->userName,
                 'message' => $this->message

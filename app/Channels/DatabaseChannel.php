@@ -11,6 +11,8 @@ class DatabaseChannel
     {
         $data = $notification->data;
         
+        $data['notification_id'] = $notification->id;
+
         /* Send the immidate notification */
         $user_id = $notifiable->id;
         $user = auth()->user();

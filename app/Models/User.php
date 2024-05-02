@@ -273,4 +273,9 @@ class User extends Authenticatable implements MustVerifyEmail
     public function createdBy(){
         return $this->belongsTo(User::class,'created_by','id');
     }
+
+    public function groups()
+    {
+        return $this->belongsToMany(Group::class, 'users_groups', 'user_id','group_id');
+    }
 }

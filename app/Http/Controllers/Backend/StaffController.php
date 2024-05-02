@@ -7,6 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Staff\NotificationRequest;
 use App\Http\Requests\Staff\StaffRequest;
 use App\Models\User;
+use App\Models\Group;
+use App\Models\Message;
 use App\Models\Profile;
 use App\Notifications\SendNotification;
 use Illuminate\Http\Request;
@@ -283,6 +285,11 @@ class StaffController extends Controller
             $user = User::where('uuid', $id)->first();
             DB::beginTransaction();
             try {
+
+                $groupIds = $user->groups()->pluck('id')->toArray();
+                Message::whereIn('group_id', $groupIds)->delete();
+                Group::whereIn('id', $groupIds)->delete();
+
                 $user->delete();
                 DB::commit();
                 
@@ -291,7 +298,8 @@ class StaffController extends Controller
                     'message'    => trans('messages.crud.delete_record'),
                 ]);
             } catch (\Exception $e) {
-                DB::rollBack();                
+                DB::rollBack();      
+                // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine());          
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
@@ -305,6 +313,14 @@ class StaffController extends Controller
             DB::beginTransaction();
             try {
                 $ids = $request->input('ids');
+
+                $getAllUsers = User::whereIn('uuid', $ids)->get();
+                foreach($getAllUsers as $user){
+                    $groupIds = $user->groups()->pluck('id')->toArray();
+                    Message::whereIn('group_id', $groupIds)->delete();
+                    Group::whereIn('id', $groupIds)->delete();
+                }
+
                 $users = User::whereIn('uuid', $ids)->delete();
                 DB::commit();
                 
@@ -416,6 +432,44 @@ class StaffController extends Controller
             DB::beginTransaction();
 
             $users = User::whereIn('uuid', $input['staffs'])->get();
+
+            if($input['section'] == 'help_chat'){
+
+                foreach($users as $staff){
+                    $userIds= [];
+                    $group = Group::whereHas('users',function($query) use($staff){
+                        $query->where('user_id',$staff->id);
+                    })->where('group_name',$input['subject'])->first();
+
+                    if(!$group){
+                        $groupDetail['group_name'] = $input['subject'];
+                        $groupCreated = Group::create($groupDetail);
+                        if($groupCreated){
+                            $group = $groupCreated;
+                            $userIds[] = $staff->id;
+                            $userIds[] = $staff->company->id;
+                            $userIds[] = auth()->user()->is_super_admin ? auth()->user()->id : $staff->company->created_by;
+
+                            $groupCreated->users()->attach($userIds);
+                        }
+                    }
+
+                    //Start to create message
+                    $messageInput['group_id'] = $group->id;
+                    $messageInput['content']  = $input['message'];
+                    $messageInput['type']     = 'text';
+                    $messageCreated = Message::create($messageInput);
+                    //End to create message
+
+                    if(auth()->user()->company){
+                        //Send notification to super admin
+                        Notification::send($staff->company->createdBy, new SendNotification($input));
+                    }
+                   
+                }
+                
+            }
+
             Notification::send($users, new SendNotification($input));
 
             if($input['section'] != 'help_chat'){
@@ -443,6 +497,7 @@ class StaffController extends Controller
             ]);
         } catch (\Exception $e) {
             DB::rollBack();
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             \Log::error($e->getMessage().' '.$e->getFile().' '.$e->getLine());
             return response()->json([
                 'success' => false, 

@@ -11,6 +11,8 @@ use App\DataTables\SubAdminDataTable;
 use App\Http\Requests\SubAdmin\StoreRequest;
 use App\Http\Requests\SubAdmin\UpdateRequest;
 use App\Models\User;
+use App\Models\Group;
+use App\Models\Message;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
@@ -212,6 +214,11 @@ class SubAdminController extends Controller
         if($subAdmin->staffs){
             $subAdmin->staffs()->delete();
         }
+
+        $groupIds = $subAdmin->groups()->pluck('id')->toArray();
+        Message::whereIn('group_id', $groupIds)->delete();
+        Group::whereIn('id', $groupIds)->delete();
+
         $subAdmin->delete();
     }
 

@@ -128,27 +128,31 @@ class MessageController extends APIController
                 $query->where('user_id',auth()->user()->id);
             })->where('uuid',$groupId)->first();
            
-            $allMessages = $group->messages()->with('user')->orderBy('created_at','asc')->get();   
+            $data = [];
+            if($group->messages){
+                $allMessages = $group->messages()->with('user')->orderBy('created_at','asc')->get();   
 
-            $user = auth()->user();
-
-            // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
-            //     $query->where('user_id', auth()->user()->id);
-            // })->count();
-
-            $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
-                     $query->where('user_id', auth()->user()->id);
-                })->pluck('id')->toArray();
-
-            $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
-
-            if (!$exists) {
-                $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+                $user = auth()->user();
+    
+                // $unseenMessage = $user->messages()->where('group_id',$group->id)->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                //     $query->where('user_id', auth()->user()->id);
+                // })->count();
+    
+                $messageIds = $group->messages()->where('user_id','!=',$user->id)->whereDoesntHave('usersSeen', function ($query) {
+                         $query->where('user_id', auth()->user()->id);
+                    })->pluck('id')->toArray();
+    
+                $exists = $user->seenMessage()->wherePivotIn('message_id', $messageIds)->exists();
+    
+                if (!$exists) {
+                    $user->seenMessage()->attach($messageIds, ['group_id' => $group->id,'read_at'=>now()]);
+                }
+    
+                $data['groups'] = $group;
+                $data['messages'] = $allMessages;
+    
             }
-
-            $data['groups'] = $group;
-            $data['messages'] = $allMessages;
-
+            
            return $this->respondOk([
                'status'        => true,
                'message'       => trans('messages.record_retrieved_successfully'),
