@@ -90,6 +90,7 @@ return [
 
     'subject_notification_type' => [
         /* shifts */
+        'shift_available'                   => 'Shift Available',
         'shift_assign'                      => 'Shift Assign',
         'shift_pickings'                    => 'Shift Pickings',
         'shift_amendments'                  => 'Shift Amendments',
@@ -120,6 +121,7 @@ return [
 
     'notification_routes' => [
         'shifts' => [
+            'shift_available',
             'shift_assign',
             'shift_pickings',
             'shift_amendments',

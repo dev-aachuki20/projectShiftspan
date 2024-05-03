@@ -70,6 +70,9 @@ return [
     'staff_account_deactivate'      => 'Your account has been deactivated.',
 
     'shift' =>[
+        'shift_available_subject'               => 'New Shift Available',
+        'shift_available_message'               => 'New shift are available from :start_date to :end_date and :start_time to :end_time, Please pick it',   
+
         'shift_created_and_assign_subject'      => 'Shift Assign',
         'shift_created_and_assign_message'      => 'Hello :username, We are pleased to inform you that the shift has been successfully created and assigned for the following duration from :start_date to :end_date and :start_time to :end_time.',
 

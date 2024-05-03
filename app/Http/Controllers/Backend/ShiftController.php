@@ -108,6 +108,25 @@ class ShiftController extends Controller
                     ];
                     
                     Notification::send($user, new SendNotification($messageData));
+
+                }else if(isset($input['sub_admin_id'])){
+                    
+                    $companyAdmin = User::where('id', $input['sub_admin_id'])->first();
+
+                    $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.shift.shift_available_subject'),
+                        'message'           => trans('messages.shift.shift_available_message', [
+                            'start_date'    => $request['start_date'], 
+                            'end_date'      => $request['end_date'], 
+                            'start_time'    => $request['start_time'], 
+                            'end_time'      => $request['end_time']
+                        ]),       
+                    ];
+                    
+                    Notification::send($companyAdmin->staffs, new SendNotification($messageData));  
                 }
                 
 
