@@ -115,14 +115,14 @@ class ShiftDataTable extends DataTable
                 $staffUuids = $record->staffs()->pluck('uuid')->toArray();
 
                 $anchorTags = array_map(function ($staffName, $staffUuid) use ($record) {
-                    return '<a class="viewStaffBtn" href="' . route('staffs.show', $staffUuid) . '" data-type="shift" data-href="' . route('staffs.show', $staffUuid) . '">' . $staffName . '</a>';
+                    return '<a class="viewStaffBtn" href="' . route('staffs.show', $staffUuid) . '" data-type="shift" data-href="' . route('staffs.show', $staffUuid) . '"><span class="blue-highlight">' . $staffName . '</span></a>';
                 }, $selectedStaffs, $staffUuids);
 
                 return implode(', ', $anchorTags);
             })
 
             ->editColumn('shift_label', function($record){
-                return $record->shift_label ? $record->shift_label  : '';
+                return $record->shift_label ? '<span class="blue-highlight">'.$record->shift_label.'</span>'  : '';
             })
 
             ->editColumn('start_date', function($record){
@@ -142,7 +142,7 @@ class ShiftDataTable extends DataTable
             })
 
             ->editColumn('picked_at', function($record){
-                return $record->picked_at ? dateFormat($record->picked_at, config('constant.date_format.date_time')) : '';
+                return $record->picked_at ? '<span class="blue-highlight">'.dateFormat($record->picked_at, config('constant.date_format.date_time')).'</span>' : '';
             })
 
             ->editColumn('cancel_at', function($record){
@@ -233,7 +233,9 @@ class ShiftDataTable extends DataTable
                 'rating', 
                 auth()->user()->is_super_admin ? 'client.name' : '', 
                 auth()->user()->is_sub_admin ? 'clientDetail.name' : '',
-                'staffs.name'
+                'staffs.name',
+                'shift_label',
+                'picked_at'
             ]);
     }
 
