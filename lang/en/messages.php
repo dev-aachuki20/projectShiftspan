@@ -111,7 +111,7 @@ return [
     'registration_completion_message'           => 'Hi :username, Congratulations! Your registration is now complete and your account has been approved by :listed_business. Thank you for your patience. Please login.',
     
     'registration_completion_admin_subject'     => 'New Staff Registration',
-    'registration_completion_admin_message'     => ':username has completed registration. Please review and approve their account',
+    'registration_completion_admin_message'     => ':username has completed registration. Please review and activate their account',
 
     'user_account_deactivate_subject'          => 'Your Account has been Deactivated',
     'user_account_deactivate_message'          => 'Hi :username, your account has been deactivated by :admin. If you believe this is a mistake, please contact support.',

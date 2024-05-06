@@ -481,10 +481,9 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_canceled_subject'),
                 'message'           => trans('messages.shift.shift_canceled_admin_message', [
                     'username'      => $user->name,
-                    'status'        => 'canceled',
-                    'start_date'    => Carbon::parse($shift->start_date)->format('d-m-Y'),
-                    'start_time'    => Carbon::parse($shift->start_time)->format('H:i'),
-                    'cancel_at'     => date('d-m-Y H:i'),
+                    'shift_label'   => $shift->shift_label,
+                    'listed_business' => $shift->clientDetail->name,
+                    'cancelled_date'    => Carbon::parse($shift->cancel_at)->format('l d-m-Y'),
                 ]),
             ];
             
