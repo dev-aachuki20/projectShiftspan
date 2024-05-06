@@ -77,7 +77,7 @@ return [
         'shift_created_and_assign_message'      => 'Hello :username, We are pleased to inform you that the shift has been successfully created and assigned for the following duration from :start_date to :end_date and :start_time to :end_time.',
 
         'shift_picked_subject'                  => 'Shift Picked',
-        'shift_picked_admin_message'            => 'User :username has :status the shift :picked_at.',
+        'shift_picked_admin_message'            => ':username has :status the shift at :listed_business :picked_at.',
 
         'shift_picked_update_subject'           => 'Shift Picked Update Notification',
         'shift_picked_update_message'           => 'Hi :username, your shift has been picked up by another staff member. Thank you for your service.',
@@ -88,27 +88,29 @@ return [
         'shift_completed_subject'               => 'Shift Completed',
         'shift_completed_admin_message'         => 'User :username has :status the shift :completed_at.',
 
-        'shift_clock_in_subject'                => 'Clock In',
-        'shift_clock_in_admin_message'          => ':username has clocked in for the shift at :clockin_date :clockin_time.',
+        'shift_clock_in_subject'                => 'Shift Clock In',
+        'shift_clock_in_admin_message'          => ':username has clocked in for the shift at :listed_business :clockin_date :clockin_time',
         
-        'shift_clock_out_subject'               => 'Clock Out',
-        'shift_clock_out_admin_message'         => ':username has clocked out from the shift at :clockout_date :clockout_time.',
+        'shift_clock_out_subject'               => 'Shift Clock Out',
+        'shift_clock_out_admin_message'         => ':username has clocked out from the shift at :listed_business :clockout_date :clockout_time.',
 
-        'shift_authorised_sign_subject'         => 'Shift Authorised Sign',
-        'shift_authorised_sign_admin_message'   => ':username has been authorised by :manager_name for the shift at :authorize_at :authorize_time.',
+        'shift_authorised_sign_subject'         => 'Shift Sign Off ',
+        'shift_authorised_sign_admin_message'   => ':username’s shift :shift_label shift on :authorize_at at :listed_business has been signed off by manager :manager_name',
 
         'shift_rating_subject'                  => 'Shift Rating Notification',
-        'shift_rating_message'                  => 'Hi :username, your shift has been rated :rating star by the :admin. Thank you for your service.',
+        'shift_rating_message'                  => 'Hi :username, you have been rated :rating stars by :listed_business. Thank you for your service. 
+'        ,
 
-        'shift_canceled_subject'               => 'Canceled Shift',
-        'shift_canceled_admin_message'         => 'User :username has :status their shift scheduled for :start_date at :start_time. The cancellation was made at :cancel_at',
+        'shift_canceled_subject'               => 'Cancelled Shift',
+        'shift_canceled_admin_message'         => ':username, your :shift_label shift at :listed_business on :cancelled_date has been cancelled. Please check your schedule for more info',
+        'shift_canceled_staff_message'         => ':username, your :shift_label shift at :listed_business on :cancelled_date has been cancelled. Please check your schedule for more info',
     ],
 
-    'registration_completion_subject'           => 'Completed successfully. Thank you for registering your account.',
-    'registration_completion_message'           => 'Hi :username, Congratulations! Your account has been approved by the :admin. Welcome to our service. Thank you!',
+    'registration_completion_subject'           => 'Registration Complete',
+    'registration_completion_message'           => 'Hi :username, Congratulations! Your registration is now complete and your account has been approved by :listed_business. Thank you for your patience. Please login.',
     
-    'registration_completion_admin_subject'     => 'New User Registration',
-    'registration_completion_admin_message'     => 'A new user :username has completed registration. Please review and approve their account.',
+    'registration_completion_admin_subject'     => 'New Staff Registration',
+    'registration_completion_admin_message'     => ':username has completed registration. Please review and approve their account',
 
     'user_account_deactivate_subject'          => 'Your Account has been Deactivated',
     'user_account_deactivate_message'          => 'Hi :username, your account has been deactivated by :admin. If you believe this is a mistake, please contact support.',

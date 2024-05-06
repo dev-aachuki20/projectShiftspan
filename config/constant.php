@@ -169,6 +169,10 @@ return [
             'super_admin' => true,
             'sub_admin'  => true,
         ],
+        'registration_completion_deactive' => [
+            'super_admin' => true,
+            'sub_admin'  => true,
+        ],
     ],
 
     

@@ -299,12 +299,13 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_picked_subject'),
                 'message'           => trans('messages.shift.shift_picked_admin_message', [
                     'username'      => $user->name,
-                    'picked_at'     => date('Y-m-d'),
+                    'picked_at'     => date('d-m-Y'),
                     'status'        => 'picked',
+                    'listed_business' => $shift->clientDetail->name,
                 ]),
             ];
             
-            Notification::send($user, new SendNotification($messageData));
+            // Notification::send($user, new SendNotification($messageData));
 
             $this->sendNotificationToParent($user->company,$messageData,'pick_shift');
            
@@ -352,12 +353,13 @@ class ShiftController extends APIController
                 'subject'           => trans('messages.shift.shift_clock_in_subject'),
                 'message'           => trans('messages.shift.shift_clock_in_admin_message', [
                     'username'      => $user->name,
-                    'clockin_date'  => date('Y-m-d'),
-                    'clockin_time'  => $shift->start_time.' to '.$shift->end_time,
+                    'clockin_date'  => date('d-m-Y'),
+                    'clockin_time'  => Carbon::parse($shift->start_time)->format('H:i').' to '.Carbon::parse($shift->end_time)->format('H:i'),
+                    'listed_business' => $shift->clientDetail->name,
                 ]),
             ];
             
-            Notification::send($user, new SendNotification($messageData));
+            // Notification::send($user, new SendNotification($messageData));
 
             $this->sendNotificationToParent($user->company,$messageData,'clock_in_shift');
 
@@ -422,12 +424,13 @@ class ShiftController extends APIController
                     'subject'           => trans('messages.shift.shift_clock_out_subject'),
                     'message'           => trans('messages.shift.shift_clock_out_admin_message', [
                         'username'      => $user->name,
-                        'clockout_date' => date('Y-m-d'),
-                        'clockout_time' => $shift->start_time.' to '.$shift->end_time,
+                        'clockout_date' => date('d-m-Y'),
+                        'clockout_time' => Carbon::parse($shift->start_time)->format('H:i').' to '.Carbon::parse($shift->end_time)->format('H:i'),
+                        'listed_business' => $shift->clientDetail->name,
                     ]),
                 ];
                 
-                Notification::send($user, new SendNotification($messageData));
+                // Notification::send($user, new SendNotification($messageData));
 
                 $this->sendNotificationToParent($user->company,$messageData,'clock_out_shift');
 
@@ -534,12 +537,13 @@ class ShiftController extends APIController
                 'message'           => trans('messages.shift.shift_authorised_sign_admin_message', [
                     'username'      => $user->name,
                     'manager_name'  => $request->full_name,
-                    'authorize_at'  => date('Y-m-d'),
-                    'authorize_time'=> $shift->start_time.' to '.$shift->end_time,
+                    'authorize_at'  => date('d-m-Y'),
+                    'shift_label'   => $shift->shift_label,
+                    'listed_business' => $shift->clientDetail->name,
                 ]),
             ];
             
-            Notification::send($user, new SendNotification($messageData));
+            // Notification::send($user, new SendNotification($messageData));
 
             $this->sendNotificationToParent($user->company,$messageData,'authorized_sign');
 

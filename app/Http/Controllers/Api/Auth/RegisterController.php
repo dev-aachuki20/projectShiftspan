@@ -88,7 +88,9 @@ class RegisterController extends APIController
                 ]),
             ];
             
-            Notification::send($user, new SendNotification($messageData));
+            // Notification::send($user, new SendNotification($messageData));
+
+            $this->sendNotificationToParent($user->company,$messageData,'registration_completion_deactive');
 
             return $this->respondOk([
                 'status'   => true,
@@ -101,6 +103,26 @@ class RegisterController extends APIController
             // return $this->throwValidation([$e->getMessage()]);
             return $this->throwValidation([trans('messages.error_message')]);
         }
+    }
+
+    public function sendNotificationToParent($company,$messageData,$action){
+
+
+        //Send notification to company with mail
+        if($company  && config('constant.send_notification_to_parent.'.$action.'.sub_admin')){
+            Notification::send($company, new SendNotification($messageData));
+        }
+
+        //Send notification to super admin with mail
+        $superAdmin = User::whereHas('roles',function($query){
+            $query->where('id',config('constant.roles.super_admin'));
+        })->first();
+
+        if($superAdmin && config('constant.send_notification_to_parent.'.$action.'.super_admin')){
+            Notification::send($superAdmin, new SendNotification($messageData));
+        }
+
+        return true;
     }
 
 

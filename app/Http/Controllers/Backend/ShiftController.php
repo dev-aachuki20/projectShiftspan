@@ -448,15 +448,13 @@ class ShiftController extends Controller
                         'notification_type' => array_search(config('constant.subject_notification_type.shift_cancels'), config('constant.subject_notification_type')),
                         'section'           => $key,
                         'subject'           => trans('messages.shift.shift_canceled_subject'),
-                        'message'           => trans('messages.shift.shift_canceled_admin_message', [
+                        'message'           => trans('messages.shift.shift_canceled_staff_message', [
                             'username'      => $user->name,
-                            'status'        => 'canceled',
-                            'start_date'    => Carbon::parse($shift->start_date)->format('d-m-Y'),
-                            'start_time'    => Carbon::parse($shift->start_time)->format('H:i'),
-                            'cancel_at'     => date('d-m-Y H:i'),
+                            'shift_label'   => $shift->shift_label,
+                            'listed_business' => $shift->clientDetail->name,
+                            'cancelled_date'    => Carbon::parse($shift->cancel_at)->format('l d-m-Y'),
                         ]),
                     ];
-                    
                     Notification::send($user, new SendNotification($messageData));
                 }
               
@@ -495,7 +493,7 @@ class ShiftController extends Controller
                     'message'           => trans('messages.shift.shift_rating_message', [
                         'username'      => $shift->staffs->first()->name,
                         'rating'        => $request->rating,
-                        'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                        'listed_business' => $shift->clientDetail->name,
                     ]),
                 ];
                 

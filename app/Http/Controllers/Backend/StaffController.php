@@ -363,7 +363,7 @@ class StaffController extends Controller
                         'subject'           => trans('messages.registration_completion_subject'),
                         'message'           => trans('messages.registration_completion_message', [
                             'username'      => $user->name,
-                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                            'listed_business' => $user->company->name,
                         ]),
                     ];
                 }else{
