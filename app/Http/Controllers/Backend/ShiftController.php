@@ -88,8 +88,8 @@ class ShiftController extends Controller
                         }
                     }
                 }
-                DB::commit();
-
+                
+                $clientDetail = ClientDetail::where('id', $input['client_detail_id'])->first();
                 if(isset($request->assign_staff)){
                     $user = User::where('uuid', $request->assign_staff)->first();
                 
@@ -118,9 +118,10 @@ class ShiftController extends Controller
                         'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
                         'section'           => $key,
                         'subject'           => trans('messages.shift.shift_available_subject'),
-                        'message'           => trans('messages.shift.shift_available_message', [
+                        'message'           => trans('messages.shift.shift_available_staff_message', [
+                            'shift_label'   => $request['shift_label'],
                             'start_date'    => $request['start_date'], 
-                            'end_date'      => $request['end_date'], 
+                            'listed_business' => $clientDetail->name, 
                             'start_time'    => $request['start_time'], 
                             'end_time'      => $request['end_time']
                         ]),       
@@ -128,16 +129,40 @@ class ShiftController extends Controller
                     
                     Notification::send($companyAdmin->staffs, new SendNotification($messageData));  
                 }
-                
 
+                $shiftCreatorRole = $shift->shiftCreator->roles()->first()->id;
+                if(config('constant.roles.super_admin') == $shiftCreatorRole){
+                    $adminData = $shift->client;
+                } else if(config('constant.roles.sub_admin') == $shiftCreatorRole) {
+                    $adminData = User::whereHas('roles', function($q){
+                        $q->where('id', config('constant.roles.super_admin'));
+                    })->first();
+                }
+
+                // send notification to admin
+                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                $adminMessageData = [
+                    'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
+                    'section'           => $key,
+                    'subject'           => trans('messages.shift.shift_available_subject'),
+                    'message'           => trans('messages.shift.shift_available_admin_message', [
+                        'shift_label'   => $request['shift_label'],
+                        'start_date'    => $request['start_date'], 
+                        'listed_business' => $clientDetail->name, 
+                        'start_time'    => $request['start_time'], 
+                        'end_time'      => $request['end_time']
+                    ]),       
+                ];
+                Notification::send($adminData, new SendNotification($adminMessageData));  
+                
+                DB::commit();
                 $response = [
                     'success' => true,
                     'message' => trans('cruds.shift.title_singular').' '.trans('messages.crud.add_record'),
                 ];
                 return response()->json($response);
             } catch (\Exception $e) {
-                // dd($e);
-                DB::rollBack();                
+                DB::rollBack();
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

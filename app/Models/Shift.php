@@ -94,5 +94,7 @@ class Shift extends Model
         return $this->hasOne(AuthorizedShift::class);
     }
 
-
+    public function shiftCreator(){
+        return $this->belongsTo(User::class, 'created_by', 'id');
+    }
 }

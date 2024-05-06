@@ -71,7 +71,8 @@ return [
 
     'shift' =>[
         'shift_available_subject'               => 'New Shift Available',
-        'shift_available_message'               => 'New shift are available from :start_date to :end_date and :start_time to :end_time, Please pick it',   
+        'shift_available_admin_message'         => ':shift_label shift available at :listed_business (:start_date Time: :start_time to :end_time).',
+        'shift_available_staff_message'         => ':shift_label shift available at :listed_business (:start_date Time: :start_time to :end_time). Please pick it',
 
         'shift_created_and_assign_subject'      => 'Shift Assign',
         'shift_created_and_assign_message'      => 'Hello :username, We are pleased to inform you that the shift has been successfully created and assigned for the following duration from :start_date to :end_date and :start_time to :end_time.',
