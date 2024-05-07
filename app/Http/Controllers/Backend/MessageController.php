@@ -93,6 +93,8 @@ class MessageController extends Controller
                             $groupCreated->users()->attach($userIds);
                         }
                     }
+                    
+                    $input['group_uuid'] = $group->uuid;
 
                     //Start to create message
                     $messageInput['group_id'] = $group->id;
@@ -105,12 +107,20 @@ class MessageController extends Controller
                         //Send notification to super admin
                         Notification::send($staff->company->createdBy, new SendNotification($input));
                     }
+                    
+                     Notification::send($staff, new SendNotification($input));
                    
                 }
                 
+            }else{
+                
+                Notification::send($users, new SendNotification($input));
+            
+                
             }
 
-            Notification::send($users, new SendNotification($input));
+          
+           
 
             if($input['section'] != 'help_chat'){
 

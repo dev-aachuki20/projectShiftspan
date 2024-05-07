@@ -46,6 +46,8 @@ class LoginController extends APIController
                 
                 $user->device_token = $request->device_token;
                 
+                $user->current_session_id = $request->header('X-Device-Id');
+                
                 $user->save();
 
                 $accessToken = $user->createToken(config('auth.api_token_name'))->plainTextToken;

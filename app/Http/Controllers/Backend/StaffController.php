@@ -454,6 +454,8 @@ class StaffController extends Controller
                         }
                     }
 
+                    $input['group_uuid'] = $group->uuid;
+                    
                     //Start to create message
                     $messageInput['group_id'] = $group->id;
                     $messageInput['content']  = $input['message'];
@@ -465,12 +467,19 @@ class StaffController extends Controller
                         //Send notification to super admin
                         Notification::send($staff->company->createdBy, new SendNotification($input));
                     }
+                    
+                     Notification::send($staff, new SendNotification($input));
                    
                 }
                 
+            }else{
+                
+                Notification::send($users, new SendNotification($input));
+            
+                
             }
 
-            Notification::send($users, new SendNotification($input));
+           
 
             if($input['section'] != 'help_chat'){
 

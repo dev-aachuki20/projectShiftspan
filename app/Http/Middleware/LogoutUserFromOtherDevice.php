@@ -20,9 +20,9 @@ class LogoutUserFromOtherDevice
         if ($this->isApiRequest($request)) {
             $deviceID = $request->header('X-Device-Id');
 
-            if ($user && $user->device_token !== $deviceID) {
+            if ($user && $user->current_session_id !== $deviceID) {
                 $tokenId = $request->user()->currentAccessToken()->id;
-                $user->tokens()->where('id', '!=',$tokenId)->delete();
+                $user->tokens()->where('id', $tokenId)->delete();
 
                 return response()->json(['message' => 'Unauthorized'], 401);
             }
