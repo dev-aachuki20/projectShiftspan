@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Setting;
 use App\Models\Occupation;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends APIController
@@ -18,6 +19,10 @@ class HomeController extends APIController
      */
     public function logout(Request $request)
     {
+        $user = Auth::user();
+        $user->current_session_id = null;
+        $user->save();
+        
         // Revoke all tokens...
         $request->user()->tokens()->delete();
         // Revoke the token that was used to authenticate the current request...

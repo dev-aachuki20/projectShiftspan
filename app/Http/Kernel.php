@@ -72,6 +72,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'checkUserStatus' => \App\Http\Middleware\CheckUserStatus::class,
         'userinactive' => \App\Http\Middleware\RedirectIfInactive::class,
+        'check.device' => \App\Http\Middleware\LogoutUserFromOtherDevice::class,
 
     ];
 

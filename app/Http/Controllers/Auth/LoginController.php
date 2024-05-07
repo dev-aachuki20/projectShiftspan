@@ -33,6 +33,9 @@ class LoginController extends Controller
             if (Auth::attempt($credentialsOnly, $remember_me))
             {   // Staff Cannot Login Into Web
 
+                $user->current_session_id = session()->getId();
+                $user->save();
+
                 if (auth()->user()->is_staff)
                 {
                     Auth::guard('web')->logout();
@@ -51,6 +54,10 @@ class LoginController extends Controller
 
     public function logout()
     {
+        $user = Auth::user();
+        $user->current_session_id = null;
+        $user->save();
+
         Auth::guard('web')->logout();
         return redirect()->route('login');
     }
