@@ -48,6 +48,8 @@ Route::group(['middleware' => 'guest'], function () {
 
         Route::get('/admin/login', 'index')->name('login');
         Route::post('/admin/login','login')->name('authenticate');
+        
+         Route::get('/admin/support', 'support')->name('support');
     });
 
     // Route::controller(ForgotPasswordController::class)->group(function(){

@@ -61,5 +61,9 @@ class LoginController extends Controller
         Auth::guard('web')->logout();
         return redirect()->route('login');
     }
+    
+    public function support(){
+        return view('auth.support');
+    }
 
 }

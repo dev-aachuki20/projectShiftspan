@@ -71,10 +71,15 @@ class MessageController extends APIController
             $input['group_uuid'] = $group->uuid;
             $input['notification_type'] = 'send_message';
             $input['section'] = 'help_chat';
-            Notification::send($authUser->company, new SendNotification($input));
-
-            Notification::send($authUser->company->createdBy, new SendNotification($input));
-
+            
+            if($authUser->company){
+                Notification::send($authUser->company, new SendNotification($input));
+            }
+            
+            if($authUser->company->createdBy){
+                Notification::send($authUser->company->createdBy, new SendNotification($input));
+            }
+            
 
             DB::commit();
             return $this->respondOk([
