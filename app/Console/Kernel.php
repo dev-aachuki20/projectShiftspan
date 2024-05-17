@@ -12,7 +12,9 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('notify-staff-before-shift-clockin')->everyMinute()->withoutOverlapping();
+
+        $schedule->command('notify-staff-before-shift-clockout')->everyMinute()->withoutOverlapping();
     }
 
     /**

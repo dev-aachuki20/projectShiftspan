@@ -99,12 +99,18 @@ return [
         'shift_authorised_sign_admin_message'   => ':username’s shift :shift_label shift on :authorize_at at :listed_business has been signed off by manager :manager_name',
 
         'shift_rating_subject'                  => 'Shift Rating Notification',
-        'shift_rating_message'                  => 'Hi :username, you have been rated :rating stars by :listed_business. Thank you for your service. 
-'        ,
+        'shift_rating_message'                  => 'Hi :username, you have been rated :rating stars by :listed_business. Thank you for your service.',
 
         'shift_canceled_subject'               => 'Cancelled Shift',
         'shift_canceled_admin_message'         => ':username, your :shift_label shift at :listed_business on :cancelled_date has been cancelled. Please check your schedule for more info',
         'shift_canceled_staff_message'         => ':username, your :shift_label shift at :listed_business on :cancelled_date has been cancelled. Please check your schedule for more info',
+
+        // shift reminder notification 
+        'shift_clock_in_reminder_subject'       => 'CLOCK IN REMINDER ',
+        'shift_clock_in_reminder_message'       => 'Your shift about to start soon. please remember to clock in',
+
+        'shift_clock_out_reminder_subject'      => 'CLOCK OUT REMINDER',
+        'shift_clock_out_reminder_message'      => 'Your shift about to end soon. please remember to clock out',
     ],
 
     'registration_completion_subject'           => 'Registration Complete',

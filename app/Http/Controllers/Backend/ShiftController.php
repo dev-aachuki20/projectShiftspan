@@ -90,7 +90,7 @@ class ShiftController extends Controller
                 }
                 
                 $clientDetail = ClientDetail::where('id', $input['client_detail_id'])->first();
-                if(isset($request->assign_staff)){
+                if(isset($request->assign_staff) && !is_null($request->assign_staff) && !empty($request->assign_staff)){
                     $user = User::where('uuid', $request->assign_staff)->first();
                 
                     $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
