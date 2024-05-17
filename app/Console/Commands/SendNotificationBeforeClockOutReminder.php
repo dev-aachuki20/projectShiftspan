@@ -53,6 +53,7 @@ class SendNotificationBeforeClockOutReminder extends Command
             'section'           => $section,
             'subject'           => trans('messages.shift.shift_clock_out_reminder_subject'),
             'message'           => trans('messages.shift.shift_clock_out_reminder_message'),
+            'task_type'         => 'cron'
         ];
         
         Notification::send($allStaffs, new SendNotification($messageData));

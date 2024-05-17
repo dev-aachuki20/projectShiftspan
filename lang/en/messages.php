@@ -107,10 +107,10 @@ return [
 
         // shift reminder notification 
         'shift_clock_in_reminder_subject'       => 'CLOCK IN REMINDER ',
-        'shift_clock_in_reminder_message'       => 'Your shift about to start soon. please remember to clock in',
+        'shift_clock_in_reminder_message'       => 'Your shift about to start soon. Please remember to clock in',
 
         'shift_clock_out_reminder_subject'      => 'CLOCK OUT REMINDER',
-        'shift_clock_out_reminder_message'      => 'Your shift about to end soon. please remember to clock out',
+        'shift_clock_out_reminder_message'      => 'Your shift about to end soon. Please remember to clock out',
     ],
 
     'registration_completion_subject'           => 'Registration Complete',

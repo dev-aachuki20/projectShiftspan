@@ -20,6 +20,8 @@ class DatabaseChannel
             if ($user->is_super_admin || $user->is_sub_admin) {
                 sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
             }
+        } else if(isset($data['task_type']) && $data['task_type'] == 'cron'){
+            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
         }
 
         /* From this Save the value from database */
