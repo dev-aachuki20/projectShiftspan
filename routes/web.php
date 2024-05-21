@@ -46,10 +46,10 @@ Route::group(['middleware' => 'guest'], function () {
             return redirect()->route('login');
         });
 
-        Route::get('/admin/login', 'index')->name('login');
-        Route::post('/admin/login','login')->name('authenticate');
+        Route::get('/login', 'index')->name('login');
+        Route::post('/login','login')->name('authenticate');
         
-         Route::get('/admin/support', 'support')->name('support');
+         Route::get('/support', 'support')->name('support');
     });
 
     // Route::controller(ForgotPasswordController::class)->group(function(){
@@ -64,7 +64,7 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function () {
-    Route::prefix('admin')->group(function (){
+    Route::group(['prefix' => ''],function (){
         Route::get('profile', [UserController::class, 'showProfile'])->name('show.profile');
         Route::post('profile', [UserController::class, 'updateProfile'])->name('update.profile');
 
