@@ -272,10 +272,13 @@
 @can('sub_admin_edit')
     $(document).ready(function() {
         $(document).on('click', '.custom-select', function() {
-            // $(".custom-select.custom-dropdown").removeClass("custom-dropdown");
             
-            $(this).toggleClass('custom-dropdown');
-            //$('.custom-select').removeClass('custom-dropdown');
+           if ($(this).hasClass('custom-dropdown')) {
+                $(this).removeClass('custom-dropdown');
+            } else {
+                $(".custom-select.custom-dropdown").removeClass("custom-dropdown");
+                $(this).addClass('custom-dropdown');
+            }
             
         });
     });
