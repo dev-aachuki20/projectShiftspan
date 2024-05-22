@@ -39,6 +39,19 @@
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+    $(document).ready(function() {
+        $(document).on('click', '.custom-select', function() {
+            
+           if ($(this).hasClass('custom-dropdown')) {
+                $(this).removeClass('custom-dropdown');
+            } else {
+                $(".custom-select.custom-dropdown").removeClass("custom-dropdown");
+                $(this).addClass('custom-dropdown');
+            }
+            
+        });
+    });
+
     $(document).on('shown.bs.modal', function() {
         $('.select2').each(function() {
             if (this.isConnected) {
