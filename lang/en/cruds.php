@@ -190,6 +190,7 @@ return [
             'name'                          => 'Staff Name',
             'username'                      => 'Username',
             'staff_image'                   => 'Staff Image',
+            'company_name'                  => 'Company Name',
             'email'                         => 'Email',
             'password'                      => 'Password',
             'phone'                         => 'Phone Number',

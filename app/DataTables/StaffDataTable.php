@@ -29,7 +29,7 @@ class StaffDataTable extends DataTable
 
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
-        return (new EloquentDataTable($query))
+        return (new EloquentDataTable($query->with(['company'])->select('users.*')))
             // ->addIndexColumn()
             ->addColumn('checkbox', function($record){
                 return '<label class="custom-checkbox"><input type="checkbox" class="dt_cb staff_cb" data-id="'.$record->uuid.'" /><span></span></label>';
@@ -45,6 +45,10 @@ class StaffDataTable extends DataTable
 
             ->editColumn('name', function($record){
                 return $record->name ? ucwords($record->name) : '';
+            })
+
+            ->editColumn('company.name', function($record){
+                return $record->company ? ucwords($record->company->name) : '';
             })
 
             ->editColumn('email', function($record){
@@ -129,6 +133,7 @@ class StaffDataTable extends DataTable
                 $query->where('id',config('constant.roles.staff'));
             })->newQuery();
         }
+
     }
 
     /**
@@ -164,6 +169,11 @@ class StaffDataTable extends DataTable
         }
 
         $columns[] = Column::make('staff_image')->title(trans('cruds.staff.fields.staff_image'))->titleAttr(trans('cruds.staff.fields.staff_image'))->searchable(false)->orderable(false);
+
+        if(auth()->user()->is_super_admin){
+            $columns[] = Column::make('company.name')->title(trans('cruds.staff.fields.company_name'))->titleAttr(trans('cruds.staff.fields.company_name'))->orderable(false);
+        }
+
         $columns[] = Column::make('name')->title('<span>'.trans('cruds.staff.fields.name').'</span>')->titleAttr(trans('cruds.staff.fields.name'));
         $columns[] = Column::make('email')->title('<span>'.trans('cruds.staff.fields.email').'</span>')->titleAttr(trans('cruds.staff.fields.email'));
         $columns[] = Column::make('created_at')->title('<span>'.trans('cruds.staff.fields.created_at').'</span>')->titleAttr(trans('cruds.staff.fields.created_at'));

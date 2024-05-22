@@ -272,7 +272,11 @@
 @can('sub_admin_edit')
     $(document).ready(function() {
         $(document).on('click', '.custom-select', function() {
+            // $(".custom-select.custom-dropdown").removeClass("custom-dropdown");
+            
             $(this).toggleClass('custom-dropdown');
+            //$('.custom-select').removeClass('custom-dropdown');
+            
         });
     });
 
