@@ -119,8 +119,11 @@ return [
     'registration_completion_admin_subject'     => 'New Staff Registration',
     'registration_completion_admin_message'     => ':username has completed registration. Please review and activate their account',
 
-    'user_account_deactivate_subject'          => 'Your Account has been Deactivated',
+    'user_account_deactivate_subject'          => 'Your account has been deactivated',
     'user_account_deactivate_message'          => 'Hi :username, your account has been deactivated by :admin. If you believe this is a mistake, please contact support.',
+    
+    'user_account_activate_subject'          => 'Your account has been activated',
+    'user_account_activate_message'          => 'Hi :username, your account has been activated by :admin. Thank you for your patience. Please login.',
 
     'notification'=>[
         'not_found' => 'Notification not found',

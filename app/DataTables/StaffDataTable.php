@@ -141,10 +141,11 @@ class StaffDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        $orderByColumn = 3;
+        /*$orderByColumn = 3;
         if (Gate::check('staff_delete')) {
             $orderByColumn = 4;
-        }
+        }*/
+        $orderByColumn = 5;
         return $this->builder()
                     ->setTableId('staff-table')
                     ->columns($this->getColumns())

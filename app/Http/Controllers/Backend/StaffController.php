@@ -354,9 +354,11 @@ class StaffController extends Controller
                 
                 $user->update(['is_active' => $updateStatus]);
                 
+                $sendNotificationUser = User::where('uuid', $request->id)->first();
+                
                 /* Send Notification */
                 $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
-                if($updateStatus == 1){
+                if(($updateStatus == 1) && is_null($sendNotificationUser->last_login_at)){
                     $messageData = [
                         'notification_type' => array_search(config('constant.subject_notification_type.registration_completion_active'), config('constant.subject_notification_type')),
                         'section'           => $key,
@@ -364,6 +366,17 @@ class StaffController extends Controller
                         'message'           => trans('messages.registration_completion_message', [
                             'username'      => $user->name,
                             'listed_business' => $user->company->name,
+                        ]),
+                    ];
+                    
+                }elseif( ($updateStatus == 1) && (!is_null($sendNotificationUser->last_login_at)) ){
+                    $messageData = [
+                        'notification_type' => array_search(config('constant.subject_notification_type.user_account_active'), config('constant.subject_notification_type')),
+                        'section'           => $key,
+                        'subject'           => trans('messages.user_account_activate_subject'),
+                        'message'           => trans('messages.user_account_activate_message', [
+                            'username'      => $user->name,
+                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
                         ]),
                     ];
                 }else{
@@ -378,7 +391,7 @@ class StaffController extends Controller
                     ];
                 }
                 
-                $sendNotificationUser = User::where('uuid', $request->id)->first();
+               
                 Notification::send($sendNotificationUser, new SendNotification($messageData));
                 
                 DB::commit();

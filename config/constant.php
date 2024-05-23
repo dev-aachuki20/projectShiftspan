@@ -107,7 +107,7 @@ return [
         'registration_completion_deactive'  => 'Registration is complete, Account is deactivated',
 
         /* For Account activate */
-        'user_account_active'               => 'account is activated',
+        'user_account_active'               => 'Account is activated',
         'user_account_deactive'             => 'Account is deactivated',
         
         /* for staff */

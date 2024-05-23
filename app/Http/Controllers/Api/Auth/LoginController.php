@@ -46,6 +46,8 @@ class LoginController extends APIController
                 
                 $user->device_token = $request->device_token;
                 
+                $user->last_login_at = now();
+                
                 $user->current_session_id = $request->header('X-Device-Id');
                 
                 $user->save();
