@@ -15,6 +15,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('notify-staff-before-shift-clockin')->everyMinute()->withoutOverlapping();
 
         $schedule->command('notify-staff-before-shift-clockout')->everyMinute()->withoutOverlapping();
+        
+        $schedule->command('queue:work --stop-when-empty')->everyMinute()->withoutOverlapping();
     }
 
     /**

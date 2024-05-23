@@ -14,7 +14,7 @@ use App\Http\Controllers\Backend\StaffController;
 use App\Http\Controllers\Backend\UserController;
 use App\Http\Controllers\Backend\SubAdminController;
 use App\Http\Controllers\Backend\SubAdminDetailController;
-
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,6 +27,24 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+/*
+Route::get('/check-mail',function(){
+    $recipient = 'superadmin@shiftspan.co.uk';
+    $subject = 'Subject of the email';
+    $message = 'This is a simple text email.';
+    
+    try{
+        Mail::raw($message, function($mail) use ($recipient, $subject) {
+         $mail->to($recipient)
+           ->subject($subject);
+        });
+        
+        dd('success');
+    } catch(\Exception $e){
+        dd($e);
+    }
+});*/
 
 Route::get('/log-file', function () {
     $file = File::get(storage_path() . '/logs/laravel.log');

@@ -76,7 +76,6 @@ class RegisterController extends APIController
                 }
             }
 
-            DB::commit();
             
             $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
             $messageData = [
@@ -92,6 +91,8 @@ class RegisterController extends APIController
 
             $this->sendNotificationToParent($user->company,$messageData,'registration_completion_deactive');
 
+            DB::commit();
+            
             return $this->respondOk([
                 'status'   => true,
                 'message'   => trans('messages.register_success')
