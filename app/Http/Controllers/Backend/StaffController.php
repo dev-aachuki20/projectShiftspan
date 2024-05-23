@@ -378,7 +378,8 @@ class StaffController extends Controller
                     ];
                 }
                 
-                Notification::send($user, new SendNotification($messageData));
+                $sendNotificationUser = User::where('uuid', $request->id)->first();
+                Notification::send($sendNotificationUser, new SendNotification($messageData));
                 
                 DB::commit();
                 $response = [

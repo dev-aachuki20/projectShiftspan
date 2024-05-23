@@ -52,7 +52,9 @@ class RegisterController extends APIController
                 'company_id' => $request->company_id,
                 'password' => Hash::make($request->password),
                 'is_active' => 0,
+                'device_token' => $request->device_token ?? null,
             ]);
+            
 
             $user->profile()->create([
                 'is_criminal' => $request->is_criminal,

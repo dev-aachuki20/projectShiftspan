@@ -160,8 +160,13 @@ if (!function_exists('sendNotification')) {
     function sendNotification($user_id, $subject, $message, $section, $notification_type = null, $data = null)
     {
         try {
-			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
-			\Log::info(['firebaseToken' => $firebaseToken]);
+// 			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
+			
+			$firebaseToken = User::where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
+			
+			
+			\Log::info(['firebaseToken' => $firebaseToken,'user_id'=>$user_id]);
+			
 			$response = null;
 			if($firebaseToken){
 				$SERVER_API_KEY = env('FIREBASE_KEY');

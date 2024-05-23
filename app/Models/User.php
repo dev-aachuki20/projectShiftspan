@@ -44,7 +44,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'remember_token',
         'is_active',
         'email_verified_at',
-        'current_session_id'
+        'current_session_id',
+        'device_token',
     ];
 
     /**
@@ -72,6 +73,8 @@ class User extends Authenticatable implements MustVerifyEmail
         parent::boot();
         static::creating(function(User $model) {
             $model->uuid = Str::uuid();
+            
+            $model->created_by = auth()->user() ? auth()->user()->id : null;
         });
     }
 

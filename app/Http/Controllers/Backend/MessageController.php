@@ -71,7 +71,7 @@ class MessageController extends Controller
 
             DB::beginTransaction();
 
-            $users = User::whereIn('uuid', $input['staffs'])->get();
+            $users = User::with(['company'])->whereIn('uuid', $input['staffs'])->get();
 
             if($input['section'] == 'help_chat'){
 
@@ -89,7 +89,7 @@ class MessageController extends Controller
                             $userIds[] = $staff->id;
                             $userIds[] = $staff->company->id;
                             $userIds[] = auth()->user()->is_super_admin ? auth()->user()->id : $staff->company->created_by;
-
+                            
                             $groupCreated->users()->attach($userIds);
                         }
                     }
