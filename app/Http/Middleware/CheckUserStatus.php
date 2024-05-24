@@ -28,7 +28,7 @@ class CheckUserStatus
                         'status'        => false,
                         'status_code'   => 401,
                         'error'         => trans('messages.staff_account_deactivate')
-                    ]);
+                    ],401);
                 }
                 
             }

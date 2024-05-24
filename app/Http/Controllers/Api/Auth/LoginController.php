@@ -106,7 +106,7 @@ class LoginController extends APIController
             );
 
             $subject = "Reset Password OTP";
-            $expiretime = '2 Minutes';
+            $expiretime = config('auth.passwords.users.otp_expire').' Minutes';
             $user->sendPasswordResetOtpNotification($user,$token, $subject , $expiretime);
             DB::commit();
 
@@ -139,7 +139,7 @@ class LoginController extends APIController
             return $this->throwValidation(trans('auth.messages.forgot_password.validation.invalid_otp'));
         }
 
-        if (Carbon::parse($passwordReset->created_at)->addMinutes(config('auth.passwords.users.expire'))->isPast()) {
+        if (Carbon::parse($passwordReset->created_at)->addMinutes(config('auth.passwords.users.otp_expire'))->isPast()) {
             return $this->throwValidation(trans('auth.messages.forgot_password.validation.expire_otp'));
         }
 
@@ -170,7 +170,7 @@ class LoginController extends APIController
             return $this->throwValidation(trans('auth.messages.forgot_password.validation.invalid_token_email'));
         }
 
-        $expireTime = config('auth.passwords.users.expire');
+        $expireTime = config('auth.passwords.users.otp_expire');
         if (Carbon::parse($passwordReset->created_at)->addMinutes($expireTime)->isPast()) {
             DB::table('password_resets')->where('email',$passwordReset->email)->delete();
             return $this->throwValidation(trans('auth.messages.forgot_password.validation.expire_otp'));            
