@@ -145,7 +145,12 @@ class StaffDataTable extends DataTable
         if (Gate::check('staff_delete')) {
             $orderByColumn = 4;
         }*/
-        $orderByColumn = 5;
+        
+        $orderByColumn = 4;
+        if(auth()->user()->is_super_admin){
+            $orderByColumn = 5;
+        }
+        
         return $this->builder()
                     ->setTableId('staff-table')
                     ->columns($this->getColumns())

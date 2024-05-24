@@ -365,7 +365,7 @@ class StaffController extends Controller
                         'subject'           => trans('messages.registration_completion_subject'),
                         'message'           => trans('messages.registration_completion_message', [
                             'username'      => $user->name,
-                            'listed_business' => $user->company->name,
+                            'listed_business' => auth()->user()->is_super_admin ? getSetting('site_title') ? getSetting('site_title') : config('app.name')  : $user->company->name,
                         ]),
                     ];
                     
@@ -376,7 +376,7 @@ class StaffController extends Controller
                         'subject'           => trans('messages.user_account_activate_subject'),
                         'message'           => trans('messages.user_account_activate_message', [
                             'username'      => $user->name,
-                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                            'admin'         => auth()->user()->is_super_admin ? getSetting('site_title') ? getSetting('site_title') : config('app.name')  : $user->company->name,
                         ]),
                     ];
                 }else{
@@ -386,7 +386,7 @@ class StaffController extends Controller
                         'subject'           => trans('messages.user_account_deactivate_subject'),
                         'message'           => trans('messages.user_account_deactivate_message', [
                             'username'      => $user->name,
-                            'admin'         => getSetting('site_title') ? getSetting('site_title') : config('app.name'),
+                            'admin'         => auth()->user()->is_super_admin ? getSetting('site_title') ? getSetting('site_title') : config('app.name')  : $user->company->name,
                         ]),
                     ];
                 }
