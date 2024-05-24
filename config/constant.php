@@ -78,8 +78,8 @@ return [
         5 => '5 Star',
     ],
 
-    //'timepicker_step' => 15,
-     'timepicker_step' => 5,
+    'timepicker_step' => 15,
+    // 'timepicker_step' => 5,
     'timepicker_min_time' => '00:00',
     'timepicker_max_time' => '24:00',
 
