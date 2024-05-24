@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use Illuminate\Foundation\Http\FormRequest;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
+use App\Models\User;
 
 class UpdateRequest extends FormRequest
 {
@@ -63,7 +64,26 @@ class UpdateRequest extends FormRequest
         
 
         $rules['occupation_id'] = ['required', 'exists:occupations,uuid,deleted_at,NULL'];
-        $rules['assign_staff'] = ['nullable', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), '', 'uuid')];
+        $rules['assign_staff'] = ['nullable', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), '', 'uuid'),function ($attribute, $value, $fail)  {
+
+               
+                $user = User::where('uuid',$value)->first();
+                
+                $isShiftWithinAssignedShifts = $user->assignShifts()->whereIn('status', ['picked'])->where(function ($query) {
+                $query->where(function ($q) {
+                        $q->whereBetween('start_date', [Carbon::parse($this->start_date)->format('Y-m-d'), Carbon::parse($this->end_date)->format('Y-m-d')])
+                          ->orWhereBetween('end_date', [Carbon::parse($this->start_date)->format('Y-m-d'), Carbon::parse($this->end_date)->format('Y-m-d')]);
+                    })->where(function ($q) {
+                        $q->where('start_time', '<=', $this->end_time)
+                            ->where('end_time', '>=', $this->start_time);
+                    });
+                })->exists();
+                
+
+                if($isShiftWithinAssignedShifts){
+                    $fail("The shift's time slot overlaps with your assigned shifts.");
+                } 
+            }];
 
         return $rules;
     }

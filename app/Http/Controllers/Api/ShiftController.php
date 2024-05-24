@@ -228,7 +228,7 @@ class ShiftController extends APIController
                 if($selectedShift->status != 'open'){
                     $fail('The shift already picked');
                 }
-
+                /*
                 $isShiftWithinAssignedShifts = $user->assignShifts()
                 ->whereIn('status', ['picked','complete'])
                 ->where(function ($query) use($selectedShift) {
@@ -242,6 +242,17 @@ class ShiftController extends APIController
                     });
                 })
                 ->exists();
+                */
+                
+                $isShiftWithinAssignedShifts = $user->assignShifts()->whereIn('status', ['picked'])->where(function ($query) use($selectedShift) {
+                $query->where(function ($q) use($selectedShift) {
+                        $q->whereBetween('start_date', [Carbon::parse($selectedShift->start_date)->format('Y-m-d'), Carbon::parse($selectedShift->end_date)->format('Y-m-d')])
+                          ->orWhereBetween('end_date', [Carbon::parse($selectedShift->start_date)->format('Y-m-d'), Carbon::parse($selectedShift->end_date)->format('Y-m-d')]);
+                    })->where(function ($q) use($selectedShift) {
+                        $q->where('start_time', '<=', $selectedShift->end_time)
+                            ->where('end_time', '>=', $selectedShift->start_time);
+                    });
+                })->exists();
 
                 if($isShiftWithinAssignedShifts){
                     $fail("The shift's time slot overlaps with your assigned shifts.");
