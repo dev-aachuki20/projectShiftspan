@@ -32,7 +32,7 @@ return [
         ],
         'forgot_password' => [
             'success'               => 'We have sent email with reset password link. Please check your inbox!.',
-            'success_update'        => 'You are changed your password successful.',
+            'success_update'        => 'Your password has been reset successfully',
             'otp_sent'              => 'We have sent email with OTP. Please check your inbox!.',
             'validation'            => [
                 'phone_number_not_found'=> "We can't find a user with that phone number.",
