@@ -76,12 +76,12 @@ Route::group(['namespace' => 'Api'], function () {
     | Register API Routes
     |--------------------------------------------------------------------------
     |
-    | Route 		: http://localhost:8000/api/register
+    | Route 		: http://localhost:8000/api/new_register
     | Parameter 	: Multiple
     | Method 		: Post
     |
     */
-	Route::post('register',[RegisterController::class,'create']);
+	Route::post('new_register',[RegisterController::class,'create']);
 
 
 	/*
