@@ -15,7 +15,7 @@ class SendNotificationBeforeClockOutReminder extends Command
      *
      * @var string
      */
-    protected $signature = 'notify-staff-before-shift-clockout';
+    protected $signature = 'notify-staff-after-shift-clockout';
 
     /**
      * The console command description.
@@ -29,11 +29,12 @@ class SendNotificationBeforeClockOutReminder extends Command
      */
     public function handle()
     {
-        $reminderTime       = config('constant.notification_reminder.before_clock_out_shift');
+        $reminderTime       = config('constant.notification_reminder.after_clock_out_shift');
         $section            = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
 
         $now                = Carbon::now();
-        $reminderEndTime  = $now->copy()->addMinutes($reminderTime)->format('H:i:00');
+        
+        /*$reminderEndTime  = $now->copy()->addMinutes($reminderTime)->format('H:i:00');
 
         $shifts = Shift::with(['staffs'])->where('status', 'picked')
         ->whereDate('start_date', '<=', $now)
@@ -42,7 +43,20 @@ class SendNotificationBeforeClockOutReminder extends Command
         ->whereHas('clockInOuts', function($q) use($now){
             $q->whereDate('clockin_date', $now)->whereNull('clockout_date');
         })
-        ->get();
+        ->get();*/
+        
+        $reminderEndTime = $now->copy()->subMinutes($reminderTime)->format('H:i:00');
+        
+        $shifts = Shift::with(['staffs'])
+            ->where('status', 'picked')
+            ->whereDate('start_date', '<=', $now)
+            ->whereDate('end_date', '>=', $now)
+            ->whereTime('end_time', '=', $reminderEndTime)
+            ->whereHas('clockInOuts', function($q) use($now) {
+                $q->whereDate('clockin_date', $now)
+                  ->whereNull('clockout_date');
+            })
+            ->get();
 
         $allStaffs = $shifts->flatMap(function ($shift) {
             return $shift->staffs;

@@ -181,8 +181,8 @@ return [
 
     // Notification Reminder time
     'notification_reminder' =>[
-        'before_clock_in_shift' => env('BEFORE_SHIFT_CLOCK_IN_REMINDER', 10),
-        'before_clock_out_shift' => env('BEFORE_SHIFT_CLOCK_OUT_REMINDER', 10),
+        'before_clock_in_shift' => env('BEFORE_SHIFT_CLOCK_IN_REMINDER', 15),
+        'after_clock_out_shift' => env('AFTER_SHIFT_CLOCK_OUT_REMINDER', 15),
     ]
     
 ];
