@@ -18,7 +18,7 @@
                     <div class="form-label">
                         <label>{{$setting->display_name}}:</label>
                         @if(auth()->user()->is_super_admin)
-                            <input type="text" value="{{$setting->value}}" name="{{$setting->key}}" />
+                            <input type="text" value="{{$setting->value}}" name="{{$setting->key}}"  autocomplete="off"/>
                         @else
                             <div class="right-sidebox">
                                 <span class="d-inline-block position-relative">

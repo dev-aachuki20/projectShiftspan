@@ -81,13 +81,14 @@ class SettingController extends Controller
             'support_email'  => ['required', 'email'],
             'support_phone' => [
                 'required',
-                'integer',
-                'regex:/^[0-9]{7,15}$/',
+                'numeric',
+                // 'regex:/^[0-9]{7,15}$/',
+                'regex:/^[0-9]/',
                 'not_in:-'
             ],
         ],[
             'support_phone.required'=>'The phone number field is required',
-            'support_phone.regex' =>'The phone number length must be 7 to 15 digits.',
+            // 'support_phone.regex' =>'The phone number length must be 7 to 15 digits.',
             'support_phone.unique' =>'The phone number already exists.',
         ]);
         $data=$request->all();
