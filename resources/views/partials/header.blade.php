@@ -82,11 +82,13 @@
                     <p>Loading...</p>
                 </div>
                 <div id="pdf-canvas-container"></div>
-                <p class="mt-2 text-center">
-                    <a id="pdf-download-link" class="dash-btn green-bg" href="#" download>Download</a>
-                </p>
                  
                 {{--<iframe src="https://docs.google.com/viewer?url={{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}&embedded=true" width="100%" height="500px" style="border: none;"></iframe>--}}
+            </div>
+            <div class="modal-footer d-block border-0">
+                <p class="m-0 text-center">
+                    <a id="pdf-download-link" class="dash-btn green-bg" href="#" download>Download</a>
+                </p>
             </div>
         </div>
     </div>
