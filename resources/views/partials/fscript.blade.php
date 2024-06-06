@@ -310,3 +310,82 @@ $jsonArr = json_encode($arr);
     @endcan
 
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.worker.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    function showPdfLoader() {
+        const loader = document.getElementById('pdf-loader');
+        if (loader) {
+            loader.style.display = 'block';
+        }
+    }
+
+    function hidePdfLoader() {
+        const loader = document.getElementById('pdf-loader');
+        if (loader) {
+            loader.style.display = 'none';
+        }
+    }
+
+    function renderPDF(url) {
+        showPdfLoader();
+
+        const container = document.getElementById('pdf-canvas-container');
+        container.innerHTML = '';  // Clear the container
+
+        pdfjsLib.getDocument(url).promise.then(function(pdf) {
+            const pageCount = pdf.numPages;
+
+            for (let pageNumber = 1; pageNumber <= pageCount; pageNumber++) {
+                // Create a canvas for each page
+                const canvas = document.createElement('canvas');
+                canvas.id = 'pdf-canvas-' + pageNumber;
+                container.appendChild(canvas);
+
+                // Render each page
+                pdf.getPage(pageNumber).then(function(page) {
+                    const viewport = page.getViewport({ scale: 1.5 });
+                    canvas.width = viewport.width;
+                    canvas.height = viewport.height;
+
+                    const ctx = canvas.getContext('2d');
+                    const renderContext = {
+                        canvasContext: ctx,
+                        viewport: viewport
+                    };
+
+                    page.render(renderContext).promise.then(function() {
+                        if (pageNumber === pageCount) {
+                            hidePdfLoader(); // Hide loader when last page is rendered
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    // Event listener to open the modal and render PDF
+    $('#HelpPdf').on('shown.bs.modal', function () {
+        const pdfUrl = "{{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}";
+        renderPDF(pdfUrl);
+
+        // Ensure the download link is set after the modal is fully shown
+        const downloadLink = document.getElementById('pdf-download-link');
+        if (downloadLink) {
+            downloadLink.href = pdfUrl;
+        }
+    });
+
+    // Clear container when modal is closed
+    $('#HelpPdf').on('hidden.bs.modal', function () {
+        const container = document.getElementById('pdf-canvas-container');
+        if (container) {
+            container.innerHTML = '';  // Clear the container
+        }
+    });
+});
+</script>
+
+

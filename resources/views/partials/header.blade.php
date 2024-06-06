@@ -66,14 +66,27 @@
 
 <!-- Help Modal -->
 <div class="modal fade common-modal modal-size-l" id="HelpPdf" tabindex="-1" aria-labelledby="HelpPdfLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-820">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable mw-820">
         <div class="modal-content">
             <div class="modal-header justify-content-center green-bg">
                 <h5 class="modal-title text-center" id="HelpPdfLabel">@lang('global.help')</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <iframe src="{{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}" width="100%" height="500px" style="border: none;"></iframe>
+                {{--<iframe src="{{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}" width="100%" height="500px" style="border: none;"></iframe>--}}
+                
+                <div id="pdf-loader" class="text-center" style="display: none;">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p>Loading...</p>
+                </div>
+                <div id="pdf-canvas-container"></div>
+                <p class="mt-2 text-center">
+                    <a id="pdf-download-link" class="dash-btn green-bg" href="#" download>Download</a>
+                </p>
+                 
+                {{--<iframe src="https://docs.google.com/viewer?url={{ getSetting('help_pdf') ? getSetting('help_pdf') : asset(config('constant.default.help_pdf')) }}&embedded=true" width="100%" height="500px" style="border: none;"></iframe>--}}
             </div>
         </div>
     </div>
