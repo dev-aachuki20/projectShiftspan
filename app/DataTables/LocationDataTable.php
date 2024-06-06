@@ -44,7 +44,7 @@ class LocationDataTable extends DataTable
                 $actionHtml = '';
                 if (Gate::check('location_edit')) {
                     if($this->authUser->is_super_admin){
-                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editLocationBtn"  data-href="'.route('locations.edit', $record->uuid).'">
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editLocationBtn"  data-href="'.route('locations.edit', $record->uuid).'" title="Edit">
                             <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
                                 '.(getSvgIcon('edit')).'
                             </span>
@@ -52,7 +52,7 @@ class LocationDataTable extends DataTable
                     }
                 }
                 if (Gate::check('location_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'">
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteLocationBtn" data-href="'.route('locations.destroy', $record->uuid).'" title="Delete">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
                             '.(getSvgIcon('delete')).'
                         </span>

@@ -168,14 +168,14 @@ class ShiftDataTable extends DataTable
                 $actionHtml = '';
 
                 if ($record->status == 'open') {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn cancelShiftBtn" title="'.__('global.cancel').'" data-href="'.route('shifts.cancel', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn cancelShiftBtn" title="'.__('global.cancel').'" data-href="'.route('shifts.cancel', $record->uuid).'" title="Cancel">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.cancel').'">
                             '.(getSvgIcon('cancel')).'
                         </span>
                     </button>';
                 }
                 if ($record->status == 'complete') {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn ratingShiftBtn"  data-rating="'.$record->rating.'" data-href="'.route('shifts.rating', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn ratingShiftBtn"  data-rating="'.$record->rating.'" data-href="'.route('shifts.rating', $record->uuid).'" title="Rating">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.trans('cruds.shift.fields.rating').'">
                             '.(getSvgIcon('rating')).'
                         </span>
@@ -183,7 +183,7 @@ class ShiftDataTable extends DataTable
                 }
                 if($record->status != 'complete'){
                     if (Gate::check('shift_edit')) {
-                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editShiftBtn" data-start_time="'.$record->start_time.'" data-href="'.route('shifts.edit', $record->uuid).'">
+                        $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editShiftBtn" data-start_time="'.$record->start_time.'" data-href="'.route('shifts.edit', $record->uuid).'" title="Edit">
                             <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
                                 '.(getSvgIcon('edit')).'
                             </span>
@@ -191,7 +191,7 @@ class ShiftDataTable extends DataTable
                     }
                     
                     if (Gate::check('shift_delete')) {
-                        $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteShiftBtn" data-href="'.route('shifts.destroy', $record->uuid).'">
+                        $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteShiftBtn" data-href="'.route('shifts.destroy', $record->uuid).'" title="Delete">
                             <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
                                 '.(getSvgIcon('delete')).'
                             </span>

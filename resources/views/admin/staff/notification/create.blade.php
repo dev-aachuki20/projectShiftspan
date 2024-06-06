@@ -50,7 +50,7 @@
                         <span class="section_error"></span>
                     </div>
                     <div class="form-label select-label">
-                        <label for="subject" class="text-end px-2">@lang('cruds.notification.fields.subject'): </label>
+                        <label for="subject">@lang('cruds.notification.fields.subject'): </label>
                         <select class="select2"  name="subject" id="subject">
                             <option value="">@lang('global.select')  ...</option>
                             @if (getSetting('message_subject'))

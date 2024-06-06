@@ -39,14 +39,14 @@ class OccupationDataTable extends DataTable
                 $actionHtml = '';
                 
                 if (Gate::check('occupation_edit') && ($this->authUser->is_super_admin)) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editOccupationBtn" data-href="'.route('occupations.edit', $record->uuid).'" title="Edit">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
                             '.(getSvgIcon('edit')).'
                         </span>
                     </button>';
                 }
                 if (Gate::check('occupation_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteOccupationBtn" data-href="'.route('occupations.destroy', $record->uuid).'">
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteOccupationBtn" data-href="'.route('occupations.destroy', $record->uuid).'" title="Delete">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
                             '.(getSvgIcon('delete')).'
                         </span>

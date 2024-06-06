@@ -48,14 +48,14 @@ class SubAdminDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('sub_admin_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editSubAdminBtn" data-href="'.route('client-admins.edit', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editSubAdminBtn" data-href="'.route('client-admins.edit', $record->uuid).'" title="Edit">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
                             '.(getSvgIcon('edit')).'
                         </span>
                     </button>';
                 }
                 if (Gate::check('sub_admin_delete')) {
-                    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteSubAdminBtn" data-href="'.route('client-admins.destroy', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteSubAdminBtn" data-href="'.route('client-admins.destroy', $record->uuid).'" title="Delete">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
                             '.(getSvgIcon('delete')).'
                         </span>

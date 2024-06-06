@@ -72,21 +72,21 @@ class StaffDataTable extends DataTable
             ->addColumn('action', function($record){
                 $actionHtml = '';
                 if (Gate::check('staff_view')) {
-                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn viewStaffBtn" data-type="staff"  data-href="'.route('staffs.show', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn yellow-bg small-btn icon-btn viewStaffBtn" data-type="staff"  data-href="'.route('staffs.show', $record->uuid).'" title="View">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.view').'">
                             '.(getSvgIcon('view')).'
                         </span>
                     </button>';
                 }
                 if (Gate::check('staff_edit')) {
-                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editStaffBtn"  data-href="'.route('staffs.edit', $record->uuid).'">
+                    $actionHtml .= '<button class="dash-btn sky-bg small-btn icon-btn editStaffBtn"  data-href="'.route('staffs.edit', $record->uuid).'" title="Edit">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.edit').'">
                             '.(getSvgIcon('edit')).'
                         </span>
                     </button>';
                 }
                 if (Gate::check('staff_delete')) {
-				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteStaffBtn" data-href="'.route('staffs.destroy', $record->uuid).'">
+				    $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteStaffBtn" data-href="'.route('staffs.destroy', $record->uuid).'" title="Delete">
                         <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
                             '.(getSvgIcon('delete')).'
                         </span>
