@@ -26,7 +26,7 @@
         <div class="location_name_error" style="width: 100%"></div>
     </div>
 @endif
-<div class="form-label justify-content-center">
+<div class="form-label justify-content-center footer-btn">
     <button type="submit" class="cbtn submitBtn">
         @if(isset($location))
             @lang('global.update') @lang('cruds.location.title_singular')            

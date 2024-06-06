@@ -2602,6 +2602,18 @@ th.datatable_desription{
     width: 100%;
 }
 
+.location-group-modal .modal-body {
+    position: relative;
+    padding-bottom: 64px;
+}
+.location-group-modal .modal-body .footer-btn {
+    position: absolute;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 30;
+}
+
 
 
 /* Responsive css */

@@ -1,4 +1,4 @@
-<div class="modal fade common-modal modal-size-l" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationLabel" aria-hidden="true">
+<div class="modal fade common-modal modal-size-l location-group-modal" id="addLocationModal" tabindex="-1" aria-labelledby="addLocationLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered mw-820">
         <div class="modal-content">
             <div class="modal-header justify-content-center green-bg">
