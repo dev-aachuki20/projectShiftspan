@@ -2596,7 +2596,7 @@ th.datatable_desription{
 
 
 /* ---06-06-2024-- */
-.modal {
+.modal, div:where(.swal2-container) {
     z-index: 9999 !important;
 }
 #pdf-canvas-container {
@@ -3311,6 +3311,9 @@ th.datatable_desription{
     .chatboxGroup .chat-panel .userporfile{
         width: calc(100% - 90px);
     }
+    /*.tooltip {
+        display: none !important;
+    }*/
     /*  */
 }
 @media screen and (max-width: 575px){
