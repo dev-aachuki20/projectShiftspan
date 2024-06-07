@@ -81,15 +81,15 @@ class SettingController extends Controller
             'support_email'  => ['required', 'email'],
             'support_phone' => [
                 'required',
-                'numeric',
+                'string',
+                'regex:/^(?:[+\-\d]+(?:\s[+\-\d]+)*)$/',
+                //'numeric',
                 // 'regex:/^[0-9]{7,15}$/',
-                'regex:/^[0-9]/',
-                'not_in:-'
+                //'not_in:-'
             ],
         ],[
             'support_phone.required'=>'The phone number field is required',
-            // 'support_phone.regex' =>'The phone number length must be 7 to 15 digits.',
-            'support_phone.unique' =>'The phone number already exists.',
+            'support_phone.regex' =>'The phone number may only contain numbers, a single space, plus and minus signs.',
         ]);
         $data=$request->all();
         try {
