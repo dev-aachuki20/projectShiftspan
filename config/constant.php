@@ -35,6 +35,7 @@ return [
     'travel_info_length' => 200, 
     'company_number_prefix' => 'SS', 
     'company_number_start' => '000001', 
+    'staff_document_agreement_text' => 'I agree with the terms and conditions of document submission.',
 
     'staff_file_fields' => [
         'user_dbs_certificate',

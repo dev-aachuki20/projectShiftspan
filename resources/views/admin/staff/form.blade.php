@@ -15,7 +15,7 @@
         <input type="text" name="title" value="{{ (isset($staff) && !empty($staff->title)) ? $staff->title : ''}}">
     </div>
     <div class="form-label">
-        <label>@lang('cruds.staff.fields.username'):</label>
+        <label>@lang('cruds.staff.fields.full_name'):</label>
         <input type="text" name="name" value="{{ (isset($staff) && !empty($staff->name)) ? $staff->name : ''}}" @if(isset($staff) && !empty($staff->name)) {{-- readonly --}} @endif>
     </div>
     {{-- <div class="form-label">
@@ -28,12 +28,12 @@
     </div> --}}
     <div class="form-label">
         <label>@lang('cruds.staff.fields.email'):</label>
-        <input type="email" name="email" value="{{ (isset($staff) && !empty($staff->email)) ? $staff->email : ''}}" @if(isset($staff) && !empty($staff->username)) {{-- readonly --}} @endif>
+        <input type="email" name="email" value="{{ (isset($staff) && !empty($staff->email)) ? $staff->email : ''}}" @if(isset($staff) && !empty($staff->username)) {{-- readonly --}} @endif autofocus="false">
     </div>
     @if(!isset($staff))    
         <div class="form-label password-area">
             <label>@lang('cruds.staff.fields.password'):</label>
-            <input type="password" name="password" value="">
+            <input type="password" name="password" value="" autofocus="false">
             
             <span class="toggle-password close-eye">
                 <x-svg-icons icon="close-eye" />
@@ -227,6 +227,14 @@
                 <input type="file" name="training_check" id="fileInput1_7" class="fileInput" accept=".pdf" multiple>
             </div>
         </div>
+    </div>
+     <div class="form-label">
+        <label>@lang('cruds.staff.fields.previous_name'):</label>
+        <input type="text" name="previous_name" value="{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->previous_name : ''}}">
+    </div>
+    <div class="form-group form-check">
+        <input type="checkbox" class="form-check-input" id="is_agreement" @if(isset($staff) && $staff->is_agreement) checked @endif required>
+        <label class="form-check-label" for="is_agreement">{{ config('constant.staff_document_agreement_text') }}</label>
     </div>
 <div class="form-label justify-content-center">
     <button type="submit" class="cbtn submitBtn">

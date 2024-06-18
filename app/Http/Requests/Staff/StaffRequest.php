@@ -23,7 +23,7 @@ class StaffRequest extends FormRequest
      */
     public function rules(): array
     {
-
+   // dd($this->all());
         $rules = [];
         $method = $this->input('_method');
         $ids = $this->input('ids');
@@ -72,6 +72,7 @@ class StaffRequest extends FormRequest
             $rules['staff_budge']               = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
             $rules['dbs_check']                 = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
             $rules['training_check']            = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
+            $rules['is_agreement']              = ['required','in:1,0',];
 
         }
         

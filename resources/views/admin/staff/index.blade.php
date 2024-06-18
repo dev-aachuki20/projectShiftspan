@@ -152,7 +152,9 @@
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
 
+            let isAgreementChecked = $('#is_agreement').is(':checked') ? 1 : 0;
             var formData = new FormData(this);
+            formData.set('is_agreement', isAgreementChecked);
 
             $.ajax({
                 type: 'post',
@@ -282,7 +284,9 @@
 
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
+            let isAgreementChecked = $('#is_agreement').is(':checked') ? 1 : 0;
             var formData = new FormData(this);
+            formData.set('is_agreement', isAgreementChecked);
 
             var url = $(this).data('action');
 
