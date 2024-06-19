@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="form-label">
-                        <label>@lang('cruds.staff.fields.username'):</label>
+                        <label>@lang('cruds.staff.fields.full_name'):</label>
                         <div class="right-sidebox d-flex align-items-center justify-content-center">
                             <span class="fw-600">{{$user->name}}</span>
                         </div>
