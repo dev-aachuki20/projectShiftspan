@@ -107,7 +107,7 @@ class UpdateRequest extends FormRequest
     {
         return [
             'sub_admin_id' => 'Client name',
-            'client_detail_id' => 'Client Detail Name',
+            'client_detail_id' => 'Listed Sites Name',
             'location_id' => 'Location',
             'occupation_id' => ' Occupation',
         ];

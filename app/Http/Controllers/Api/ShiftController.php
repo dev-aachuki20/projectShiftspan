@@ -478,7 +478,7 @@ class ShiftController extends APIController
             if ($currentDateTime->gt($endDateTime)) {
                 Shift::where('id', $request->id)->update(['status' => 'cancel', 'cancel_at' => date('Y-m-d H:i:s')]);
             }else{
-                $isupdated = Shift::where('id', $request->id)->update(['status' => 'open', 'cancel_at' => Null ,  'picked_at' => Null]);
+                $isupdated = Shift::where('id', $request->id)->update(['status' => 'open', 'cancel_at' => Null , 'picked_at' => Null]);
 
                 if($isupdated){
                    $shift->staffs()->sync([]);
