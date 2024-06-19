@@ -267,7 +267,7 @@ return [
             'id'                => 'ID',
             'shift_label'      => 'Shift Label',
             'client_name'      => 'Client Admin',
-            'client_detail_name'=> 'Listed Business Name',
+            'client_detail_name'=> 'Listed Sites Name',
             'staff_name'        => 'Staff Name',
             'start_date'        => 'Start Date',
             'end_date'          => 'End Date',

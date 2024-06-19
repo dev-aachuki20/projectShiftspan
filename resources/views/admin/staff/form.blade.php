@@ -153,7 +153,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="relevant_training" id="fileInput1_2" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="relevant_training" id="fileInput1_2" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -168,7 +168,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="dbs_certificate" id="fileInput1_3" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="dbs_certificate" id="fileInput1_3" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -182,7 +182,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="cv_image" id="fileInput1_4" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="cv_image" id="fileInput1_4" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -196,7 +196,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="staff_budge" id="fileInput1_5" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="staff_budge" id="fileInput1_5" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -210,7 +210,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="dbs_check" id="fileInput1_6" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="dbs_check" id="fileInput1_6" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -224,7 +224,7 @@
             @endif
             <div class="chose-btn-area position-relative">
                 <a href="javascript:void(0)" class="chose-btn">@lang('global.choose') @lang('global.file')</a>
-                <input type="file" name="training_check" id="fileInput1_7" class="fileInput" accept=".pdf" multiple>
+                <input type="file" name="training_check" id="fileInput1_7" class="fileInput docfileinput" accept=".pdf" multiple>
             </div>
         </div>
     </div>
@@ -232,10 +232,7 @@
         <label>@lang('cruds.staff.fields.previous_name'):</label>
         <input type="text" name="previous_name" value="{{ (isset($staff) && !empty($staff->profile)) ? $staff->profile->previous_name : ''}}">
     </div>
-    <div class="form-group form-check">
-        <input type="checkbox" class="form-check-input" id="is_agreement" @if(isset($staff) && $staff->is_agreement) checked @endif required>
-        <label class="form-check-label" for="is_agreement">{{ config('constant.staff_document_agreement_text') }}</label>
-    </div>
+    
 <div class="form-label justify-content-center">
     <button type="submit" class="cbtn submitBtn">
         @if(isset($staff))

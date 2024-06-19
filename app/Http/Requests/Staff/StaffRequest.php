@@ -71,8 +71,7 @@ class StaffRequest extends FormRequest
             $rules['cv_image']                  = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
             $rules['staff_budge']               = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
             $rules['dbs_check']                 = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
-            $rules['training_check']            = ['nullable', 'file', 'mimes:pdf', 'max:2048'];
-            $rules['is_agreement']              = ['required','in:1,0',];
+            $rules['training_check']            = ['nullable', 'file', 'mimes:pdf', 'max:2048'];            
 
         }
         

@@ -151,10 +151,8 @@
 
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
-
-            let isAgreementChecked = $('#is_agreement').is(':checked') ? 1 : 0;
-            var formData = new FormData(this);
-            formData.set('is_agreement', isAgreementChecked);
+            
+            var formData = new FormData(this);           
 
             $.ajax({
                 type: 'post',
@@ -284,10 +282,9 @@
 
             $('.validation-error-block').remove();
             $(".submitBtn").attr('disabled', true);
-            let isAgreementChecked = $('#is_agreement').is(':checked') ? 1 : 0;
+           
             var formData = new FormData(this);
-            formData.set('is_agreement', isAgreementChecked);
-
+           
             var url = $(this).data('action');
 
             $.ajax({
@@ -574,6 +571,14 @@
             $('#addNotificationForm .hiddenInputs').html(hiddenInputs);
         }
     }
+
+    
+    $(document).on('change', '.docfileinput', function (e) {    
+        e.preventDefault();    
+        if (this.files && this.files.length > 0) {            
+            $(this).prev('a.chose-btn').addClass('file-uploaded');
+        }
+    });
 </script>
 
 @endsection
