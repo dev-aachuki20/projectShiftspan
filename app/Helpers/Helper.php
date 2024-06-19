@@ -2,6 +2,7 @@
 
 use App\Models\Order;
 use App\Models\Setting;
+use App\Models\Shift;
 use App\Models\Uploads;
 use App\Models\User;
 use Carbon\Carbon;
@@ -160,13 +161,13 @@ if (!function_exists('sendNotification')) {
     function sendNotification($user_id, $subject, $message, $section, $notification_type = null, $data = null)
     {
         try {
-// 			$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
-			
+        // 	$firebaseToken = User::where('is_active', 1)->where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
+
 			$firebaseToken = User::where('id', $user_id)->whereNotNull('device_token')->pluck('device_token')->all();
-			
-			
+
+
 			\Log::info(['firebaseToken' => $firebaseToken,'user_id'=>$user_id]);
-			
+
 			$response = null;
 			if($firebaseToken){
 				$SERVER_API_KEY = env('FIREBASE_KEY');
@@ -252,3 +253,30 @@ if (!function_exists('getStaffRating')) {
 		return $rating;
 	}
 }
+
+if (!function_exists('checkAndChangeShiftExpireStatus')) {
+
+	function checkAndChangeShiftExpireStatus($shift_id) {
+
+        $currentDateTime = Carbon::now();
+        $CheckShiftexpire = Shift::where('id', $shift_id)
+            ->where('status', 'open')
+            ->whereNull('picked_at')
+            ->where(function ($query) use ($currentDateTime) {
+                $query->where('end_date', '<', $currentDateTime->toDateString())
+                        ->orWhere(function ($query) use ($currentDateTime) {
+                            $query->where('end_date', '=', $currentDateTime->toDateString())
+                                ->where('end_time', '<', $currentDateTime->toTimeString());
+                        });
+            })->first();
+
+        if ($CheckShiftexpire) {
+            // Shift is expired , then change status not picked
+            $CheckShiftexpire->update(['status'=>'not picked']);
+            return true;
+        }
+        // Shift is not expired
+        return false;
+	}
+}
+

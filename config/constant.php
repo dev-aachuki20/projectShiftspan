@@ -31,10 +31,10 @@ return [
         0 => 'No'
     ],
 
-    'shop_description_length' => 200, 
-    'travel_info_length' => 200, 
-    'company_number_prefix' => 'SS', 
-    'company_number_start' => '000001', 
+    'shop_description_length' => 200,
+    'travel_info_length' => 200,
+    'company_number_prefix' => 'SS',
+    'company_number_start' => '000001',
     'staff_document_agreement_text' => 'I agree with the terms and conditions of document submission.',
 
     'staff_file_fields' => [
@@ -65,10 +65,11 @@ return [
     ],
 
     'shift_status' => [
-        'open' => 'Open', 
-        'picked' => 'Picked', 
-        'cancel' => 'Cancel', 
-        'complete' => 'Complete'
+        'open' => 'Open',
+        'picked' => 'Picked',
+        'cancel' => 'Cancel',
+        'complete' => 'Complete',
+        'not picked' => 'Not Picked'
     ],
 
     'ratings' =>[
@@ -85,7 +86,7 @@ return [
     'timepicker_max_time' => '24:00',
 
     'notification_subject' => [
-        'help_chat'     => 'Help Chat', 
+        'help_chat'     => 'Help Chat',
         'announcements' => 'Announcements',
     ],
 
@@ -110,7 +111,7 @@ return [
         /* For Account activate */
         'user_account_active'               => 'Account is activated',
         'user_account_deactive'             => 'Account is deactivated',
-        
+
         /* for staff */
         'clock_in'                          => 'Clock In',
         'clock_out'                         => 'Clock Out',
@@ -138,7 +139,7 @@ return [
             'shift_ratings',
             'shift_delete',
         ],
-        
+
         'staffs' => [
             'clock_in',
             'clock_out',
@@ -152,7 +153,7 @@ return [
             'send_notification'
         ]
     ],
-    
+
     'send_notification_to_parent'=>[
         'pick_shift' => [
            'super_admin' => true,
@@ -185,5 +186,5 @@ return [
         'before_clock_in_shift' => env('BEFORE_SHIFT_CLOCK_IN_REMINDER', 15),
         'after_clock_out_shift' => env('AFTER_SHIFT_CLOCK_OUT_REMINDER', 15),
     ]
-    
+
 ];

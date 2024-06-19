@@ -24,11 +24,11 @@ return new class extends Migration
             $table->datetime('picked_at')->nullable();
             $table->datetime('cancel_at')->nullable();
             $table->tinyInteger('rating')->default(null)->nullable();
-            $table->enum('status', ['open', 'picked', 'cancel', 'complete'])->default('open');
+            $table->enum('status', ['open', 'picked', 'cancel', 'complete','not picked'])->default('open');
             $table->unsignedBigInteger('created_by')->nullable();
             $table->timestamps();
             $table->softDeletes();
-            
+
             $table->foreign('occupation_id')->references('id')->on('occupations');
         });
     }

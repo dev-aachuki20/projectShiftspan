@@ -150,6 +150,11 @@ class ShiftDataTable extends DataTable
             })
 
             ->editColumn('status', function($record){
+                $checkshiftexpirestatus = checkAndChangeShiftExpireStatus($record->id);
+                if ($checkshiftexpirestatus) {
+                    $updatedRecord = Shift::find($record->id);
+                    return config('constant.shift_status')[$updatedRecord->status];
+                }
                 return config('constant.shift_status')[$record->status];
             })
 
@@ -163,7 +168,7 @@ class ShiftDataTable extends DataTable
                     <i class="fa fa-star '.($rating >=5 ? 'checked' : '' ).'"></i>
                 </div>';
             })
-            
+
             ->addColumn('action', function($record){
                 $actionHtml = '';
 
@@ -189,7 +194,7 @@ class ShiftDataTable extends DataTable
                             </span>
                         </button>';
                     }
-                    
+
                     if (Gate::check('shift_delete')) {
                         $actionHtml .= '<button class="dash-btn red-bg small-btn icon-btn deleteShiftBtn" data-href="'.route('shifts.destroy', $record->uuid).'" title="Delete">
                             <span data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="'.__('global.delete').'">
@@ -228,10 +233,10 @@ class ShiftDataTable extends DataTable
                 $query->whereRaw("DATE_FORMAT(cancel_at, '".config('constant.search_date_format.date_time')."') like ?", ["%$keyword%"]); //date_format when searching using date
             })
             ->rawColumns([
-                'action', 
+                'action',
                 'checkbox',
-                'rating', 
-                auth()->user()->is_super_admin ? 'client.name' : '', 
+                'rating',
+                auth()->user()->is_super_admin ? 'client.name' : '',
                 auth()->user()->is_sub_admin ? 'clientDetail.name' : '',
                 'staffs.name',
                 'shift_label',
@@ -257,7 +262,7 @@ class ShiftDataTable extends DataTable
      */
     public function html(): HtmlBuilder
     {
-        
+
         return $this->builder()
                     ->setTableId('shift-table')
                     ->columns($this->getColumns())
@@ -267,7 +272,7 @@ class ShiftDataTable extends DataTable
                     ->lengthMenu([
                         [10, 25, 50, 100, /*-1*/], // Page length values
                         [10, 25, 50, 100, /*'All'*/]  // Display text for each value
-                    ])                    
+                    ])
                     ->selectStyleSingle()
                     ->lengthMenu([
                         [10, 25, 50, 100, -1],
@@ -303,7 +308,7 @@ class ShiftDataTable extends DataTable
         $columns[] = Column::make('cancel_at')->title('<span>'.trans('cruds.shift.fields.cancel_at').'</span>')->titleAttr(trans('cruds.shift.fields.cancel_at'));
         $columns[] = Column::make('rating')->title('<span>'.trans('cruds.shift.fields.rating').'</span>')->titleAttr(trans('cruds.shift.fields.rating'))->searchable(false);
         $columns[] = Column::make('status')->title('<span>'.trans('cruds.shift.fields.status').'</span>')->titleAttr(trans('cruds.shift.fields.status'));
-        
+
         $columns[] = Column::make('created_at')->title(trans('cruds.shift.fields.created_at'))->visible(false)->searchable(false);
         $columns[] = Column::computed('action')->exportable(false)->printable(false)->width(60)->addClass('text-center');
 
