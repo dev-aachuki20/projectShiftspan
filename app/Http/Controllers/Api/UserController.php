@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Api\APIController;
+use App\Models\Group;
+use App\Models\Message;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -95,4 +98,26 @@ class UserController extends APIController
         }
     }
     
+    public function deleteUserAccount(){
+        $user = User::where('id', auth()->user()->id)->first();
+        DB::beginTransaction();
+        try {
+
+            $groupIds = $user->groups()->pluck('id')->toArray();
+            Message::whereIn('group_id', $groupIds)->delete();
+            Group::whereIn('id', $groupIds)->delete();
+
+            $user->delete();
+            DB::commit();
+            
+            return response()->json($response = [
+                'success'    => true,
+                'message'    => trans('messages.api.delete_staff_account'),
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();      
+            // dd($e->getMessage().' '.$e->getFile().' '.$e->getLine());          
+            return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
+        }
+    }
 }
