@@ -253,7 +253,7 @@ class ShiftDataTable extends DataTable
         if($user->is_super_admin){
             return $model->newQuery();
         } else {
-            return $model->where('sub_admin_id', $user->id)->newQuery();
+            return $model->where('shifts.sub_admin_id', $user->id)->newQuery();
         }
     }
 
