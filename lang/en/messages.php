@@ -131,5 +131,9 @@ return [
         'no_notification'=>'No notifications to clear!',
         'clear_notification' => 'All notifications have been cleared',
         'delete'             => 'Notification has been deleted successfully!',
+    ],
+
+    'api' => [
+        'delete_staff_account' => 'Your account has been succesfully deleted'
     ]
 ];

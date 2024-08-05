@@ -476,6 +476,6 @@ Route::group(['namespace' => 'Api', 'middleware' => ['auth:sanctum', 'checkUserS
     Route::post('/send-message/{groupId}', [MessageController::class,'sendMessage']);
 
 
-    
+    Route::post('delete-account', [UserController::class,'deleteUserAccount']);
     
 });
