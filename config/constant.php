@@ -11,6 +11,7 @@ return [
         'user_icon' => 'default/user-icon.svg',
         'datatable_loader' => 'default/datatable_loader.gif',
         'group_icon' => 'images/groupIcon.svg',
+        'firebase_json_file' => storage_path('app/firebase-auth.json'),
     ],
     'profile_max_size' => 2048,
     'profile_max_size_in_mb' => '2MB',

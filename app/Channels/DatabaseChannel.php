@@ -18,10 +18,12 @@ class DatabaseChannel
         $user = auth()->user();
         if (auth()->check()) {
             if ($user->is_super_admin || $user->is_sub_admin) {
-                sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+                // sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+                SendPushNotification($user_id, $data['subject'], $data['message']);
             }
         } else if(isset($data['task_type']) && $data['task_type'] == 'cron'){
-            sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+            // sendNotification($user_id, $data['subject'], $data['message'], $data['section'], $data['notification_type'], $data);
+            SendPushNotification($user_id, $data['subject'], $data['message']);
         }
 
         /* From this Save the value from database */
