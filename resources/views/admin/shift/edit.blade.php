@@ -1,5 +1,5 @@
-<div class="modal fade common-modal modal-size-l" id="editShiftModal" tabindex="-1" aria-labelledby="editShiftLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-820">
+<div class="modal fade common-modal new-common-modal" id="editShiftModal" tabindex="-1" aria-labelledby="editShiftLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-full">
         <div class="modal-content">
             <div class="modal-header justify-content-center sky-bg">
                 <h5 class="modal-title text-center" id="editShiftLabel">@lang('global.edit') @lang('cruds.shift.title_singular')</h5>

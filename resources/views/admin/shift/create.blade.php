@@ -1,5 +1,5 @@
-<div class="modal fade common-modal modal-size-l" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered mw-820">
+<div class="modal fade common-modal new-common-modal" id="addShiftModal" tabindex="-1" aria-labelledby="addShiftLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-full">
         <div class="modal-content">
             <div class="modal-header justify-content-center green-bg">
                 <h5 class="modal-title text-center" id="addShiftLabel">+ @lang('global.add') @lang('cruds.shift.title_singular')</h5>

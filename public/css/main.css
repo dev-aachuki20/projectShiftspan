@@ -2617,7 +2617,6 @@ th.datatable_desription{
     transform: translateX(-50%);
     z-index: 30;
 }
-
 .file-uploaded{
     position: relative;
 }
@@ -2634,6 +2633,119 @@ th.datatable_desription{
     background-size: 13px;
     background-color: var(--white);
     border-radius: 10px;
+}
+
+/* New Modal design */
+.modal-full{
+    max-width: 1480px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.new-common-modal .msg-form>.row{
+    margin-bottom: 32px;
+    margin-left: -8px;
+    margin-right: -8px;
+    position: relative;
+}
+.clone_row>.inner_col:not(:last-child){
+    width: 19%;
+}
+.clone_row>.inner_col:nth-last-of-type(2){
+    width: 24%;
+}
+.new-common-modal .msg-form>.row:not(:first-of-type)::before{
+    content: '';
+    position: absolute;
+    left: 9px;
+    top: -18px;
+    width: calc(100% - 18px);
+    height: 1px;
+    background-color: var(--light-gray-color);
+}
+#clone-showing-data .clone_row{
+    margin-left: -8px;
+    margin-right: -8px;
+}
+.new-common-modal .msg-form>.row>*,
+#clone-showing-data .clone_row>*{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.new-common-modal .msg-form .form-label{
+    display: flex;
+    display: -webkit-flex;
+    position: relative;
+}
+.new-common-modal .msg-form .form-label .error_select{
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+}
+.new-common-modal .msg-form .form-label>label{
+    flex: 0 0 auto;
+    -webkit-flex: 0 0 auto;
+    max-width: max-content;
+    font-size: var(--body-font-size);
+    color: var(--black);
+    font-weight: var(--fw-600);
+    background-color: #cbcbcb;
+    border-radius: 28px 0 0 28px;
+    padding: 17px 8px 17px 15px;
+    text-align: right;
+}
+.new-common-modal .msg-form .form-label>input:not(input[type="submit"]){
+    min-height: 54px;
+    border-radius: 0 28px 28px 0;
+    color: #7a7a7a;
+    padding-left: 10px;
+}
+.new-common-modal .msg-form .form-label .select2.select2-container{
+    flex: 1;
+    -webkit-flex: 1;
+    max-width: none;
+    width: 100% !important;
+    text-align: left;
+}
+.new-common-modal .msg-form .form-label .select2 .select2-selection{
+    justify-content: flex-start;
+    -webkit-justify-content: flex-start;
+    text-align: left;
+    padding-left: 10px;
+}
+.clone_row{
+    padding-right: 66px;
+    position: relative;
+}
+.clone_row .AddOptionBtn2{
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: auto;
+}
+#clone-showing-data .clone_row:first-child{
+    margin-top: -18px;
+}
+#clone-showing-data .clone_row{
+    margin-bottom: 32px;
+}
+.AddOptionBtn2>a{
+    width: 54px;
+    height: 54px;
+    line-height: 54px;
+    text-align: center;
+    border-radius: 28px;
+    display: block;
+}
+.AddOptionBtn2>a.addicon{
+    background-color: var(--primary);
+}
+.AddOptionBtn2>a.remove-option{
+    background-color: #ee4242;
+}
+.new-common-modal .msg-form .form-label>input.datepicker,
+.new-common-modal .msg-form .form-label>input.timepicker{
+    background-position: calc(100% - 12px) center;
+    background-size: 15px;
 }
 
 
@@ -2837,7 +2949,27 @@ th.datatable_desription{
     .chatboxGroup .list-group .list-group-item .useraccount{
         width: calc(100% - 50px);
     }
-
+    .clone_row,
+    .new-common-modal .msg-form>.first_row{
+        row-gap: 18px;
+    }
+    .new-common-modal .msg-form>.first_row>div:first-child,
+    .new-common-modal .msg-form>.first_row>div:nth-child(2){
+        width: 50%;
+    }
+    .new-common-modal .msg-form>.first_row>div + div + div{
+        width: 100%;
+    }
+    .new-common-modal .msg-form .form-label>input.datepicker,
+    .new-common-modal .msg-form .form-label>input.timepicker{
+        background-position: calc(100% - 12px) center;
+    }
+    .clone_row>.inner_col:not(:last-child) {
+        width: 25%;
+    }
+    .clone_row>.inner_col:nth-last-of-type(2){
+        width: 100%;
+    }
 }
 @media screen and (min-width: 992px) and (max-width: 1199px){
     /* .header-inner .menu-left > ul li.dropdown .has_noti{
@@ -3199,6 +3331,23 @@ th.datatable_desription{
     .chatboxGroup .list-group .list-group-item .useraccount{
         width: calc(100% - 50px);
     }
+
+    .clone_row>.inner_col:not(:last-child),
+    .clone_row>.inner_col:nth-last-of-type(2){
+        width: 100%;
+    }
+    .new-common-modal .msg-form .form-label>label{
+        flex: 0 0 154px;
+        -webkit-flex: 0 0 154px;
+        max-width: 154px;
+    }
+    .new-common-modal .msg-form>.row,
+    #clone-showing-data .clone_row{
+        gap: 8px;
+    }
+    .clone_row {
+        padding-right: 55px;
+    }
 }
 @media screen and (max-width: 767px){
     .size-22{
@@ -3328,10 +3477,6 @@ th.datatable_desription{
     .chatboxGroup .chat-panel .userporfile{
         width: calc(100% - 90px);
     }
-    /*.tooltip {
-        display: none !important;
-    }*/
-    /*  */
 }
 @media screen and (max-width: 575px){
     .input-icon{
@@ -3462,6 +3607,44 @@ th.datatable_desription{
     }
     .chatboxGroup .message {
         max-width: 80%;
+    }
+
+    .new-common-modal .msg-form .form-label{
+        flex-wrap: wrap;
+        -webkit-flex-wrap: wrap;
+    }
+    .new-common-modal .msg-form .form-label>input:not(input[type="submit"]),
+    .new-common-modal .msg-form .form-label .select2 .select2-selection{
+        text-align: center;
+    }
+    .new-common-modal .msg-form .form-label .select2 .select2-selection{
+        justify-content: center;
+        -webkit-justify-content: center;
+    }
+    .new-common-modal .msg-form .form-label>input:not(input[type="submit"]),
+    .new-common-modal .msg-form .select2 .select2-selection{
+        min-height: 48px;
+    }
+    .new-common-modal .msg-form .form-label>label{
+        padding: 14px;
+    }
+    .new-common-modal .msg-form .form-label>label{
+        flex: 0 0 100%;
+        -webkit-flex: 0 0 100%;
+        max-width: 100%;
+    }
+    .new-common-modal .msg-form .form-label>label{
+        border-radius: 28px 28px 0 0;
+        text-align: center;
+    }
+    .new-common-modal .msg-form .form-label>input:not(input[type="submit"]),
+    .new-common-modal .msg-form .select2 .select2-selection{
+        border-radius: 0 0 28px 28px;
+    }
+    .AddOptionBtn2>a{
+        width: 48px;
+        height: 48px;
+        line-height: 48px;
     }
 }
 
