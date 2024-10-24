@@ -61,100 +61,109 @@ class ShiftController extends Controller
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
-    }
+    }  
 
-    /**
-     * Store a newly created resource in storage.
-     */
+
     public function store(StoreRequest $request)
-    {
+    {       
         abort_if(Gate::denies('shift_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) 
         {
             DB::beginTransaction();
             try{
+
                 $input = $this->modifyRequestInput($request);
 
-                if($request->has('quantity')){
-                    for($i=1;$i<=$request->quantity; $i++){
-                        $shift = Shift::create($input);
-                        if($i == 1 && $shift && $request->has('assign_staff') && !empty($request->assign_staff)){
-                            $shift->update([
-                                'picked_at' => date('Y-m-d H:i:s'),
-                                'status' => 'picked',
-                            ]);                            
-                            $staffId = User::where('uuid', $request->assign_staff)->first()->id;
-                            $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
-                        }
+                foreach ($request->shifts as $shiftData)
+                {                                       
+                    $data = [
+                        'shift_label' => $request->shift_label,
+                        'sub_admin_id' => $input['sub_admin_id'],
+                        'client_detail_id' => $input['client_detail_id'],
+                        'occupation_id' =>  $input['occupation_id'] ,
+                        'start_date' => Carbon::createFromFormat('d-m-Y', $shiftData['start_date'])->format('Y-m-d'),
+                        'end_date' => Carbon::createFromFormat('d-m-Y', $shiftData['end_date'])->format('Y-m-d'),
+                        'start_time' => $shiftData['start_time'],
+                        'end_time' => $shiftData['end_time'],
+                    ];       
+                    
+                    $shift = Shift::create($data);
+        
+                    // If this staff is assigned
+                    if($shift && isset($shiftData['assign_staff']) && !empty($shiftData['assign_staff'])) {
+                        $shift->update([
+                            'picked_at' => now(),
+                            'status' => 'picked',
+                        ]);
+
+                        // Sync the assigned staff
+                        $staffId = User::where('uuid', $shiftData['assign_staff'])->first()->id;
+                        $shift->staffs()->sync([$staffId => ['created_at' => now()]]);
+                    }                                            
+
+                    $clientDetail = ClientDetail::where('id', $input['client_detail_id'])->first();
+                    
+                    if(isset($shiftData['assign_staff']) && !is_null($shiftData['assign_staff']) && !empty($shiftData['assign_staff'])){
+                        $user = User::where('uuid', $shiftData['assign_staff'])->first();
+                       
+                        $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                        $messageData = [
+                            'notification_type' => array_search(config('constant.subject_notification_type.shift_assign'), config('constant.subject_notification_type')),
+                            'section'           => $key,
+                            'subject'           => trans('messages.shift.shift_created_and_assign_subject'),
+                            'message'           => trans('messages.shift.shift_created_and_assign_message', [
+                                'username'      => $user->name,
+                                'start_date'    => $shiftData['start_date'], 
+                                'end_date'      => $shiftData['end_date'], 
+                                'start_time'    => $shiftData['start_time'], 
+                                'end_time'      => $shiftData['end_time']
+                            ]),       
+                        ];                        
+                        Notification::send($user, new SendNotification($messageData));
+                    }else if(isset($input['sub_admin_id'])){
+                        
+                        $companyAdmin = User::where('id', $input['sub_admin_id'])->first();
+                        $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
+                        $messageData = [
+                            'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
+                            'section'           => $key,
+                            'subject'           => trans('messages.shift.shift_available_subject'),
+                            'message'           => trans('messages.shift.shift_available_staff_message', [
+                                'shift_label'   => $request['shift_label'],
+                                'start_date'    => $shiftData['start_date'], 
+                                'listed_business' => $clientDetail->name, 
+                                'start_time'    => $shiftData['start_time'], 
+                                'end_time'      => $shiftData['end_time']
+                            ]),       
+                        ];
+                        Notification::send($companyAdmin->staffs, new SendNotification($messageData));  
                     }
-                }
-                
-                $clientDetail = ClientDetail::where('id', $input['client_detail_id'])->first();
-                if(isset($request->assign_staff) && !is_null($request->assign_staff) && !empty($request->assign_staff)){
-                    $user = User::where('uuid', $request->assign_staff)->first();
-                
-                    $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
-                    $messageData = [
-                        'notification_type' => array_search(config('constant.subject_notification_type.shift_assign'), config('constant.subject_notification_type')),
-                        'section'           => $key,
-                        'subject'           => trans('messages.shift.shift_created_and_assign_subject'),
-                        'message'           => trans('messages.shift.shift_created_and_assign_message', [
-                            'username'      => $user->name,
-                            'start_date'    => $request['start_date'], 
-                            'end_date'      => $request['end_date'], 
-                            'start_time'    => $request['start_time'], 
-                            'end_time'      => $request['end_time']
-                        ]),       
-                    ];
-                    
-                    Notification::send($user, new SendNotification($messageData));
 
-                }else if(isset($input['sub_admin_id'])){
-                    
-                    $companyAdmin = User::where('id', $input['sub_admin_id'])->first();
+                    $shiftCreatorRole = $shift->shiftCreator->roles()->first()->id;
+                    if(config('constant.roles.super_admin') == $shiftCreatorRole){
+                        $adminData = $shift->client;
+                    } else if(config('constant.roles.sub_admin') == $shiftCreatorRole) {
+                        $adminData = User::whereHas('roles', function($q){
+                            $q->where('id', config('constant.roles.super_admin'));
+                        })->first();
+                    }
 
+                    // send notification to admin
                     $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
-                    $messageData = [
+                    $adminMessageData = [
                         'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
                         'section'           => $key,
                         'subject'           => trans('messages.shift.shift_available_subject'),
-                        'message'           => trans('messages.shift.shift_available_staff_message', [
+                        'message'           => trans('messages.shift.shift_available_admin_message', [
                             'shift_label'   => $request['shift_label'],
-                            'start_date'    => $request['start_date'], 
+                            'start_date'    => $shiftData['start_date'], 
                             'listed_business' => $clientDetail->name, 
-                            'start_time'    => $request['start_time'], 
-                            'end_time'      => $request['end_time']
+                            'start_time'    => $shiftData['start_time'], 
+                            'end_time'      => $shiftData['end_time']
                         ]),       
                     ];
-                    
-                    Notification::send($companyAdmin->staffs, new SendNotification($messageData));  
-                }
-
-                $shiftCreatorRole = $shift->shiftCreator->roles()->first()->id;
-                if(config('constant.roles.super_admin') == $shiftCreatorRole){
-                    $adminData = $shift->client;
-                } else if(config('constant.roles.sub_admin') == $shiftCreatorRole) {
-                    $adminData = User::whereHas('roles', function($q){
-                        $q->where('id', config('constant.roles.super_admin'));
-                    })->first();
-                }
-
-                // send notification to admin
-                $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
-                $adminMessageData = [
-                    'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
-                    'section'           => $key,
-                    'subject'           => trans('messages.shift.shift_available_subject'),
-                    'message'           => trans('messages.shift.shift_available_admin_message', [
-                        'shift_label'   => $request['shift_label'],
-                        'start_date'    => $request['start_date'], 
-                        'listed_business' => $clientDetail->name, 
-                        'start_time'    => $request['start_time'], 
-                        'end_time'      => $request['end_time']
-                    ]),       
-                ];
-                Notification::send($adminData, new SendNotification($adminMessageData));  
-                
+                    Notification::send($adminData, new SendNotification($adminMessageData));  
+                }   
                 DB::commit();
                 $response = [
                     'success' => true,
@@ -163,13 +172,12 @@ class ShiftController extends Controller
                 return response()->json($response);
             } catch (\Exception $e) {
                 DB::rollBack();
-                // dd($e->getMessage());
+                 dd($e->getMessage(),$e->getCode(),$e->getLine());
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }
         return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
     }
-
     /**
      * Display the specified resource.
      */

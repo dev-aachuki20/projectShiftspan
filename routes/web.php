@@ -157,3 +157,4 @@ Route::middleware(['auth','PreventBackHistory', 'userinactive'])->group(function
 });
 
 
+Route::get('/testDatePicker', [ShiftController::class, 'testDatePicker'])->name('testDatePicker');

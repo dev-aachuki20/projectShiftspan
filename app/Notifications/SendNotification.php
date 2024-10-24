@@ -78,8 +78,7 @@ class SendNotification extends Notification implements ShouldQueue
             }
         }else{
             return (new CustomNotificationMail($subject, $userName, $message))->to($notifiable->email);
-        }
-        
+        }        
        
     }
 
