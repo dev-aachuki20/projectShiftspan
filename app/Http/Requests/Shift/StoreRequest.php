@@ -82,20 +82,27 @@ class StoreRequest extends FormRequest
 
         // $rules['end_time'] = ['required', 'date_format:'.config('constant.date_format.time'), 'after:start_time'];       
 
-        $rules['shifts.*.assign_staff'] = ['nullable', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), '', 'uuid'), function ($attribute, $value, $fail)  {               
-                $user = User::where('uuid',$value)->first();                
-                $isShiftWithinAssignedShifts = $user->assignShifts()->whereIn('status', ['picked'])->where(function ($query) {
-                $query->where(function ($q) {
-                        $q->whereBetween('start_date', [Carbon::parse($this->start_date)->format('Y-m-d'), Carbon::parse($this->end_date)->format('Y-m-d')])
-                          ->orWhereBetween('end_date', [Carbon::parse($this->start_date)->format('Y-m-d'), Carbon::parse($this->end_date)->format('Y-m-d')]);
-                    })
-                    ->where(function ($q) {
-                          $q->where('start_time', '<=', $this->end_time)
-                            ->where('end_time', '>=', $this->start_time);
-                    });
+        $rules['shifts.*.assign_staff'] = ['nullable', 'exists:users,uuid,deleted_at,NULL', new UserHasRole(config('constant.roles.staff'), '', 'uuid'), function ($attribute, $value, $fail)  {  
+                $user = User::where('uuid',$value)->first();
+                $shiftIndex = $this->getIndexFromAttribute($attribute);
+
+                $startDate = $this->input("shifts.$shiftIndex.start_date");
+                $endDate = $this->input("shifts.$shiftIndex.end_date");
+                $startTime = $this->input("shifts.$shiftIndex.start_time");
+                $endTime = $this->input("shifts.$shiftIndex.end_time");
+
+                $isShiftWithinAssignedShifts = $user->assignShifts()->whereIn('status', ['picked'])->where(function ($query) use($startDate, $endDate, $startTime,$endTime) {
+                $query->where(function ($q) use($startDate, $endDate){
+                    $q->whereBetween('start_date', [Carbon::parse($startDate)->format('Y-m-d'), Carbon::parse($endDate)->format('Y-m-d')])
+                        ->orWhereBetween('end_date', [Carbon::parse($startDate)->format('Y-m-d'), Carbon::parse($endDate)->format('Y-m-d')]);
+                })
+                ->where(function ($q) use($startTime,$endTime) {
+                        $q->where('start_time', '<=', $endTime)
+                        ->where('end_time', '>=', $startTime);
+                });
                 })->exists();                
                 if($isShiftWithinAssignedShifts){
-                    $fail("The shift's time slot overlaps with your assigned shifts.");
+                    $fail("The shift's time slot overlaps with the staff member's assigned shifts");
                 } 
             }];
 

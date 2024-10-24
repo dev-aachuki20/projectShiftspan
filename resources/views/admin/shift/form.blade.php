@@ -5,8 +5,8 @@
             <input type="text" name="shift_label" id="shift_label"  value="{{ isset($shift) ? $shift->shift_label : '' }}" autocomplete="off" @required(true) />
         </div>
     </div>
-    <div class="col-lg-4">
-        @if(auth()->user()->is_super_admin)
+    @if(auth()->user()->is_super_admin)
+        <div class="col-lg-4">
             <div class="form-label select-label">
                 <label>@lang('cruds.shift.fields.client_name'):</label>
                 <select name="sub_admin_id" id="sub_admin_id" class="select2">
@@ -17,8 +17,8 @@
                 </select>
                 <div class="client_name_error error_select" style="width: 100%"></div>
             </div>
-        @endif
-    </div>
+        </div>
+    @endif
     <div class="col-lg-4">
         <div class="form-label select-label">
             <label>@lang('cruds.shift.fields.client_detail_name'):</label>
@@ -39,31 +39,31 @@
     <div class="inner_col">
         <div class="form-label position-relative">
             <label>@lang('cruds.shift.fields.start_date'):</label>
-            <input type="text" name="start_date"  class="datepicker start_date" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
+            <input type="text"   class="datepicker start_date" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
         </div>
     </div>
     <div class="inner_col">
         <div class="form-label">
             <label>@lang('cruds.shift.fields.end_date'):</label>
-            <input type="text" name="end_date"   class="datepicker end_date" value="{{ isset($shift) ? dateFormat($shift->end_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true) />
+            <input type="text"    class="datepicker end_date" value="{{ isset($shift) ? dateFormat($shift->end_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true) />
         </div>
     </div>
     <div class="inner_col">
         <div class="form-label">
             <label>@lang('cruds.shift.fields.start_time'):</label>
-            <input type="text" name="start_time"  class="timepicker start_time" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}"  @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
+            <input type="text"   class="timepicker start_time" value="{{ isset($shift) ? dateFormat($shift->start_time, config('constant.date_format.time')) : '' }}"  @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
         </div>
     </div>
     <div class="inner_col">
         <div class="form-label">
             <label>@lang('cruds.shift.fields.end_time'):</label>
-            <input type="text" name="end_time"  class="timepicker end_time" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}"  @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
+            <input type="text"   class="timepicker end_time" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}"  @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
         </div>
     </div>
     <div class="inner_col">
         <div class="form-label select-label">
             <label>@lang('cruds.shift.fields.assign_staff'):</label>
-            <select name="assign_staff"  class="select2 assign_staff" >
+            <select   class="select2 assign_staff" >
                 <option value="">@lang('global.select') @lang('cruds.staff.title_singular')</option>
                 @if((isset($shift) && auth()->user()->is_super_admin) || auth()->user()->is_sub_admin)
                     @foreach ($staffs as $keyStaff => $staff)

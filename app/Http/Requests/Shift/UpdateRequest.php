@@ -81,7 +81,7 @@ class UpdateRequest extends FormRequest
                 
 
                 if($isShiftWithinAssignedShifts){
-                    $fail("The shift's time slot overlaps with your assigned shifts.");
+                    $fail("The shift's time slot overlaps with the staff member's assigned shifts.");
                 } 
             }];
 
