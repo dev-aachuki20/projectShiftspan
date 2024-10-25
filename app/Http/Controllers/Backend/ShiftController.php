@@ -162,7 +162,7 @@ class ShiftController extends Controller
                             'end_time'      => $shiftData['end_time']
                         ]),       
                     ];
-                    // Notification::send($adminData, new SendNotification($adminMessageData));  
+                    Notification::send($adminData, new SendNotification($adminMessageData));  
                 }   
                 DB::commit();
                 $response = [
