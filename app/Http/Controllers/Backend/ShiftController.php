@@ -162,7 +162,7 @@ class ShiftController extends Controller
                             'end_time'      => $shiftData['end_time']
                         ]),       
                     ];
-                    Notification::send($adminData, new SendNotification($adminMessageData));  
+                    // Notification::send($adminData, new SendNotification($adminMessageData));  
                 }   
                 DB::commit();
                 $response = [
@@ -172,7 +172,7 @@ class ShiftController extends Controller
                 return response()->json($response);
             } catch (\Exception $e) {
                 DB::rollBack();
-                 dd($e->getMessage(),$e->getCode(),$e->getLine());
+                //  dd($e);
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

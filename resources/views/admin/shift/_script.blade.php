@@ -183,7 +183,7 @@
         if (errorFlg) {
             // Clear existing error messages
             $('.validation-error-block').remove(); // Remove previous error messages
-            $(errorHtml).insertAfter($('.clone_row:last')); // Insert accumulated error messages
+            $(errorHtml).insertAfter($('#clone-showing-data')); // Insert accumulated error messages
         }
 
         return errorFlg; // Return whether there were any errors

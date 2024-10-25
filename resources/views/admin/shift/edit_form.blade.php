@@ -30,7 +30,6 @@
     <div class="client_detail_name_error error_select" style="width: 100%"></div>
 </div>
 
-<div class="clone_row p-0 mb-3">
     <div class="form-label position-relative">
         <label>@lang('cruds.shift.fields.start_date'):</label>
         <input type="text" name="start_date" id="start_date" class="datepicker start_date" value="{{ isset($shift) ? dateFormat($shift->start_date, config('constant.date_format.date')) : '' }}" @required(true) @readonly(true)/>
@@ -47,7 +46,6 @@
         <label>@lang('cruds.shift.fields.end_time'):</label>
         <input type="text" name="end_time" id="end_time" class="timepicker end_time" value="{{ isset($shift) ? dateFormat($shift->end_time, config('constant.date_format.time')) : '' }}" @required(true) @readonly(false) oninput="this.value = this.value.replace(/[^0-9:]/g, '').replace(/(\..*)\./g, '$1');" onkeypress="return /[0-9:]/.test(event.key)" maxlength="5"/>
     </div>
-</div>
 <div class="form-label select-label">
     <label>@lang('cruds.shift.fields.occupation_id'):</label>
     <select name="occupation_id" id="occupation_id" class="select2">

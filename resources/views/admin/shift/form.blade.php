@@ -1,12 +1,12 @@
 <div class="row first_row">
-    <div class="col-lg-4">
+    <div class="col-lg">
         <div class="form-label position-relative">
             <label>@lang('cruds.shift.fields.shift_label'):</label>
             <input type="text" name="shift_label" id="shift_label"  value="{{ isset($shift) ? $shift->shift_label : '' }}" autocomplete="off" @required(true) />
         </div>
     </div>
     @if(auth()->user()->is_super_admin)
-        <div class="col-lg-4">
+        <div class="col-lg">
             <div class="form-label select-label">
                 <label>@lang('cruds.shift.fields.client_name'):</label>
                 <select name="sub_admin_id" id="sub_admin_id" class="select2">
@@ -19,7 +19,7 @@
             </div>
         </div>
     @endif
-    <div class="col-lg-4">
+    <div class="col-lg">
         <div class="form-label select-label">
             <label>@lang('cruds.shift.fields.client_detail_name'):</label>
             <select name="client_detail_id" id="client_detail_id" class="select2">
