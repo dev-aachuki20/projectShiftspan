@@ -2754,7 +2754,7 @@ th.datatable_desription{
 .new-common-modal .clone_row .error:not(#clone-showing-data .clone_row .error), 
 .modal-body .msg-form .form-label + .validation-error-block{
     font-size: 14px;
-    margin-top: -14px;
+    /* margin-top: -14px; */
     display: block;
 }
 #clone-showing-data + .validation-error-block{

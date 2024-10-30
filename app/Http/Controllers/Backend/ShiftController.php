@@ -65,19 +65,18 @@ class ShiftController extends Controller
 
 
     public function store(StoreRequest $request)
-    {       
+    {
         abort_if(Gate::denies('shift_create'), Response::HTTP_FORBIDDEN, '403 Forbidden');
         if ($request->ajax()) 
         {
             DB::beginTransaction();
             try{
-
                 $input = $this->modifyRequestInput($request);
 
                 foreach ($request->shifts as $shiftData)
                 {                                       
                     $data = [
-                        'shift_label' => $request->shift_label,
+                        'shift_label' => $input['shift_label'],
                         'sub_admin_id' => $input['sub_admin_id'],
                         'client_detail_id' => $input['client_detail_id'],
                         'occupation_id' =>  $input['occupation_id'] ,
@@ -87,21 +86,20 @@ class ShiftController extends Controller
                         'end_time' => $shiftData['end_time'],
                     ];       
                     
-                    $shift = Shift::create($data);
-        
-                    // If this staff is assigned
-                    if($shift && isset($shiftData['assign_staff']) && !empty($shiftData['assign_staff'])) {
-                        $shift->update([
-                            'picked_at' => now(),
-                            'status' => 'picked',
-                        ]);
-
-                        // Sync the assigned staff
-                        $staffId = User::where('uuid', $shiftData['assign_staff'])->first()->id;
-                        $shift->staffs()->sync([$staffId => ['created_at' => now()]]);
-                    }                                            
-
                     $clientDetail = ClientDetail::where('id', $input['client_detail_id'])->first();
+                    if($request->quantity){
+                        for($i=1;$i<=$request->quantity; $i++){
+                            $shift = Shift::create($data);
+                            if($i == 1 && $shift && isset($shiftData['assign_staff']) && !empty($shiftData['assign_staff'])){
+                                $shift->update([
+                                    'picked_at' => date('Y-m-d H:i:s'),
+                                    'status' => 'picked',
+                                ]);                            
+                                $staffId = User::where('uuid', $shiftData['assign_staff'])->first()->id;
+                                $shift->staffs()->sync([$staffId => ['created_at' => date('Y-m-d H:i:s')]]);
+                            }
+                        }
+                    }
                     
                     if(isset($shiftData['assign_staff']) && !is_null($shiftData['assign_staff']) && !empty($shiftData['assign_staff'])){
                         $user = User::where('uuid', $shiftData['assign_staff'])->first();
@@ -120,9 +118,10 @@ class ShiftController extends Controller
                             ]),       
                         ];                        
                         Notification::send($user, new SendNotification($messageData));
-                    }else if(isset($input['sub_admin_id'])){
-                        
+                    }
+                    if(isset($input['sub_admin_id']) && !empty($request->quantity) && $request->quantity > 1){                     
                         $companyAdmin = User::where('id', $input['sub_admin_id'])->first();
+                        $staffs = $companyAdmin->staffs()->where('uuid', "<>", $shiftData['assign_staff'])->get();
                         $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
                         $messageData = [
                             'notification_type' => array_search(config('constant.subject_notification_type.shift_available'), config('constant.subject_notification_type')),
@@ -136,7 +135,7 @@ class ShiftController extends Controller
                                 'end_time'      => $shiftData['end_time']
                             ]),       
                         ];
-                        Notification::send($companyAdmin->staffs, new SendNotification($messageData));  
+                        Notification::send($staffs, new SendNotification($messageData));  
                     }
 
                     $shiftCreatorRole = $shift->shiftCreator->roles()->first()->id;
@@ -170,9 +169,9 @@ class ShiftController extends Controller
                     'message' => trans('cruds.shift.title_singular').' '.trans('messages.crud.add_record'),
                 ];
                 return response()->json($response);
-            } catch (\Exception $e) {
+            } catch (\Throwable $th) {
                 DB::rollBack();
-                //  dd($e);
+                //  dd($th);
                 return response()->json(['success' => false, 'error_type' => 'something_error', 'error' => trans('messages.error_message')], 400 );
             }
         }

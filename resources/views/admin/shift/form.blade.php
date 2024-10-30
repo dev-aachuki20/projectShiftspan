@@ -106,6 +106,19 @@
             <div class="client_detail_name_error error_select" style="width: 100%"></div>
         </div>
     </div>
+    <div class="col-lg-6">
+        @if(!isset($shift))
+            <div class="form-label select-label">
+                <label>@lang('cruds.shift.fields.quantity'):</label>
+                <select name="quantity" id="quantity" class="select2">
+                    @for ($i=1; $i<=10;$i++)
+                        <option value="{{$i}}">{{ $i}}</option>
+                    @endfor
+                </select>
+                <div class="quantity_error error_select" style="width: 100%"></div>
+            </div>
+        @endif
+    </div>
 </div>
 <div class="form-label justify-content-center mb-0">
     <button type="submit" class="cbtn submitBtn">
