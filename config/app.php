@@ -72,7 +72,7 @@ return [
 
     // 'timezone' => 'UTC',
     // 'timezone' => 'Europe/London',
-    'timezone' => 'Asia/Kolkata',
+    'timezone' => env('APP_TIMEZONE', 'Europe/London'),
 
 
     /*

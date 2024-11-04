@@ -42,7 +42,7 @@ class StoreRequest extends FormRequest
         $rules['shifts.*.start_date'] = ['required', 'date', function ($attribute, $value, $fail) {
             $today = Carbon::today();
             if (Carbon::parse($value)->lt($today)) {
-                $fail('The ' . str_replace('_', ' ',$attribute) . ' must be greater than or equal to today.');
+                $fail('The start date must be greater than or equal to today.');
             }
         }];
         $rules['shifts.*.end_date'] = ['required', 'date',  'after_or_equal:shifts.*.start_date'];
