@@ -119,7 +119,7 @@ class ShiftController extends Controller
                         ];                        
                         Notification::send($user, new SendNotification($messageData));
                     }
-                    if(isset($input['sub_admin_id']) && !empty($request->quantity) && $request->quantity > 1){                     
+                    if(isset($input['sub_admin_id']) && !empty($input['sub_admin_id'])){                     
                         $companyAdmin = User::where('id', $input['sub_admin_id'])->first();
                         $staffs = $companyAdmin->staffs()->where('uuid', "<>", $shiftData['assign_staff'])->get();
                         $key = array_search(config('constant.notification_subject.announcements'), config('constant.notification_subject'));
@@ -135,7 +135,10 @@ class ShiftController extends Controller
                                 'end_time'      => $shiftData['end_time']
                             ]),       
                         ];
-                        Notification::send($staffs, new SendNotification($messageData));  
+                        if($staffs->count() > 0){
+                            Notification::send($staffs, new SendNotification($messageData)); 
+                        }
+                         
                     }
 
                     $shiftCreatorRole = $shift->shiftCreator->roles()->first()->id;
