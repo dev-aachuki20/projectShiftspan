@@ -73,6 +73,11 @@
             <div class="modal-content">
                 <div class="modal-header justify-content-center green-bg">
                     <h5 class="modal-title text-center" id="timeSheetLabel">@lang('cruds.shift.fields.timesheet')</h5>
+
+                    <!-- download image -->
+                    <a class="download_image"><i class="fas fa-download"></i></a>
+                    <!-- end download image -->
+
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -99,5 +104,10 @@
                 </div>
             </div>
         </div>
-    </div>
+
+        <div id="getData" class="d-none">
+            @include('admin.shift.sample',  ['shiftData' => $shiftData])
+        </div>  
+
+    </div>    
 @endif

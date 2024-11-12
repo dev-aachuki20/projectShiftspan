@@ -12,6 +12,27 @@
     .daterangepicker{
         z-index: 9999 !important;
     }
+    .download_image {
+        position: absolute;
+        right: 55px;
+        cursor: pointer;
+        top: 16px;
+        width: 50px;
+        height: 32px;
+        padding: 0;
+        background-color: var(--white);
+        opacity: 1;
+        margin: 0;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .download_image i{
+        font-size: 20px;
+        line-height: 1.1;
+        color: #000;
+    }
 </style>
 @endsection
 
@@ -70,6 +91,9 @@
 
 @parent
 {!! $dataTable->scripts() !!}
+
+<!-- html 2 canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="{{asset('plugins/timepicker/jquery.timepicker.js')}}"></script>
@@ -617,6 +641,27 @@
             }
         });                    
     });
+
+    $(document).on('click', '.download_image', function() {
+        const content = document.getElementById("getData");
+        content.classList.remove("d-none");
+        const originalPosition = content.style.position;
+        const originalLeft = content.style.left;
+
+        content.style.position = "absolute";
+        content.style.left = "-9999px";
+        html2canvas(content,  { scale: 2 }).then(canvas => {
+            content.style.position = originalPosition;
+            content.style.left = originalLeft;
+            content.classList.add("d-none");
+
+            const link = document.createElement("a");
+            link.href = canvas.toDataURL("image/jpg");
+            link.download = "content-image.png";
+            link.click();
+        });
+    });
+
 </script>
 
 @include('admin.shift._script');
