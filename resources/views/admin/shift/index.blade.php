@@ -93,7 +93,12 @@
 {!! $dataTable->scripts() !!}
 
 <!-- html 2 canvas -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+
+
 
 <script src="{{asset('plugins/jquery-ui/jquery.ui.min.js')}}"></script>
 <script src="{{asset('plugins/timepicker/jquery.timepicker.js')}}"></script>
@@ -642,25 +647,49 @@
         });                    
     });
 
-    $(document).on('click', '.download_image', function() {
-        const content = document.getElementById("getData");
-        content.classList.remove("d-none");
-        const originalPosition = content.style.position;
-        const originalLeft = content.style.left;
 
-        content.style.position = "absolute";
-        content.style.left = "-9999px";
-        html2canvas(content,  { scale: 2 }).then(canvas => {
-            content.style.position = originalPosition;
-            content.style.left = originalLeft;
-            content.classList.add("d-none");
+    //html2canvas
+    // $(document).on('click', '.download_image', function() {
+    //     const content = document.getElementById("getData");
+    //     content.classList.remove("d-none");
+    //     const originalPosition = content.style.position;
+    //     const originalLeft = content.style.left;
 
-            const link = document.createElement("a");
-            link.href = canvas.toDataURL("image/jpg");
-            link.download = "content-image.png";
-            link.click();
+    //     content.style.position = "absolute";
+    //     content.style.left = "-9999px";
+    //     html2canvas(content,  { scale: 2 }).then(canvas => {
+    //         content.style.position = originalPosition;
+    //         content.style.left = originalLeft;
+    //         content.classList.add("d-none");
+
+    //         const link = document.createElement("a");
+    //         link.href = canvas.toDataURL("image/jpg");
+    //         link.download = "content-image.png";
+    //         link.click();
+    //     });
+    // });
+
+    //html2pdf
+    $(document).on('click', '.downloadpdf', function() {
+        const content = document.getElementById('pdfContent');
+        content.style.display = 'block';
+        html2pdf().from(content).set({
+            margin: 0.2,
+            filename: 'timesheet.pdf',
+            html2canvas: {
+                scale: 2,
+                useCORS: true 
+            },
+            jsPDF: {
+                unit: 'in',
+                format: 'a4',
+                orientation: 'portrait'
+            }
+        }).save().then(() => {
+            content.style.display = 'none';
         });
     });
+
 
 </script>
 
