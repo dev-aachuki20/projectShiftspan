@@ -93,7 +93,7 @@
                                 <label>@lang('cruds.shift.fields.manager_signature'):</label>
                                 <div class="right-sidebox d-flex align-items-center justify-content-center">
                                     
-                                    <img src="{{ $shiftData->authorized_signature_url ? $shiftData->authorized_signature_url : asset('images/manager-sign.png')}}" alt="Manager Signature" class="img-fluid">
+                                    <img src="{{ file_exists(public_path($shiftData->authorized_signature_url)) ? asset($shiftData->authorized_signature_url) : asset('images/manager-sign.png')}}" alt="Manager Signature" class="img-fluid">
                                     
                                 </div>
                             </div>
