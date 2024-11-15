@@ -26,7 +26,7 @@
     <table class="table" border="0" style="vertical-align: middle; max-width: 1024px; width: 100%;  margin: 0px auto; border-collapse: collapse; width: 100%; color: black; border-spacing: 0; border-color: #ddd; box-shadow: none;font-family: Arial, Helvetica, sans-serif; margin-bottom: 20px; font-size: 16px;">
         <thead>
             <tr>
-                <th colspan="6" style="padding: 6px; background-color: #1d8524;"></th>
+                <th colspan="6" style="padding: 6px; background-color: #1d8524; border-radius:10px"></th>
             </tr>
             <tr>
                 <th colspan="6" style="text-align: center; padding: 15px 0px 10px;"><img src="{{asset('default/Shiftspan.png')}}" width="150px" alt="logo"></th>
@@ -46,7 +46,7 @@
                 <td style="background-color: #c6dec3; font-size: 12px; padding: 5px 5px 5px 5px; white-space: nowrap;"><strong>@lang('cruds.shift.fields.end_time')</strong> : {{isset($shiftData->shift) && isset($shiftData->shift->end_time) ? \Carbon\Carbon::parse($shiftData->shift->end_time)->format('h:i') : 'N/A'}}</td>
             </tr>
             <tr>
-                <td colspan="6" style="text-align: center; padding: 100px 50px;"><img src="{{ $shiftData->authorized_signature_url ? $shiftData->authorized_signature_url : asset('images/manager-sign.png')}}" width="300" alt=""></td>
+                <td colspan="6" style="text-align: center; padding: 100px 50px;"><img src="{{ file_exists(public_path($shiftData->authorized_signature_url)) ? asset($shiftData->authorized_signature_url) : asset('images/manager-sign.png') }}" width="300" alt="signature"></td>
             </tr>
         </tbody>
     </table>

@@ -678,7 +678,8 @@
             filename: 'timesheet.pdf',
             html2canvas: {
                 scale: 2,
-                useCORS: true 
+                useCORS: true,
+                allowTaint: true
             },
             jsPDF: {
                 unit: 'in',
