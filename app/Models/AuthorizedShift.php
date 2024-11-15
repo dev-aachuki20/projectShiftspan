@@ -44,7 +44,7 @@ class AuthorizedShift extends Model
 
     public function getAuthorizedSignatureUrlAttribute()
     {
-        if ($this->authorizedSignature && file_exists(public_path($this->authorizedSignature->file_url)) ) {
+        if ($this->authorizedSignature) {
             return $this->authorizedSignature->file_url;
         }
         return "";
