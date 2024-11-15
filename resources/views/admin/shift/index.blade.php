@@ -93,9 +93,6 @@
 {!! $dataTable->scripts() !!}
 
 <!-- html 2 canvas -->
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script> -->
-
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
 
 
@@ -674,7 +671,8 @@
         const content = document.getElementById('pdfContent');
         content.style.display = 'block';
         html2pdf().from(content).set({
-            margin: 0.2,
+            margin: 0,
+            // margin: [0, 0.2, 0.2, 0.2]
             filename: 'timesheet.pdf',
             html2canvas: {
                 scale: 2,
